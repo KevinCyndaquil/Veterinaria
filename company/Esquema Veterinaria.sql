@@ -99,7 +99,7 @@ CREATE TABLE productos(
 
 
 
-CREATE TABLE medicamentos(
+CREATE TABLE medicamento(
 	idm SERIAL NOT NULL PRIMARY KEY,
 	nombre CHAR(30) NOT NULL,
 	costo REAL NOT NULL,
@@ -194,7 +194,7 @@ CREATE TABLE productos_factura(
 
 
 CREATE TABLE medicamentos_factura(
-	idm INTEGER NOT NULL REFERENCES medicamentos,
+	idm INTEGER NOT NULL REFERENCES medicamento,
 	cnsmf INTEGER NOT NULL,
 	PRIMARY KEY(idm, cnsmf),
 	subtotal REAL NOT NULL,
@@ -228,7 +228,7 @@ CREATE TABLE productos_stock(
 
 
 CREATE TABLE medicamentos_stock(
-	idm INTEGER NOT NULL REFERENCES medicamentos,
+	idm INTEGER NOT NULL REFERENCES medicamento,
 	caducidad DATE NOT NULL,
 	PRIMARY KEY(idm, caducidad),
 	cantidad INTEGER NOT NULL
@@ -288,7 +288,7 @@ CREATE TABLE vacunas_aplicadas(
 	cnsv INTEGER NOT NULL,
 	PRIMARY KEY(curpm, cnsv),
 	fecha_apl DATE NOT NULL,
-	idm INTEGER NOT NULL REFERENCES medicamentos
+	idm INTEGER NOT NULL REFERENCES medicamento
 );
 
 
@@ -348,7 +348,7 @@ CREATE TABLE medicamentos_recetados(
 	dias INTEGER NOT NULL,
 	frecuencia REAL NOT NULL,
 	can_fre INTEGER NOT NULL,
-	idm INTEGER NOT NULL REFERENCES medicamentos
+	idm INTEGER NOT NULL REFERENCES medicamento
 );
 
 
