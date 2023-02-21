@@ -208,7 +208,7 @@ CREATE TABLE vacunas_expediente(
                                    id_registro serial,
                                    curp_mascota CHAR(13) REFERENCES mascotas,
                                    fecha_vacuna DATE NOT NULL,
-                                   id_vacuna text NOT NULL REFERENCES medicamentos
+                                   id_vacuna text NOT NULL REFERENCES medicamentos,
                                        primary key(id_registro, curp_mascota)
 );
 
