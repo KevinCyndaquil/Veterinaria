@@ -1,34 +1,34 @@
 package application.modelos.entregas;
 
 import application.modelos.Lista;
-import application.modelos.entidades.Proveedor;
+import application.modelos.Tabla;
 
 import java.time.LocalDate;
 
 public class Factura extends Lista <Integer> {
-    private LocalDate fecha;
+    private LocalDate fecha_factura;
     private Double monto_total;
-    private Proveedor proveedor;
+    private Tabla <?> proveedor;
 
-    public Factura(LocalDate fecha, Double monto_total, Proveedor proveedor) {
-        this.fecha = fecha;
+    public Factura(LocalDate fecha_factura, Double monto_total, Tabla <?> proveedor) {
+        this.fecha_factura = fecha_factura;
         this.monto_total = monto_total;
         this.proveedor = proveedor;
     }
 
-    public Factura(Integer llave, LocalDate fecha, Double monto_total, Proveedor proveedor) {
+    public Factura(Integer llave, LocalDate fecha_factura, Double monto_total, Tabla <?> proveedor) {
         super(llave);
-        this.fecha = fecha;
+        this.fecha_factura = fecha_factura;
         this.monto_total = monto_total;
         this.proveedor = proveedor;
     }
 
-    public LocalDate getFecha() {
-        return fecha;
+    public LocalDate getFecha_factura() {
+        return fecha_factura;
     }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
+    public void setFecha_factura(LocalDate fecha_factura) {
+        this.fecha_factura = fecha_factura;
     }
 
     public Double getMonto_total() {
@@ -39,11 +39,11 @@ public class Factura extends Lista <Integer> {
         this.monto_total = monto_total;
     }
 
-    public Proveedor getProveedor() {
+    public Tabla <?> getProveedor() {
         return proveedor;
     }
 
-    public void setProveedor(Proveedor proveedor) {
+    public void setProveedor(Tabla <?> proveedor) {
         this.proveedor = proveedor;
     }
 }

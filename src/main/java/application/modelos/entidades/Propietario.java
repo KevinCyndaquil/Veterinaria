@@ -3,33 +3,33 @@ package application.modelos.entidades;
 import application.modelos.Tabla;
 
 public class Propietario extends Tabla<String> {
-    private String nombre;
-    private String apellidos;
+    private String apellido_paterno;
+    private String apellido_materno;
 
-    public Propietario(String nombre, String apellidos) {
-        this.nombre = nombre;
-        this.apellidos = apellidos;
+    public Propietario(String apellido_paterno, String apellido_materno) {
+        this.apellido_paterno = apellido_paterno;
+        this.apellido_materno = apellido_materno;
     }
 
-    public Propietario(String llave, String nombre, String apellidos) {
+    public Propietario(String llave, String nombre, String apellido_paterno, String apellido_materno) {
         super(llave, nombre);
-        this.nombre = nombre;
-        this.apellidos = apellidos;
+        this.apellido_paterno = apellido_paterno;
+        this.apellido_materno = apellido_materno;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getApellido_paterno() {
+        return apellido_paterno;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setApellido_paterno(String apellido_paterno) {
+        this.apellido_paterno = apellido_paterno;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getApellido_materno() {
+        return apellido_materno;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setApellido_materno(String apellido_materno) {
+        this.apellido_materno = apellido_materno;
     }
 }

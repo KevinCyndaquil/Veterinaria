@@ -3,13 +3,11 @@ package application.modelos.entidades;
 import application.modelos.Tabla;
 
 public class Producto extends Tabla<Integer> {
-    private String nombre;
     private Double costo;
     private String descripcion;
     private TipoProducto tipo;
 
-    public Producto(String nombre, Double costo, String descripcion, TipoProducto tipo) {
-        this.nombre = nombre;
+    public Producto(Double costo, String descripcion, TipoProducto tipo) {
         this.costo = costo;
         this.descripcion = descripcion;
         this.tipo = tipo;
@@ -17,18 +15,9 @@ public class Producto extends Tabla<Integer> {
 
     public Producto(Integer llave, String nombre, Double costo, String descripcion, TipoProducto tipo) {
         super(llave, nombre);
-        this.nombre = nombre;
         this.costo = costo;
         this.descripcion = descripcion;
         this.tipo = tipo;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public Double getCosto() {

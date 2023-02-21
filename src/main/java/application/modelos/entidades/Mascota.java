@@ -8,10 +8,10 @@ public class Mascota extends Tabla<String> {
     private LocalDate fecha_nacimiento;
     private Integer edad;
     private Boolean sexo;
-    private Propietario propietario;
-    private Raza raza;
+    private Tabla<?> propietario;
+    private Tabla<?> raza;
 
-    public Mascota(LocalDate fecha_nacimiento, Integer edad, Boolean sexo, Propietario propietario, Raza raza) {
+    public Mascota(LocalDate fecha_nacimiento, Integer edad, Boolean sexo, Tabla<?> propietario, Tabla<?> raza) {
         this.fecha_nacimiento = fecha_nacimiento;
         this.edad = edad;
         this.sexo = sexo;
@@ -19,7 +19,7 @@ public class Mascota extends Tabla<String> {
         this.raza = raza;
     }
 
-    public Mascota(String llave, String nombre, LocalDate fecha_nacimiento, Integer edad, Boolean sexo, Propietario propietario, Raza raza) {
+    public Mascota(String llave, String nombre, LocalDate fecha_nacimiento, Integer edad, Boolean sexo, Tabla<?> propietario, Tabla<?> raza) {
         super(llave, nombre);
         this.fecha_nacimiento = fecha_nacimiento;
         this.edad = edad;
@@ -52,19 +52,19 @@ public class Mascota extends Tabla<String> {
         this.sexo = sexo;
     }
 
-    public Propietario getPropietario() {
+    public Tabla<?> getPropietario() {
         return propietario;
     }
 
-    public void setPropietario(Propietario propietario) {
+    public void setPropietario(Tabla<?> propietario) {
         this.propietario = propietario;
     }
 
-    public Raza getRaza() {
+    public Tabla<?> getRaza() {
         return raza;
     }
 
-    public void setRaza(Raza raza) {
+    public void setRaza(Tabla<?> raza) {
         this.raza = raza;
     }
 }

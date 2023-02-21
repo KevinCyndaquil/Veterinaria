@@ -1,52 +1,50 @@
 package application.modelos.citas;
 
 import application.modelos.Lista;
-import application.modelos.entidades.Mascota;
-import application.modelos.entidades.Veterinario;
-import application.modelos.finanzas.Ticket;
+import application.modelos.Tabla;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Cita extends Lista <Integer> {
-    private LocalDate fecha;
+    private LocalDate fecha_cita;
     private LocalTime hora;
-    private Double costo;
-    private Estatus estatus;
-    private Veterinario veterinario;
-    private Ticket ticket;
+    private Double monto;
     private String detalle;
-    private Mascota mascota;
+    private Tabla<?> mascota;
+    private Tabla<?> veterinario;
+    private Tabla<?> ticket;
+    private Estatus estatus;
 
-    public Cita(LocalDate fecha, LocalTime hora, Double costo, Estatus estatus, Veterinario veterinario, Ticket ticket, String detalle, Mascota mascota) {
-        this.fecha = fecha;
+    public Cita(LocalDate fecha_cita, LocalTime hora, Double monto, String detalle, Tabla<?> mascota, Tabla<?> veterinario, Tabla<?> ticket, Estatus estatus) {
+        this.fecha_cita = fecha_cita;
         this.hora = hora;
-        this.costo = costo;
-        this.estatus = estatus;
-        this.veterinario = veterinario;
-        this.ticket = ticket;
+        this.monto = monto;
         this.detalle = detalle;
         this.mascota = mascota;
+        this.veterinario = veterinario;
+        this.ticket = ticket;
+        this.estatus = estatus;
     }
 
-    public Cita(Integer llave, LocalDate fecha, LocalTime hora, Double costo, Estatus estatus, Veterinario veterinario, Ticket ticket, String detalle, Mascota mascota) {
+    public Cita(Integer llave, LocalDate fecha_cita, LocalTime hora, Double monto, String detalle, Tabla<?> mascota, Tabla<?> veterinario, Tabla<?> ticket, Estatus estatus) {
         super(llave);
-        this.fecha = fecha;
+        this.fecha_cita = fecha_cita;
         this.hora = hora;
-        this.costo = costo;
-        this.estatus = estatus;
-        this.veterinario = veterinario;
-        this.ticket = ticket;
+        this.monto = monto;
         this.detalle = detalle;
         this.mascota = mascota;
+        this.veterinario = veterinario;
+        this.ticket = ticket;
+        this.estatus = estatus;
     }
 
-    public LocalDate getFecha() {
-        return fecha;
+    public LocalDate getFecha_cita() {
+        return fecha_cita;
     }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
+    public void setFecha_cita(LocalDate fecha_cita) {
+        this.fecha_cita = fecha_cita;
     }
 
     public LocalTime getHora() {
@@ -57,36 +55,12 @@ public class Cita extends Lista <Integer> {
         this.hora = hora;
     }
 
-    public Double getCosto() {
-        return costo;
+    public Double getMonto() {
+        return monto;
     }
 
-    public void setCosto(Double costo) {
-        this.costo = costo;
-    }
-
-    public Estatus getEstatus() {
-        return estatus;
-    }
-
-    public void setEstatus(Estatus estatus) {
-        this.estatus = estatus;
-    }
-
-    public Veterinario getVeterinario() {
-        return veterinario;
-    }
-
-    public void setVeterinario(Veterinario veterinario) {
-        this.veterinario = veterinario;
-    }
-
-    public Ticket getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
+    public void setMonto(Double monto) {
+        this.monto = monto;
     }
 
     public String getDetalle() {
@@ -97,11 +71,35 @@ public class Cita extends Lista <Integer> {
         this.detalle = detalle;
     }
 
-    public Mascota getMascota() {
+    public Tabla<?> getMascota() {
         return mascota;
     }
 
-    public void setMascota(Mascota mascota) {
+    public void setMascota(Tabla<?> mascota) {
         this.mascota = mascota;
+    }
+
+    public Tabla<?> getVeterinario() {
+        return veterinario;
+    }
+
+    public void setVeterinario(Tabla<?> veterinario) {
+        this.veterinario = veterinario;
+    }
+
+    public Tabla<?> getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(Tabla<?> ticket) {
+        this.ticket = ticket;
+    }
+
+    public Estatus getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(Estatus estatus) {
+        this.estatus = estatus;
     }
 }

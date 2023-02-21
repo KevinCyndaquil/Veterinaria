@@ -6,32 +6,35 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Empleado extends Tabla<String> {
-    private String apellidos;
+    private String apellido_paterno;
+    private String apellido_materno;
     private LocalDate fecha_inicial;
     private LocalTime jornada_inicio;
-    private LocalTime Jornada_fin;
+    private LocalTime jornada_fin;
 
-    public Empleado(String apellidos, LocalDate fecha_inicial, LocalTime jornada_inicio, LocalTime jornada_fin) {
-        this.apellidos = apellidos;
+    public Empleado(String apellido_paterno, String apellido_materno, LocalDate fecha_inicial, LocalTime jornada_inicio, LocalTime jornada_fin) {
+        this.apellido_paterno = apellido_paterno;
+        this.apellido_materno = apellido_materno;
         this.fecha_inicial = fecha_inicial;
         this.jornada_inicio = jornada_inicio;
-        Jornada_fin = jornada_fin;
+        this.jornada_fin = jornada_fin;
     }
 
-    public Empleado(String llave, String nombre, String apellidos, LocalDate fecha_inicial, LocalTime jornada_inicio, LocalTime jornada_fin) {
+    public Empleado(String llave, String nombre, String apellido_paterno, String apellido_materno, LocalDate fecha_inicial, LocalTime jornada_inicio, LocalTime jornada_fin) {
         super(llave, nombre);
-        this.apellidos = apellidos;
+        this.apellido_paterno = apellido_paterno;
+        this.apellido_materno = apellido_materno;
         this.fecha_inicial = fecha_inicial;
         this.jornada_inicio = jornada_inicio;
-        Jornada_fin = jornada_fin;
+        this.jornada_fin = jornada_fin;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getApellido_paterno() {
+        return apellido_paterno;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setApellido_paterno(String apellido_paterno) {
+        this.apellido_paterno = apellido_paterno;
     }
 
     public LocalDate getFecha_inicial() {
@@ -51,10 +54,18 @@ public class Empleado extends Tabla<String> {
     }
 
     public LocalTime getJornada_fin() {
-        return Jornada_fin;
+        return jornada_fin;
     }
 
     public void setJornada_fin(LocalTime jornada_fin) {
-        Jornada_fin = jornada_fin;
+        this.jornada_fin = jornada_fin;
+    }
+
+    public String getApellido_materno() {
+        return apellido_materno;
+    }
+
+    public void setApellido_materno(String apellido_materno) {
+        this.apellido_materno = apellido_materno;
     }
 }

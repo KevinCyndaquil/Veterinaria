@@ -1,26 +1,25 @@
 package application.modelos.entregas;
 
-import application.modelos.Lista;
-import application.modelos.entidades.Medicamento;
+import application.modelos.Tabla;
 
-public class MedicamentoFactura extends Lista <Integer> {
+import java.time.LocalDate;
+
+public class MedicamentoFactura extends Factura {
     private Double subtotal;
     private Integer cantidad;
-    private Factura factura;
-    private Medicamento medicamento;
+    private Tabla <?>  medicamento;
 
-    public MedicamentoFactura(Double subtotal, Integer cantidad, Factura factura, Medicamento medicamento) {
+    public MedicamentoFactura(LocalDate fecha_factura, Double monto_total, Tabla<?> proveedor, Double subtotal, Integer cantidad, Tabla<?> medicamento) {
+        super(fecha_factura, monto_total, proveedor);
         this.subtotal = subtotal;
         this.cantidad = cantidad;
-        this.factura = factura;
         this.medicamento = medicamento;
     }
 
-    public MedicamentoFactura(Integer llave, Double subtotal, Integer cantidad, Factura factura, Medicamento medicamento) {
-        super(llave);
+    public MedicamentoFactura(Integer llave, LocalDate fecha_factura, Double monto_total, Tabla<?> proveedor, Double subtotal, Integer cantidad, Tabla<?> medicamento) {
+        super(llave, fecha_factura, monto_total, proveedor);
         this.subtotal = subtotal;
         this.cantidad = cantidad;
-        this.factura = factura;
         this.medicamento = medicamento;
     }
 
@@ -40,19 +39,11 @@ public class MedicamentoFactura extends Lista <Integer> {
         this.cantidad = cantidad;
     }
 
-    public Factura getFactura() {
-        return factura;
-    }
-
-    public void setFactura(Factura factura) {
-        this.factura = factura;
-    }
-
-    public Medicamento getMedicamento() {
+    public Tabla<?> getMedicamento() {
         return medicamento;
     }
 
-    public void setMedicamento(Medicamento medicamento) {
+    public void setMedicamento(Tabla<?> medicamento) {
         this.medicamento = medicamento;
     }
 }

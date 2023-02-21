@@ -1,20 +1,20 @@
 package application.modelos.inventario;
 
 import application.modelos.Lista;
-import application.modelos.entidades.Alimento;
+import application.modelos.Tabla;
 
 import java.time.LocalDate;
 
 public class AlimentoStock extends Lista <LocalDate> {
     private Integer cantidad;
-    private Alimento alimento;
+    private Tabla <?> alimento;
 
-    public AlimentoStock(Integer cantidad, Alimento alimento) {
+    public AlimentoStock(Integer cantidad, Tabla <?> alimento) {
         this.cantidad = cantidad;
         this.alimento = alimento;
     }
 
-    public AlimentoStock(LocalDate caducidad, Integer cantidad, Alimento alimento) {
+    public AlimentoStock(LocalDate caducidad, Integer cantidad, Tabla <?> alimento) {
         super(caducidad);
         this.cantidad = cantidad;
         this.alimento = alimento;
@@ -28,11 +28,11 @@ public class AlimentoStock extends Lista <LocalDate> {
         this.cantidad = cantidad;
     }
 
-    public Alimento getAlimentos() {
+    public Tabla <?> getAlimentos() {
         return alimento;
     }
 
-    public void setAlimentos(Alimento alimento) {
+    public void setAlimentos(Tabla <?> alimento) {
         this.alimento = alimento;
     }
 }

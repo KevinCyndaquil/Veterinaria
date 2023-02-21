@@ -51,6 +51,7 @@ public class Tabla <Key>{
         return nombre;
     }
 
+    @Override
     public boolean equals(Object obj) {
         try {
             Tabla<?> tabla = (Tabla<?>) obj;

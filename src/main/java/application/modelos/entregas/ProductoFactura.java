@@ -1,35 +1,26 @@
 package application.modelos.entregas;
 
-import application.modelos.Lista;
-import application.modelos.entidades.Producto;
+import application.modelos.Tabla;
 
-public class ProductoFactura extends Lista <Integer> {
-    private Double subtotal;
+import java.time.LocalDate;
+
+public class ProductoFactura extends Factura {
     private Integer cantidad;
-    private Factura factura;
-    private Producto producto;
+    private Double subtotal;
+    private Tabla <?> producto;
 
-    public ProductoFactura(Double subtotal, Integer cantidad, Factura factura, Producto producto) {
-        this.subtotal = subtotal;
+    public ProductoFactura(LocalDate fecha_factura, Double monto_total, Tabla<?> proveedor, Integer cantidad, Double subtotal, Tabla<?> producto) {
+        super(fecha_factura, monto_total, proveedor);
         this.cantidad = cantidad;
-        this.factura = factura;
+        this.subtotal = subtotal;
         this.producto = producto;
     }
 
-    public ProductoFactura(Integer llave, Double subtotal, Integer cantidad, Factura factura, Producto producto) {
-        super(llave);
-        this.subtotal = subtotal;
+    public ProductoFactura(Integer llave, LocalDate fecha_factura, Double monto_total, Tabla<?> proveedor, Integer cantidad, Double subtotal, Tabla<?> producto) {
+        super(llave, fecha_factura, monto_total, proveedor);
         this.cantidad = cantidad;
-        this.factura = factura;
-        this.producto = producto;
-    }
-
-    public Double getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
+        this.producto = producto;
     }
 
     public Integer getCantidad() {
@@ -40,19 +31,19 @@ public class ProductoFactura extends Lista <Integer> {
         this.cantidad = cantidad;
     }
 
-    public Factura getFactura() {
-        return factura;
+    public Double getSubtotal() {
+        return subtotal;
     }
 
-    public void setFactura(Factura factura) {
-        this.factura = factura;
+    public void setSubtotal(Double subtotal) {
+        this.subtotal = subtotal;
     }
 
-    public Producto getProducto() {
+    public Tabla<?> getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
+    public void setProducto(Tabla<?> producto) {
         this.producto = producto;
     }
 }

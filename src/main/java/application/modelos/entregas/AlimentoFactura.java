@@ -1,35 +1,26 @@
 package application.modelos.entregas;
 
-import application.modelos.Lista;
-import application.modelos.entidades.Alimento;
+import application.modelos.Tabla;
 
-public class AlimentoFactura extends Lista <Integer> {
-    private Double subtotal;
+import java.time.LocalDate;
+
+public class AlimentoFactura extends Factura {
     private Integer cantidad;
-    private Factura factura;
-    private Alimento alimento;
+    private Double subtotal;
+    private Tabla <?> alimento;
 
-    public AlimentoFactura(Double subtotal, Integer cantidad, Factura factura, Alimento alimento) {
-        this.subtotal = subtotal;
+    public AlimentoFactura(LocalDate fecha_factura, Double monto_total, Tabla<?> proveedor, Integer cantidad, Double subtotal, Tabla<?> alimento) {
+        super(fecha_factura, monto_total, proveedor);
         this.cantidad = cantidad;
-        this.factura = factura;
+        this.subtotal = subtotal;
         this.alimento = alimento;
     }
 
-    public AlimentoFactura(Integer llave, Double subtotal, Integer cantidad, Factura factura, Alimento alimento) {
-        super(llave);
-        this.subtotal = subtotal;
+    public AlimentoFactura(Integer llave, LocalDate fecha_factura, Double monto_total, Tabla<?> proveedor, Integer cantidad, Double subtotal, Tabla<?> alimento) {
+        super(llave, fecha_factura, monto_total, proveedor);
         this.cantidad = cantidad;
-        this.factura = factura;
-        this.alimento = alimento;
-    }
-
-    public Double getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
+        this.alimento = alimento;
     }
 
     public Integer getCantidad() {
@@ -40,19 +31,19 @@ public class AlimentoFactura extends Lista <Integer> {
         this.cantidad = cantidad;
     }
 
-    public Factura getFactura() {
-        return factura;
+    public Double getSubtotal() {
+        return subtotal;
     }
 
-    public void setFactura(Factura factura) {
-        this.factura = factura;
+    public void setSubtotal(Double subtotal) {
+        this.subtotal = subtotal;
     }
 
-    public Alimento getAlimento() {
+    public Tabla<?> getAlimento() {
         return alimento;
     }
 
-    public void setAlimento(Alimento alimento) {
+    public void setAlimento(Tabla<?> alimento) {
         this.alimento = alimento;
     }
 }
