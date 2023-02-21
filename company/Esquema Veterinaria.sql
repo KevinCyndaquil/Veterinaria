@@ -13,390 +13,219 @@ DROP DATABASE veterinaria;
 CREATE DATABASE veterinaria;
 
 
-
-
-
 \c veterinaria
 
 
-
-
-
-CREATE TABLE animales(
-	ida SERIAL NOT NULL PRIMARY KEY,
-	nombre CHAR(20) NOT NULL,
-	nombre_cientifico CHAR(50) NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+CREATE TABLE Razas(
+                      id_raza SERIAL PRIMARY KEY,
+                      nombre CHAR(30) NOT NULL
 );
 
-
-
-
-
-CREATE TABLE razas(
-	idr SERIAL NOT NULL PRIMARY KEY,
-	nombre CHAR(30) NOT NULL,
-	total_adopcion INTEGER,
-	activo BOOLEAN NOT NULL DEFAULT true
+--otro dia con mas calma a;adimos lo de adopcion
+CREATE TABLE Dueños(
+                       rfc_dueño CHAR(13) PRIMARY KEY,
+                       nombre CHAR(30) NOT NULL,
+                       apellido_p CHAR(30) NOT NULL,
+                       apellido_m CHAR(30)
 );
 
-
-
-
-
-CREATE TABLE dueños(
-	rfc CHAR(13) NOT NULL PRIMARY KEY,
-	nombre CHAR(30) NOT NULL,
-	apellidos CHAR(40) NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+CREATE TABLE Mascotas(
+                         curp_mascota CHAR(13) PRIMARY KEY,
+                         nombre CHAR(30) NOT NULL,
+                         fecha_nacimiento DATE NOT NULL,
+                         edad INTEGER NOT NULL,
+                         sexo BOOLEAN,
+                         rfc_dueño CHAR(13) REFERENCES dueños,
+                         id_raza INTEGER REFERENCES razas
 );
 
-
-
-
-
-CREATE TABLE mascotas(
-	curpm CHAR(13) NOT NULL PRIMARY KEY,
-	nombre CHAR(30) NOT NULL,
-	fecha_nacimiento DATE NOT NULL,
-	edad INTEGER NOT NULL,
-	sexo BOOLEAN,
-	rfc_dueño CHAR(13) NOT NULL REFERENCES dueños,
-	idr INTEGER NOT NULL REFERENCES razas,
-	activo BOOLEAN NOT NULL DEFAULT true
+CREATE TABLE Alimentos(
+                          id_al SERIAL PRIMARY KEY,
+                          nombre CHAR(30) NOT NULL,
+                          costo REAL NOT NULL,
+                          gramaje REAL NOT NULL,
+                          descripcion CHAR(100) DEFAULT ''
 );
 
-
-
-
-
-CREATE TABLE alimento(
-	idal SERIAL NOT NULL PRIMARY KEY,
-	nombre CHAR(30) NOT NULL,
-	costo REAL NOT NULL,
-	gramaje REAL NOT NULL,
-	descripcion CHAR(100) DEFAULT '',
-	activo BOOLEAN NOT NULL DEFAULT true
+CREATE TABLE Tipo_Producto(
+                              id_tp SERIAL PRIMARY KEY,
+                              tipo CHAR(30) NOT NULL
 );
 
-
-
-
-
-CREATE TABLE tipo_producto(
-	idtp SERIAL NOT NULL PRIMARY KEY,
-	tipo CHAR(30) NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+CREATE TABLE Productos(
+                          id_p SERIAL NOT NULL PRIMARY KEY,
+                          id_tp INTEGER NOT NULL REFERENCES tipo_producto,
+                          nombre CHAR(30) NOT NULL,
+                          costo REAL NOT NULL,
+                          descripcion CHAR(100) DEFAULT ''
 );
 
-
-
-
-
-CREATE TABLE producto(
-	idp SERIAL NOT NULL PRIMARY KEY,
-	idtp INTEGER NOT NULL REFERENCES tipo_producto,
-	nombre CHAR(30) NOT NULL,
-	costo REAL NOT NULL,
-	descripcion CHAR(100) DEFAULT '',
-	activo BOOLEAN NOT NULL DEFAULT true
+CREATE TABLE Medicamentos(
+                             id_m text PRIMARY KEY,
+                             nombre CHAR(30) NOT NULL,
+                             costo REAL NOT NULL,
+                             gramaje REAL NOT NULL,
+                             laboratorio CHAR(30) NOT NULL,
+                             descripcion CHAR(100) DEFAULT '',
+                             tipo varchar(25) NOT NULL
 );
 
-
-
-
-
-CREATE TABLE medicamento(
-	idm SERIAL NOT NULL PRIMARY KEY,
-	nombre CHAR(30) NOT NULL,
-	costo REAL NOT NULL,
-	gramaje REAL NOT NULL,
-	laboratorio CHAR(30) NOT NULL,
-	descripcion CHAR(100) DEFAULT '',
-	activo BOOLEAN NOT NULL DEFAULT true
+CREATE TABLE Empleados(
+                          rfc CHAR(13) NOT NULL PRIMARY KEY,
+                          nombre CHAR(30) NOT NULL,
+                          apellido_p CHAR(30) NOT NULL,
+                          apellido_m CHAR(30) NOT NULL,
+                          fecha_ini DATE NOT NULL,
+                          jor_ini TIME NOT NULL,
+                          jor_fin TIME NOT NULL
 );
 
-
-
-
-
-CREATE TABLE empleados(
-	rfc CHAR(13) NOT NULL PRIMARY KEY,
-	nombre CHAR(20) NOT NULL,
-	apellidos CHAR(30) NOT NULL,
-	fecha_ini DATE NOT NULL,
-	jor_ini TIME NOT NULL,
-	jor_fin TIME NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+--como enn el git
+CREATE TABLE Veterinarios(
+                             rfc_veterinario CHAR(13) NOT NULL REFERENCES empleados,
+                             PRIMARY KEY(rfc_veterinario)
 );
 
-
-
-
-
-CREATE TABLE veterinarios(
-	rfc CHAR(13) NOT NULL REFERENCES empleados,
-	PRIMARY KEY(rfc),
-	especialidad CHAR(30) NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+CREATE TABLE Especialidades(
+                               id_especialidad serial not null primary key,
+                               nombre varchar(30) not null
 );
 
-
-
-
-
-CREATE TABLE nominas(
-	rfc CHAR(13) NOT NULL REFERENCES empleados,
-	cnsn SERIAL NOT NULL,
-	PRIMARY KEY(rfc, cnsn),
-	fecha DATE NOT NULL,
-	total_horas INTEGER NOT NULL,
-	salario REAL NOT NULL,
-	total_bono REAL DEFAULT 0,
-	activo BOOLEAN NOT NULL DEFAULT true
+CREATE TABLE Veterinarios_especialiadades(
+                                             rfc char(13) REFERENCES veterinarios,
+                                             especialidad integer REFERENCES especialidades,
+                                             PRIMARY KEY(rfc,especialidad)
 );
 
-
-
-
+CREATE TABLE Nominas(
+                        id_nomina SERIAL NOT NULL,
+                        rfc varchar(13) NOT NULL REFERENCES empleados,
+                        fecha DATE NOT NULL,
+                        total_horas smallint NOT NULL,
+                        salario REAL NOT NULL,
+                        total_bono REAL DEFAULT 0,
+                        PRIMARY KEY(id_nomina, rfc)
+);
 
 CREATE TABLE proveedores(
-	idpr SERIAL NOT NULL PRIMARY KEY,
-	nombre CHAR(30) NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+                            id_proveedores SERIAL PRIMARY KEY,
+                            nombre varchar(30) NOT NULL,
+                            direccion varchar(50),
+                            telefono INTEGER not null,
+                            descripcion varchar(40) not null
 );
-
-
-
-
 
 CREATE TABLE facturas(
-	idf SERIAL NOT NULL PRIMARY KEY,
-	idpr INTEGER NOT NULL REFERENCES proveedores,
-	fecha DATE NOT NULL,
-	monto_total REAL NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+                         id_factura SERIAL PRIMARY KEY,
+                         id_proveedor INTEGER NOT NULL REFERENCES proveedores,
+                         fecha DATE NOT NULL,
+                         monto_total REAL NOT NULL
 );
-
-
-
 
 
 CREATE TABLE alimentos_factura(
-	idal INTEGER NOT NULL REFERENCES alimento,
-	cnsaf INTEGER NOT NULL,
-	PRIMARY KEY(idal, cnsaf),
-	subtotal REAL NOT NULL,
-	cantidad INTEGER NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+                                  id_alimento INTEGER REFERENCES alimentos,
+                                  id_factura INTEGER REFERENCES facturas,
+                                  cantidad INTEGER NOT NULL,
+                                  subtotal REAL NOT NULL,
+                                  PRIMARY KEY(id_alimento, id_factura)
 );
-
-
 
 
 
 CREATE TABLE productos_factura(
-	idp INTEGER NOT NULL REFERENCES producto,
-	cnspf INTEGER NOT NULL,
-	PRIMARY KEY(idp, cnspf),
-	subtotal REAL NOT NULL,
-	cantidad INTEGER NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+                                  id_producto INTEGER REFERENCES productos,
+                                  id_factura INTEGER REFERENCES facturas,
+                                  cantidad INTEGER NOT NULL,
+                                  subtotal REAL NOT NULL,
+                                  PRIMARY KEY(id_producto, id_factura)
 );
-
-
-
 
 
 CREATE TABLE medicamentos_factura(
-	idm INTEGER NOT NULL REFERENCES medicamento,
-	cnsmf INTEGER NOT NULL,
-	PRIMARY KEY(idm, cnsmf),
-	subtotal REAL NOT NULL,
-	cantidad INTEGER NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+                                     id_medicamento text REFERENCES medicamentos,
+                                     id_factura INTEGER REFERENCES facturas,
+                                     cantidad INTEGER NOT NULL,
+                                     subtotal REAL NOT NULL,
+                                     PRIMARY KEY(id_medicamento, id_factura)
 );
-
-
-
-
 
 CREATE TABLE alimentos_stock(
-	idal INTEGER NOT NULL REFERENCES alimento,
-	caducidad DATE NOT NULL,
-	PRIMARY KEY(idal, caducidad),
-	cantidad INTEGER NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+                                id_alimento INTEGER REFERENCES alimentos,
+                                caducidad DATE NOT NULL,
+                                cantidad INTEGER NOT NULL,
+                                PRIMARY KEY(id_alimento,caducidad)
 );
-
-
-
-
 
 CREATE TABLE productos_stock(
-	idp INTEGER NOT NULL REFERENCES producto,
-	caducidad DATE NOT NULL,
-	PRIMARY KEY(idp, caducidad),
-	cantidad INTEGER NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+                                id_producto INTEGER REFERENCES productos,
+                                caducidad DATE ,
+                                cantidad INTEGER NOT NULL,
+                                PRIMARY KEY(id_producto, caducidad)
 );
-
-
-
-
 
 CREATE TABLE medicamentos_stock(
-	idm INTEGER NOT NULL REFERENCES medicamento,
-	caducidad DATE NOT NULL,
-	PRIMARY KEY(idm, caducidad),
-	cantidad INTEGER NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+                                   id_medicamento text REFERENCES medicamentos,
+                                   caducidad DATE ,
+                                   cantidad INTEGER NOT NULL,
+                                   PRIMARY KEY(id_medicamento, caducidad)
 );
-
-
-
 
 
 CREATE TABLE formas_pago(
-	idfp SERIAL NOT NULL PRIMARY KEY,
-	forma CHAR(30) NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+                            id_forma_pago SERIAL PRIMARY KEY,
+                            forma CHAR(30) NOT NULL
 );
-
-
-
 
 
 CREATE TABLE tickets(
-	idt SERIAL NOT NULL PRIMARY KEY,
-	idfp INTEGER NOT NULL REFERENCES formas_pago,
-	monto_total REAL NOT NULL,
-	fecha_cobro DATE NOT NULL,
-	hora_cobro TIME NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+                        id_ticket SERIAL PRIMARY KEY,
+                        id_forma_pago INTEGER REFERENCES formas_pago,
+                        monto_total REAL NOT NULL,
+                        fecha_cobro DATE NOT NULL,
+                        hora_cobro TIME NOT NULL
 );
 
-
-
-
-
-CREATE TABLE alimentos_comprados(
-	idt INTEGER NOT NULL REFERENCES tickets,
-	cnsac INTEGER NOT NULL,
-	PRIMARY KEY(idt, cnsac),
-	cantidad INTEGER NOT NULL,
-	idal INTEGER NOT NULL REFERENCES alimento,
-	activo BOOLEAN NOT NULL DEFAULT true
+CREATE TABLE alimentos_vendidos(
+                                   id_ticket INTEGER REFERENCES tickets,
+                                   id_registro serial,
+                                   id_alimento INTEGER REFERENCES alimentos,
+                                   cantidad INTEGER NOT NULL,
+                                   subtotal REAL NOT NULL,
+                                   PRIMARY KEY(id_ticket, id_registro)
 );
 
-
-
-
-
-CREATE TABLE productos_comprados(
-	idt INTEGER NOT NULL REFERENCES tickets,
-	cnspc INTEGER NOT NULL,
-	PRIMARY KEY(idt, cnspc),
-	cantidad INTEGER NOT NULL,
-	idp INTEGER NOT NULL REFERENCES producto,
-	activo BOOLEAN NOT NULL DEFAULT true
+CREATE TABLE productos_vendidos(
+                                   id_ticket INTEGER REFERENCES tickets,
+                                   id_registro serial,
+                                   id_producto INTEGER REFERENCES productos,
+                                   cantidad INTEGER NOT NULL,
+                                   subtotal REAL NOT NULL,
+                                   PRIMARY KEY(id_ticket, id_registro)
 );
 
-
-
-
-
-CREATE TABLE vacunas_aplicadas(
-	curpm CHAR(13) NOT NULL REFERENCES mascotas,
-	cnsv INTEGER NOT NULL,
-	PRIMARY KEY(curpm, cnsv),
-	fecha_apl DATE NOT NULL,
-	idm INTEGER NOT NULL REFERENCES medicamento,
-	activo BOOLEAN NOT NULL DEFAULT true
+CREATE TABLE vacunas_expediente(
+                                   id_registro serial,
+                                   curp_mascota CHAR(13) REFERENCES mascotas,
+                                   fecha_vacuna DATE NOT NULL,
+                                   id_vacuna text NOT NULL REFERENCES medicamentos
+                                       primary key(id_registro, curp_mascota)
 );
-
-
-
-
 
 CREATE TABLE estatus(
-	ide SERIAL NOT NULL PRIMARY KEY,
-	estatus CHAR(20) NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+                        id_estatus SERIAL PRIMARY KEY,
+                        estatus CHAR(20) NOT NULL
 );
-
-
-
-
 
 CREATE TABLE citas(
-	curpm CHAR(13) NOT NULL REFERENCES mascotas,
-	cnsc INTEGER NOT NULL,
-	PRIMARY KEY(curpm, cnsc),
-	fecha DATE NOT NULL,
-	hora TIME NOT NULL,
-	monto REAL NOT NULL,
-	ide INTEGER NOT NULL REFERENCES estatus,
-	rfc_doctor CHAR(13) NOT NULL REFERENCES veterinarios,
-	idt INTEGER REFERENCES tickets,
-	detalle CHAR(100) DEFAULT '',
-	activo BOOLEAN NOT NULL DEFAULT true
-);
-
-
-
-
-
-CREATE TABLE alimentos_recetados(
-	curpm CHAR(13) NOT NULL,
-	cnsc INTEGER NOT NULL,
-	FOREIGN KEY(curpm, cnsc) REFERENCES citas,
-	cnsare INTEGER NOT NULL,
-	PRIMARY KEY(curpm, cnsc, cnsare),
-	total INTEGER NOT NULL,
-	dias INTEGER NOT NULL,
-	frecuencia REAL NOT NULL,
-	can_fre INTEGER NOT NULL,
-	idal INTEGER NOT NULL REFERENCES alimento,
-	activo BOOLEAN NOT NULL DEFAULT true
-);
-
-
-
-
-
-CREATE TABLE medicamentos_recetados(
-	curpm CHAR(13) NOT NULL,
-	cnsc INTEGER NOT NULL,
-	FOREIGN KEY(curpm, cnsc) REFERENCES citas,
-	cnsmre INTEGER NOT NULL,
-	PRIMARY KEY(curpm, cnsc, cnsmre),
-	total INTEGER NOT NULL,
-	dias INTEGER NOT NULL,
-	frecuencia REAL NOT NULL,
-	can_fre INTEGER NOT NULL,
-	idm INTEGER NOT NULL REFERENCES medicamento,
-	activo BOOLEAN NOT NULL DEFAULT true
-);
-
-
-
-
-
-CREATE TABLE servicios(
-	ids SERIAL NOT NULL PRIMARY KEY,
-	servicio CHAR(30) NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
-);
-
-
-
-
-
-CREATE TABLE pago_servicio(
-	idps SERIAL NOT NULL PRIMARY KEY,
-	ids INTEGER NOT NULL REFERENCES servicios,
-	fecha DATE NOT NULL,
-	costo REAL NOT NULL,
-	activo BOOLEAN NOT NULL DEFAULT true
+                      id_cita serial,
+                      curp_mascota CHAR(13) REFERENCES mascotas,
+                      rfc_veterinario CHAR(13) REFERENCES veterinarios,
+                      fecha DATE NOT NULL,
+                      hora TIME NOT NULL,
+                      monto REAL NOT NULL,
+                      detalle CHAR(100) DEFAULT '',
+                      id_ticket INTEGER REFERENCES tickets,
+                      id_estatus INTEGER REFERENCES estatus,
+                      PRIMARY KEY(id_cita, curp_mascota)
 );
