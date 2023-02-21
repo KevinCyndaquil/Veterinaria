@@ -1,10 +1,10 @@
-package application.basededatos.crud;
+package application.repositorios.crud;
 
-import application.basededatos.Postgres;
-import application.basededatos.interfaces.CreateDaoI;
-import application.basededatos.interfaces.LockDaoI;
-import application.basededatos.interfaces.ReadDaoI;
-import application.basededatos.interfaces.UpdateDaoI;
+import application.repositorios.Postgres;
+import application.repositorios.interfaces.CreateDaoI;
+import application.repositorios.interfaces.LockDaoI;
+import application.repositorios.interfaces.ReadDaoI;
+import application.repositorios.interfaces.UpdateDaoI;
 import application.modelos.entidades.Medicamento;
 
 import java.sql.PreparedStatement;
@@ -14,11 +14,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MedicamentoCRUD  implements CreateDaoI<Medicamento>, ReadDaoI<Integer, Medicamento>, UpdateDaoI<Medicamento>, LockDaoI<Integer, Medicamento> {
-    private static AlimentoCRUD instance;
+public class MedicamentoRepositorio implements CreateDaoI<Medicamento>, ReadDaoI<Integer, Medicamento>, UpdateDaoI<Medicamento>, LockDaoI<Integer, Medicamento> {
+    private static AlimentoRepositorio instance;
 
-    public static AlimentoCRUD getInstance() {
-        return instance = (instance == null) ? new AlimentoCRUD() : instance;
+    public static AlimentoRepositorio getInstance() {
+        return instance = (instance == null) ? new AlimentoRepositorio() : instance;
     }
 
     @Override

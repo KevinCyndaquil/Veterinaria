@@ -1,10 +1,10 @@
-package application.basededatos.crud;
+package application.repositorios.crud;
 
-import application.basededatos.Postgres;
-import application.basededatos.interfaces.CreateDaoI;
-import application.basededatos.interfaces.LockDaoI;
-import application.basededatos.interfaces.ReadDaoI;
-import application.basededatos.interfaces.UpdateDaoI;
+import application.repositorios.Postgres;
+import application.repositorios.interfaces.CreateDaoI;
+import application.repositorios.interfaces.LockDaoI;
+import application.repositorios.interfaces.ReadDaoI;
+import application.repositorios.interfaces.UpdateDaoI;
 import application.modelos.entidades.Alimento;
 
 import java.sql.PreparedStatement;
@@ -14,11 +14,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlimentoCRUD implements CreateDaoI<Alimento>, ReadDaoI<Integer, Alimento>, UpdateDaoI<Alimento>, LockDaoI<Integer, Alimento> {
-    private static AlimentoCRUD instance;
+public class AlimentoRepositorio implements CreateDaoI<Alimento>, ReadDaoI<Integer, Alimento>, UpdateDaoI<Alimento>, LockDaoI<Integer, Alimento> {
+    private static AlimentoRepositorio instance;
 
-    public static AlimentoCRUD getInstance() {
-        return instance = (instance == null) ? new AlimentoCRUD() : instance;
+    public static AlimentoRepositorio getInstance() {
+        return instance = (instance == null) ? new AlimentoRepositorio() : instance;
     }
 
     @Override
@@ -65,14 +65,12 @@ public class AlimentoCRUD implements CreateDaoI<Alimento>, ReadDaoI<Integer, Ali
                         resultSet.getDouble(4),
                         resultSet.getString(5)
                 );
+            return null;
         }
-
-        return null;
     }
 
     @Override
     public List<Alimento> readAll() throws SQLException {
-
         try (Statement statement = Postgres.getConnection().createStatement();
             ResultSet resultSet = statement.executeQuery(
                     "SELECT * FROM alimentos WHERE activo = true ORDER BY nombre")) {
@@ -95,7 +93,6 @@ public class AlimentoCRUD implements CreateDaoI<Alimento>, ReadDaoI<Integer, Ali
 
     @Override
     public Alimento update(Alimento alimento) throws SQLException {
-
         if (alimento == null)
             return null;
 
@@ -117,9 +114,8 @@ public class AlimentoCRUD implements CreateDaoI<Alimento>, ReadDaoI<Integer, Ali
 
             if (resultSet.next())
                 return alimento;
+            return null;
         }
-
-        return null;
     }
 
     @Override

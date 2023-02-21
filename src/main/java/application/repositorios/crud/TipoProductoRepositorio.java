@@ -1,7 +1,7 @@
-package application.basededatos.crud;
+package application.repositorios.crud;
 
-import application.basededatos.Postgres;
-import application.basededatos.interfaces.ReadDaoI;
+import application.repositorios.Postgres;
+import application.repositorios.interfaces.ReadDaoI;
 import application.modelos.entidades.TipoProducto;
 
 import java.sql.PreparedStatement;
@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TipoProductoCRUD implements ReadDaoI <Integer, TipoProducto> {
-    private static TipoProductoCRUD instance;
+public class TipoProductoRepositorio implements ReadDaoI <Integer, TipoProducto> {
+    private static TipoProductoRepositorio instance;
 
-    public static TipoProductoCRUD getInstance() {
-        return instance = Objects.requireNonNullElseGet(instance, TipoProductoCRUD::new);
+    public static TipoProductoRepositorio getInstance() {
+        return instance = Objects.requireNonNullElseGet(instance, TipoProductoRepositorio::new);
     }
 
     @Override

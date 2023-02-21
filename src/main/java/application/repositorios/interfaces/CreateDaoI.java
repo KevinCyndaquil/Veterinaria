@@ -1,4 +1,4 @@
-package application.basededatos.interfaces;
+package application.repositorios.interfaces;
 
 public interface CreateDaoI<Tabla> {
 

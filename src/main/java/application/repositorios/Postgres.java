@@ -1,4 +1,4 @@
-package application.basededatos;
+package application.repositorios;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

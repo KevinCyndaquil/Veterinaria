@@ -1,10 +1,10 @@
-package application.basededatos.crud;
+package application.repositorios.crud;
 
-import application.basededatos.Postgres;
-import application.basededatos.interfaces.CreateDaoI;
-import application.basededatos.interfaces.LockDaoI;
-import application.basededatos.interfaces.ReadDaoI;
-import application.basededatos.interfaces.UpdateDaoI;
+import application.repositorios.Postgres;
+import application.repositorios.interfaces.CreateDaoI;
+import application.repositorios.interfaces.LockDaoI;
+import application.repositorios.interfaces.ReadDaoI;
+import application.repositorios.interfaces.UpdateDaoI;
 import application.modelos.entidades.Producto;
 
 import java.sql.PreparedStatement;
@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ProductoCRUD implements CreateDaoI<Producto>, ReadDaoI<Integer, Producto>, UpdateDaoI<Producto>, LockDaoI<Integer, Producto> {
-    private static ProductoCRUD instance;
+public class ProductoRepositorio implements CreateDaoI<Producto>, ReadDaoI<Integer, Producto>, UpdateDaoI<Producto>, LockDaoI<Integer, Producto> {
+    private static ProductoRepositorio instance;
 
-    public static ProductoCRUD getInstance() {
-        return instance = Objects.requireNonNullElseGet(instance, ProductoCRUD::new);
+    public static ProductoRepositorio getInstance() {
+        return instance = Objects.requireNonNullElseGet(instance, ProductoRepositorio::new);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ProductoCRUD implements CreateDaoI<Producto>, ReadDaoI<Integer, Pro
                         resultSet.getString(2),
                         resultSet.getDouble(3),
                         resultSet.getString(4),
-                        TipoProductoCRUD.getInstance().read(resultSet.getInt(5))
+                        TipoProductoRepositorio.getInstance().read(resultSet.getInt(5))
                 );
         }
 
@@ -85,7 +85,7 @@ public class ProductoCRUD implements CreateDaoI<Producto>, ReadDaoI<Integer, Pro
                         resultSet.getString(2),
                         resultSet.getDouble(3),
                         resultSet.getString(4),
-                        TipoProductoCRUD.getInstance().read(resultSet.getInt(5))
+                        TipoProductoRepositorio.getInstance().read(resultSet.getInt(5))
                 ));
             }
 
@@ -139,7 +139,7 @@ public class ProductoCRUD implements CreateDaoI<Producto>, ReadDaoI<Integer, Pro
                         resultSet.getString(2),
                         resultSet.getDouble(3),
                         resultSet.getString(4),
-                        TipoProductoCRUD.getInstance().read(resultSet.getInt(5))
+                        TipoProductoRepositorio.getInstance().read(resultSet.getInt(5))
                 );
 
             return null;

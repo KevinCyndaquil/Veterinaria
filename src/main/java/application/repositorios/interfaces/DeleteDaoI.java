@@ -1,4 +1,4 @@
-package application.basededatos.interfaces;
+package application.repositorios.interfaces;
 
 import java.sql.SQLException;
 
