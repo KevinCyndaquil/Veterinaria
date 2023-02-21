@@ -51,7 +51,7 @@ public class AlimentoCRUD implements CreateDaoI<Alimento>, ReadDaoI<Integer, Ali
             return null;
 
         try (PreparedStatement statement = Postgres.getConnection().prepareStatement(
-                "SELECT * FROM alimentos WHERE idal = ? AND activo = true")) {
+                "SELECT * FROM alimentos WHERE id_alimento = ? AND activo = true")) {
 
             statement.setInt(1, llave);
 
@@ -100,7 +100,12 @@ public class AlimentoCRUD implements CreateDaoI<Alimento>, ReadDaoI<Integer, Ali
             return null;
 
         try(PreparedStatement statement = Postgres.getConnection().prepareStatement(
-                "UPDATE alimentos SET nombre = ?, costo = ?, gramaje = ?, descripcion = ? WHERE idal = ? AND activo = true")) {
+                "UPDATE alimentos SET " +
+                        "nombre = ?, " +
+                        "monto = ?, " +
+                        "gramaje = ?, " +
+                        "descripcion = ? " +
+                "WHERE id_alimento = ? AND activo = true")) {
 
             statement.setString(1, alimento.getNombre());
             statement.setDouble(2, alimento.getCosto());
@@ -123,7 +128,7 @@ public class AlimentoCRUD implements CreateDaoI<Alimento>, ReadDaoI<Integer, Ali
             return null;
 
         try (PreparedStatement statement = Postgres.getConnection().prepareStatement(
-                "UPDATE alimentos SET activo = false WHERE idal = ?")) {
+                "UPDATE alimentos SET activo = false WHERE id_alimento = ?")) {
 
             statement.setInt(1, llave);
 
