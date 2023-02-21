@@ -12,8 +12,8 @@ import java.sql.SQLException;
 
 public class Postgres {
     private final String url = "jdbc:postgresql://localhost:5433/veterinaria";
-    private final String user = "postgres";
-    private final String password = "qw6xdg7sB!";
+    private static String user;
+    private static String password;
 
     private static Connection connection;
 
@@ -23,6 +23,17 @@ public class Postgres {
 
     public Postgres() {
         connectTo();
+    }
+
+    /**
+     * Asigna un usuario y una contraseña para conectarse a la base de datos.
+     * @param user un usuario valida.
+     * @param password su respectiva contraseña.
+     */
+
+    public void setUser(String user, String password) {
+        Postgres.user = user;
+        Postgres.password = password;
     }
 
     /**
@@ -38,13 +49,14 @@ public class Postgres {
 
     /**
      * Se conecta a postgres, en caso de no halla el driver de postgres o de existir un error de sql, tira una RunTimeException;
-     * en caso contrario, se conecta a postgres.
+     * necesita un usuario y una contraseña, puede ser asignada con el método setUser, de no asignarse, se usará un usuario genérico.
+     * En caso contrario, se conecta a postgres.
      */
 
-    public void connectTo() {
+    private void connectTo() {
         try {
             Class.forName("org.postgresql.Driver");
-            connection = (connection == null) ? DriverManager.getConnection(url, user, password) : connection;
+            connection = (connection == null) ? DriverManager.getConnection(url, (user == null) ? "postgres" : user, (password == null) ? "qw6xdg7sB!" : password) : connection;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Driver de postgresql no instalado.");
         } catch (SQLException e) {

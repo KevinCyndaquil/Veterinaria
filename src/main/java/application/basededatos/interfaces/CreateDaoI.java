@@ -1,4 +1,4 @@
-package application.basededatos.crud;
+package application.basededatos.interfaces;
 
 public interface CreateDaoI<Tabla> {
 

@@ -1,6 +1,10 @@
 package application.basededatos.crud;
 
 import application.basededatos.Postgres;
+import application.basededatos.interfaces.CreateDaoI;
+import application.basededatos.interfaces.LockDaoI;
+import application.basededatos.interfaces.ReadDaoI;
+import application.basededatos.interfaces.UpdateDaoI;
 import application.modelos.entidades.Alimento;
 
 import java.sql.PreparedStatement;
@@ -10,11 +14,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImpAlimentosCRUD implements PostgresDAOI<Integer, Alimento> {
-    private static ImpAlimentosCRUD instance;
+public class AlimentoCRUD implements CreateDaoI<Alimento>, ReadDaoI<Integer, Alimento>, UpdateDaoI<Alimento>, LockDaoI<Integer, Alimento> {
+    private static AlimentoCRUD instance;
 
-    public static ImpAlimentosCRUD getInstance() {
-        return instance = (instance == null) ? new ImpAlimentosCRUD() : instance;
+    public static AlimentoCRUD getInstance() {
+        return instance = (instance == null) ? new AlimentoCRUD() : instance;
     }
 
     @Override
@@ -25,10 +29,10 @@ public class ImpAlimentosCRUD implements PostgresDAOI<Integer, Alimento> {
         try (PreparedStatement statement = Postgres.getConnection().prepareStatement(
                 "INSERT INTO alimentos VALUES (default, ?, ?, ?, ?, default)")) {
 
-            statement.setString(2, alimento.getNombre());
-            statement.setDouble(3, alimento.getCosto());
-            statement.setDouble(4, alimento.getGramaje());
-            statement.setString(5, alimento.getDescripcion());
+            statement.setString(1, alimento.getNombre());
+            statement.setDouble(2, alimento.getCosto());
+            statement.setDouble(3, alimento.getGramaje());
+            statement.setString(4, alimento.getDescripcion());
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -114,7 +118,7 @@ public class ImpAlimentosCRUD implements PostgresDAOI<Integer, Alimento> {
     }
 
     @Override
-    public Alimento desactivate(Integer llave) throws SQLException {
+    public Alimento lock(Integer llave) throws SQLException {
         if (llave == null)
             return null;
 
@@ -133,8 +137,32 @@ public class ImpAlimentosCRUD implements PostgresDAOI<Integer, Alimento> {
                         resultSet.getDouble(4),
                         resultSet.getString(5)
                 );
+            return null;
         }
-
-        return null;
     }
+
+    /*@Override
+    public Alimento delete(Integer llave) throws SQLException {
+        if (llave == null)
+            return null;
+
+        try (PreparedStatement statement = Postgres.getConnection().prepareStatement(
+                "DELETE FROM alimentos WHERE idal = ?")) {
+
+            statement.setInt(1, llave);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next())
+                return new Alimento(
+                    llave,
+                    resultSet.getString(2),
+                    resultSet.getDouble(3),
+                    resultSet.getDouble(4),
+                    resultSet.getString(5)
+            );
+
+            return null;
+        }
+    }*/
 }

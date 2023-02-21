@@ -1,4 +1,4 @@
-package application.basededatos.crud;
+package application.basededatos.interfaces;
 
 import java.sql.SQLException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package application.basededatos.crud;
+package application.basededatos.interfaces;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -47,5 +47,13 @@ public interface PostgresDAOI<Key, Table> {
      * @return el objeto que ha sido ocultado de la base de datos, de no hallarlo, devolverá null.
      * @throws SQLException en caso de haber ocurrido un problema con la consulta.
      */
-    Table desactivate(Key key) throws SQLException;
+    Table lock(Key key) throws SQLException;
+
+    /**
+     * Elimina permanentemente un registro dentro de la base de datos, según una llave.
+     * @param key la llave del registro a ser borrado.
+     * @return el registro eliminado, en caso de no hallarlo, devolverá null.
+     * @throws SQLException en caso de haber ocurrido un problema con la consulta.
+     */
+    Table delete(Key key) throws SQLException;
 }
