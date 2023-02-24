@@ -5,30 +5,22 @@ import application.modelos.Tabla;
 import java.time.LocalDate;
 
 public class MedicamentoFactura extends Factura {
-    private Double subtotal;
     private Integer cantidad;
+    private Double subtotal;
     private Tabla <?>  medicamento;
 
-    public MedicamentoFactura(LocalDate fecha_factura, Double monto_total, Tabla<?> proveedor, Double subtotal, Integer cantidad, Tabla<?> medicamento) {
+    public MedicamentoFactura(LocalDate fecha_factura, Double monto_total, Tabla<?> proveedor, Integer cantidad, Double subtotal, Tabla<?> medicamento) {
         super(fecha_factura, monto_total, proveedor);
-        this.subtotal = subtotal;
         this.cantidad = cantidad;
+        this.subtotal = subtotal;
         this.medicamento = medicamento;
     }
 
-    public MedicamentoFactura(Integer llave, LocalDate fecha_factura, Double monto_total, Tabla<?> proveedor, Double subtotal, Integer cantidad, Tabla<?> medicamento) {
+    public MedicamentoFactura(Integer llave, LocalDate fecha_factura, Double monto_total, Tabla<?> proveedor, Integer cantidad, Double subtotal, Tabla<?> medicamento) {
         super(llave, fecha_factura, monto_total, proveedor);
-        this.subtotal = subtotal;
         this.cantidad = cantidad;
-        this.medicamento = medicamento;
-    }
-
-    public Double getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
+        this.medicamento = medicamento;
     }
 
     public Integer getCantidad() {
@@ -45,5 +37,13 @@ public class MedicamentoFactura extends Factura {
 
     public void setMedicamento(Tabla<?> medicamento) {
         this.medicamento = medicamento;
+    }
+
+    public Double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(Double subtotal) {
+        this.subtotal = subtotal;
     }
 }

@@ -37,7 +37,7 @@ CREATE TABLE razas(
 );
 
 CREATE TABLE propietarios(
-    rfc_dueño CHAR(13) PRIMARY KEY,
+    rfc_propietario CHAR(13) PRIMARY KEY,
     nombre CHAR(30) NOT NULL,
     apellido_p CHAR(30) NOT NULL,
     apellido_m CHAR(30),
@@ -117,14 +117,13 @@ CREATE TABLE especialidades(
 CREATE TABLE veterinarios_especialidades(
     rfc_veterinario char(13) REFERENCES veterinarios,
     id_especialidad integer REFERENCES especialidades,
-    PRIMARY KEY(rfc_veterinario, id_especialidad),
-    activo BOOLEAN DEFAULT TRUE
+    PRIMARY KEY(rfc_veterinario, id_especialidad)
 );
 
 CREATE TABLE nominas(
     id_nomina SERIAL NOT NULL,
     fecha_factura DATE NOT NULL,
-    total_horas smallint NOT NULL,
+    total_horas INTEGER NOT NULL,
     salario DECIMAL(10, 2) NOT NULL,
     total_bono DECIMAL(10, 2) DEFAULT 0,
     rfc_empleado VARCHAR(13) NOT NULL REFERENCES empleados,
@@ -133,7 +132,7 @@ CREATE TABLE nominas(
 );
 
 CREATE TABLE proveedores(
-    id_proveedores SERIAL PRIMARY KEY,
+    id_proveedor SERIAL PRIMARY KEY,
     nombre VARCHAR(30) NOT NULL,
     direccion VARCHAR(50),
     telefono VARCHAR(13) NOT NULL,

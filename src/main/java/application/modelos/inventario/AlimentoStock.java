@@ -28,11 +28,11 @@ public class AlimentoStock extends Lista <LocalDate> {
         this.cantidad = cantidad;
     }
 
-    public Tabla <?> getAlimentos() {
+    public Tabla <?> getAlimento() {
         return alimento;
     }
 
-    public void setAlimentos(Tabla <?> alimento) {
+    public void setAlimento(Tabla <?> alimento) {
         this.alimento = alimento;
     }
 }
