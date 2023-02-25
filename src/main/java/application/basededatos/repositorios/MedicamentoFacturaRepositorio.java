@@ -4,8 +4,6 @@ import application.basededatos.Postgres;
 import application.basededatos.interfaces.Create;
 import application.basededatos.interfaces.ReadAll;
 import application.basededatos.interfaces.ReadList;
-import application.modelos.entregas.Factura;
-import application.modelos.entregas.MedicamentoFactura;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

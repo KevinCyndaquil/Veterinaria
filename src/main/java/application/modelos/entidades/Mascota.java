@@ -1,70 +1,34 @@
 package application.modelos.entidades;
 
 import application.modelos.Tabla;
+import application.modelos.citas.VacunaExpediente;
 
 import java.time.LocalDate;
+import java.util.List;
 
-public class Mascota extends Tabla<String> {
+public class Mascota extends Tabla<Integer> {
+    private String nombre;
     private LocalDate fecha_nacimiento;
-    private Integer edad;
-    private Boolean sexo;
-    private Tabla<?> propietario;
-    private Tabla<?> raza;
+    private String sexo;
+    private Propietario propietario;
+    private Raza raza;
+    private List<VacunaExpediente> vacunas;
 
-    public Mascota(LocalDate fecha_nacimiento, Integer edad, Boolean sexo, Tabla<?> propietario, Tabla<?> raza) {
+    public Mascota(String nombre, LocalDate fecha_nacimiento, String sexo, Propietario propietario, Raza raza, List<VacunaExpediente> vacunas) {
+        this.nombre = nombre;
         this.fecha_nacimiento = fecha_nacimiento;
-        this.edad = edad;
         this.sexo = sexo;
         this.propietario = propietario;
         this.raza = raza;
+        this.vacunas = vacunas;
     }
 
-    public Mascota(String llave, String nombre, LocalDate fecha_nacimiento, Integer edad, Boolean sexo, Tabla<?> propietario, Tabla<?> raza) {
-        super(llave, nombre);
+    public Mascota(Integer id, String nombre, LocalDate fecha_nacimiento, String sexo, Propietario propietario, Raza raza) {
+        super(id);
+        this.nombre = nombre;
         this.fecha_nacimiento = fecha_nacimiento;
-        this.edad = edad;
         this.sexo = sexo;
         this.propietario = propietario;
-        this.raza = raza;
-    }
-
-    public LocalDate getFecha_nacimiento() {
-        return fecha_nacimiento;
-    }
-
-    public void setFecha_nacimiento(LocalDate fecha_nacimiento) {
-        this.fecha_nacimiento = fecha_nacimiento;
-    }
-
-    public Integer getEdad() {
-        return edad;
-    }
-
-    public void setEdad(Integer edad) {
-        this.edad = edad;
-    }
-
-    public Boolean getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(Boolean sexo) {
-        this.sexo = sexo;
-    }
-
-    public Tabla<?> getPropietario() {
-        return propietario;
-    }
-
-    public void setPropietario(Tabla<?> propietario) {
-        this.propietario = propietario;
-    }
-
-    public Tabla<?> getRaza() {
-        return raza;
-    }
-
-    public void setRaza(Tabla<?> raza) {
         this.raza = raza;
     }
 }

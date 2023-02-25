@@ -57,7 +57,7 @@ public class EmpleadoRepositorio implements Create<Empleado>, FullRead<String, E
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next())
-                return new Empleado(
+                return new Mascota.Empleado(
                         llave,
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -83,7 +83,7 @@ public class EmpleadoRepositorio implements Create<Empleado>, FullRead<String, E
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next())
-                return new Empleado(
+                return new Mascota.Empleado(
                         llave,
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -105,7 +105,7 @@ public class EmpleadoRepositorio implements Create<Empleado>, FullRead<String, E
             List <Empleado> list = new ArrayList<>();
 
             while (resultSet.next()) {
-                list.add(new Empleado(
+                list.add(new Mascota.Empleado(
                         resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getString(3),

@@ -1,6 +1,5 @@
 package application.basededatos.repositorios;
 
-import application.modelos.entidades.Propietario;
 import application.basededatos.Postgres;
 import application.basededatos.interfaces.Create;
 import application.basededatos.interfaces.Hide;

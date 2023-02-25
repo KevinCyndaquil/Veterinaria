@@ -3,8 +3,6 @@ package application.basededatos.repositorios;
 import application.basededatos.Postgres;
 import application.basededatos.interfaces.Create;
 import application.basededatos.interfaces.Read;
-import application.modelos.entidades.Especialidad;
-import application.modelos.entidades.Veterinario;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -4,7 +4,6 @@ import application.basededatos.Postgres;
 import application.basededatos.interfaces.Create;
 import application.basededatos.interfaces.Hide;
 import application.basededatos.interfaces.FullRead;
-import application.modelos.entidades.Especialidad;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -2,7 +2,6 @@ package application.basededatos.repositorios;
 
 import application.basededatos.Postgres;
 import application.basededatos.interfaces.FullRead;
-import application.modelos.entidades.TipoProducto;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

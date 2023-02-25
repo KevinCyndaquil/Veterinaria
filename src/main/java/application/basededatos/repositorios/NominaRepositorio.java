@@ -2,7 +2,6 @@ package application.basededatos.repositorios;
 
 import application.basededatos.Postgres;
 import application.basededatos.interfaces.*;
-import application.modelos.finanzas.Nomina;
 
 import java.sql.*;
 import java.util.ArrayList;

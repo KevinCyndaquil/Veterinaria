@@ -5,7 +5,6 @@ import application.basededatos.interfaces.Create;
 import application.basededatos.interfaces.Hide;
 import application.basededatos.interfaces.FullRead;
 import application.basededatos.interfaces.Update;
-import application.modelos.entidades.Medicamento;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -6,7 +6,7 @@ public class FormaPago extends Tabla<Integer> {
     public FormaPago() {
     }
 
-    public FormaPago(Integer llave, String forma) {
-        super(llave, forma);
+    public FormaPago(Integer id) {
+        super(id);
     }
 }

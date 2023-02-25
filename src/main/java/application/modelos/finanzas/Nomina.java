@@ -1,71 +1,32 @@
 package application.modelos.finanzas;
 
-import application.modelos.Lista;
 import application.modelos.Tabla;
+import application.modelos.entidades.Empleado;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
-public class Nomina extends Lista <Integer> {
-    private LocalDate fecha;
-    private Integer total_horas;
-    private Double salario;
-    private Double bono = 0d;
-    private Tabla<?> empleado;
+public class Nomina extends Tabla<Integer> {
+    private LocalDate fecha_inicio;
+    private LocalDate fecha_fin;
+    private LocalTime total_horas;
+    private Double total_bono;
+    private Empleado empleado; //en el DER es su entidad padre
 
-    public Nomina(LocalDate fecha, Integer total_horas, Double salario, Double bono, Tabla<?> empleado) {
-        this.fecha = fecha;
+    public Nomina(LocalDate fecha_inicio, LocalDate fecha_fin, LocalTime total_horas, Double total_bono, Empleado empleado) {
+        this.fecha_inicio = fecha_inicio;
+        this.fecha_fin = fecha_fin;
         this.total_horas = total_horas;
-        this.salario = salario;
-        this.bono = bono;
+        this.total_bono = total_bono;
         this.empleado = empleado;
     }
 
-    public Nomina(Integer llave, LocalDate fecha, Integer total_horas, Double salario, Double bono, Tabla<?> empleado) {
-        super(llave);
-        this.fecha = fecha;
+    public Nomina(Integer id, LocalDate fecha_inicio, LocalDate fecha_fin, LocalTime total_horas, Double total_bono, Empleado empleado) {
+        super(id);
+        this.fecha_inicio = fecha_inicio;
+        this.fecha_fin = fecha_fin;
         this.total_horas = total_horas;
-        this.salario = salario;
-        this.bono = bono;
-        this.empleado = empleado;
-    }
-
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    public Integer getTotal_horas() {
-        return total_horas;
-    }
-
-    public void setTotal_horas(Integer total_horas) {
-        this.total_horas = total_horas;
-    }
-
-    public Double getSalario() {
-        return salario;
-    }
-
-    public void setSalario(Double salario) {
-        this.salario = salario;
-    }
-
-    public Double getBono() {
-        return bono;
-    }
-
-    public void setBono(Double bono) {
-        this.bono = bono;
-    }
-
-    public Tabla<?> getEmpleado() {
-        return empleado;
-    }
-
-    public void setEmpleado(Tabla<?> empleado) {
+        this.total_bono = total_bono;
         this.empleado = empleado;
     }
 }
