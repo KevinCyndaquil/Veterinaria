@@ -1,9 +1,13 @@
 package application.modelos.finanzas;
 
 import application.modelos.Tabla;
+import lombok.Getter;
+import lombok.Setter;
 
-public class Pago extends Tabla<Integer> {
+public class Pago extends Tabla {
+    @Getter @Setter
     private Double monto_subtotal;
+    @Getter @Setter
     private FormaPago forma_pago;
 
     public Pago(Double monto_subtotal, FormaPago forma_pago) {

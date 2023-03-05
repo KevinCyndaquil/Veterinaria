@@ -1,9 +1,13 @@
 package application.modelos.entidades;
 
 import application.modelos.Tabla;
+import lombok.Getter;
+import lombok.Setter;
 
-public class Puesto extends Tabla<Integer> {
+public class Puesto extends Tabla {
+    @Getter @Setter
     private String nombre;
+    @Getter @Setter
     private Double salario;
 
     public Puesto(String nombre, Double salario) {

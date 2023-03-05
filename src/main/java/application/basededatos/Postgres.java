@@ -15,15 +15,7 @@ public class Postgres {
     private static String user;
     private static String password;
 
-    private static Connection connection;
-
-    /**
-     * Constructor llama al método connectTo.
-     */
-
-    public Postgres() {
-        connectTo();
-    }
+    private Connection connection; //la conexión
 
     /**
      * Asigna un usuario y una contraseña para conectarse a la base de datos.
@@ -41,8 +33,8 @@ public class Postgres {
      * @return Regresa la conexión en caso de ser exitosa, si no, regresa null.
      */
 
-    public static Connection getConnection() {
-        new Postgres();
+    public Connection getConnection() {
+        connectTo();
 
         return connection;
     }

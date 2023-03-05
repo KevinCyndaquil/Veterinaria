@@ -1,5 +1,7 @@
 package application.modelos.entidades;
 
+import lombok.Getter;
+
 /**
  * @author KevinCyndaquil
  * Enumeración que contiene los posibles medios de administración de un medicamento en la veterinaria.
@@ -14,6 +16,7 @@ public enum ViasMedicamento {
     NASAL("nasal"), //por la nariz
     CUTANEO("cutaneo"); //por la piel
 
+    @Getter
     private final String via;
 
     ViasMedicamento(String via) {

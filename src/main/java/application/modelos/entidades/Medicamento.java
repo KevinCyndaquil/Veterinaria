@@ -1,8 +1,14 @@
 package application.modelos.entidades;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Medicamento extends Articulo{
+    @Getter @Setter
     private Double gramaje;
+    @Getter @Setter
     private String laboratorio;
+    @Getter @Setter
     private ViasMedicamento via;
 
     public Medicamento(String nombre, Double monto, String descripcion, Double gramaje, String laboratorio, ViasMedicamento via) {

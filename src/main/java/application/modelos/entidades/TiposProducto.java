@@ -1,5 +1,7 @@
 package application.modelos.entidades;
 
+import lombok.Getter;
+
 /**
  * @author KevinCyndaquil
  * Es una enumeración que contiene todos los posibles tipos de productos que están disponibles a la venta
@@ -13,9 +15,10 @@ public enum TiposProducto {
     SEGURIDAD("seguridad"),
     HIGIENE("higiene");
 
-    private final String tipo;
+    @Getter
+    private final String descripcion;
 
-    TiposProducto(String tipo) {
-        this.tipo = tipo;
+    TiposProducto(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

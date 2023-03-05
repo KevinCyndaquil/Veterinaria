@@ -1,6 +1,10 @@
 package application.modelos.entidades;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Producto extends Articulo{
+   @Getter @Setter
    TiposProducto tipo;
 
     public Producto(String nombre, Double monto, String descripcion, TiposProducto tipo) {

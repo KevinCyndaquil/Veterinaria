@@ -1,6 +1,8 @@
 package application.modelos.entidades;
 
 import application.modelos.Tabla;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author KevinCyndaquil
@@ -8,9 +10,12 @@ import application.modelos.Tabla;
  * al usuario, que puede ser vendido, administrado o contado.
  */
 
-public class Articulo extends Tabla<Integer> {
+public class Articulo extends Tabla {
+    @Getter @Setter
     private String nombre;
+    @Getter @Setter
     private Double monto;
+    @Getter @Setter
     private String descripcion;
 
     public Articulo(String nombre, Double monto, String descripcion) {
@@ -24,5 +29,10 @@ public class Articulo extends Tabla<Integer> {
         this.nombre = nombre;
         this.monto = monto;
         this.descripcion = descripcion;
+    }
+
+    @Override
+    public String toString() {
+        return nombre + ", " + descripcion;
     }
 }

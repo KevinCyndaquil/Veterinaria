@@ -1,15 +1,18 @@
 package application.modelos;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Es un modelo que representa una tabla genérica de la base de datos de la veterinaria.
- * @param <Key> el tipo de dato de la id primaria de la tabla.
  */
 
-public class Tabla <Key>{
-    private Key id;
+public class Tabla {
+    @Getter @Setter
+    private Integer id;
 
     /**
-     * Constructor vacío, id nula.
+     * Constructor vacío, key nula.
      */
     public Tabla() {
         id = null;
@@ -17,9 +20,9 @@ public class Tabla <Key>{
 
     /**
      * Constructor con un identificador definido.
-     * @param id la id primaria del registro.
+     * @param id la key primaria del registro.
      */
-    public Tabla(Key id) {
+    public Tabla(Integer id) {
         this.id = id;
     }
 }

@@ -6,12 +6,10 @@ package application.basededatos.interfaces;
  */
 
 public interface Create<Tabla> {
-
     /**
      * Inserta un objeto como un registro dentro de una tabla en la base de datos.
      * @param tabla el objeto a insertar.
-     * @return el resultado de la operación.
+     * @return un mensaje con el resultado de la operación.
      */
-
     String create(Tabla tabla);
 }
