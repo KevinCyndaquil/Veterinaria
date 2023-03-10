@@ -10,16 +10,16 @@ import java.sql.SQLException;
  * Es una clase que se conecta a postgres.
  */
 
-public class Postgres {
+public class Postgres implements AutoCloseable{
     private final String url = "jdbc:postgresql://localhost:5433/veterinaria";
     private static String user;
     private static String password;
 
-    private Connection connection; //la conexión
+    protected Connection connection; //la conexión
 
     /**
      * Asigna un usuario y una contraseña para conectarse a la base de datos.
-     * @param user un usuario valida.
+     * @param user un usuario válido.
      * @param password su respectiva contraseña.
      */
 
@@ -56,11 +56,21 @@ public class Postgres {
         }
     }
 
-    public static void main(String[] args) {
-        new Postgres();
-
-        System.out.println("Connection with postgresql successfully");
+    public static void main(String[] args){
+        try (Postgres postgres = new Postgres()) {
+            postgres.connectTo();
+            System.out.println("Connection with postgresql successfully");
+        } catch (Exception ex) {
+            System.out.println("Connection with postgresql was wrong");
+        }
     }
 
-
+    /**
+     * Cerramos la conexión de PostgreSQL usada en un bloque try-with-catch.
+     * @throws SQLException regresa una excepción SQL en caso de ocurrir un error con el cierre de la conexión.
+     */
+    @Override
+    public void close () throws SQLException {
+        this.connection.close();
+    }
 }
