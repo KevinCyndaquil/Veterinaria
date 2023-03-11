@@ -1,6 +1,4 @@
 package application.views.utils;
-
-
 import java.awt.*;
 
 public class ResponsiveDimension {
@@ -11,16 +9,21 @@ public class ResponsiveDimension {
     }
 
     //return the resolution preferred for the app depending on the screen size
-    public static Dimension getResolution() {
+    public static Dimension getNextResolution() {
         Dimension screenSize = getScreenSize();
 
-        if(screenSize.equals(Resolutions.FULL_HD.getSize())){
+        if (screenSize.equals(Resolutions.FULL_HD.getSize())) {
             return Resolutions.WXGA.getSize();
+        } else if (screenSize.equals(Resolutions.WXGA.getSize())) {
+            return Resolutions.HD.getSize();
+        } else if (screenSize.equals(Resolutions.HD.getSize())) {
+            return Resolutions.QHD.getSize();
+        } else if (screenSize.equals(Resolutions.QHD.getSize())) {
+            return Resolutions.FWVGA.getSize();
+        } else {
+            return Resolutions.FWVGA.getSize();
         }
-        return null;
     }
 
-    public static void main(String[] args) {
-        System.out.println(getResolution());
-    }
+
 }
