@@ -13,27 +13,28 @@ public class AlimentoRep implements
         ReadFull<Integer, Alimento>,
         Update<Alimento>,
         Hide<Integer> {
-
-    private final Postgres postgres = new Postgres();
-
     @Override
     public String create (Alimento alimento) {
         if (alimento == null)
             return "ALIMENTO DOESN'T EXIST";
 
-        try (Connection connection = postgres.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO alimentos VALUES (default, ?, ?, ?, ?, default)")) {
+        try (Postgres postgres = new Postgres();
+             PreparedStatement statement = postgres.getConnection().prepareStatement(
+                "SELECT agrAlimento(?)")) {
 
-            statement.setString(1, alimento.getNombre());
-            statement.setDouble(2, alimento.getMonto());
-            statement.setDouble(3, alimento.getGramaje());
-            statement.setString(4, alimento.getDescripcion());
+            Array array = postgres.getConnection().createArrayOf("VARCHAR", new Object[]{
+                    alimento.getNombre(),
+                    alimento.getMonto(),
+                    alimento.getGramaje(),
+                    alimento.getDescripcion()
+            });
+
+            statement.setArray(1, array);
 
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next())
-                return "SQL SUCCESSFULLY: " + alimento;
+                return "SQL SUCCESSFULLY: " + resultSet.getInt(1);
 
             return "SQL MISSING: " + alimento;
         } catch (SQLException ex) {
@@ -49,8 +50,8 @@ public class AlimentoRep implements
         if (id.length == 0)
             return null;
 
-        try (Connection connection = postgres.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
+        try (Postgres postgres = new Postgres();
+             PreparedStatement statement = postgres.getConnection().prepareStatement(
                      "UPDATE alimentos SET activo = NOT activo WHERE id_alimento = ?")) {
 
             statement.setInt(1, id[0]);
@@ -67,12 +68,11 @@ public class AlimentoRep implements
     public Alimento read (Integer[] id) throws SQLException {
         if (id == null)
             return null;
-
         if (id.length == 0)
             return null;
 
-        try (Connection connection = postgres.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
+        try (Postgres postgres = new Postgres();
+             PreparedStatement statement = postgres.getConnection().prepareStatement(
                 "SELECT * FROM alimentos WHERE id_alimento = ? AND activo = true")) {
 
             statement.setInt(1, id[0]);
@@ -93,10 +93,10 @@ public class AlimentoRep implements
 
     @Override
     public List<Alimento> readAll () throws SQLException {
-        try (Connection connection = postgres.getConnection();
-             Statement statement = connection.createStatement();
+        try (Postgres postgres = new Postgres();
+             Statement statement = postgres.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(
-                     "SELECT * FROM alimentos WHERE activo = true")) {
+                     "SELECT * FROM alimentos WHERE activo = true ORDER BY nombre")) {
 
             List<Alimento> list = new ArrayList<>();
 
@@ -117,8 +117,8 @@ public class AlimentoRep implements
         if (alimento == null)
             return null;
 
-        try(Connection connection = postgres.getConnection();
-            PreparedStatement statement = connection.prepareStatement(
+        try(Postgres postgres = new Postgres();
+            PreparedStatement statement = postgres.getConnection().prepareStatement(
                 "UPDATE alimentos SET " +
                         "nombre = ?, " +
                         "monto = ?, " +
