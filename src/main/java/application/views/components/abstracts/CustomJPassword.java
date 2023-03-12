@@ -1,19 +1,20 @@
 package application.views.components.abstracts;
 
 import application.views.components.interfaces.IPositionableComponent;
+import application.views.utils.FontsLoader;
 import application.views.utils.Positions;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public abstract class CustomJLabel extends JLabel implements IPositionableComponent {
-    public CustomJLabel() {
+public abstract class CustomJPassword extends JPasswordField implements IPositionableComponent {
+    @Getter
+    private final FontsLoader fontsLoader;
+    public CustomJPassword() {
         super();
+        fontsLoader = new FontsLoader();
     }
-    public CustomJLabel(String text) {
-        super(text);
-    }
-
     @Override
     public void setLocation(@NotNull JComponent fatherJComponent, Positions position){
 

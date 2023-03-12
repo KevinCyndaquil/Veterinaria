@@ -18,7 +18,7 @@ public abstract class CustomJFrame extends JFrame {
         super(title);
         fontsLoader = new FontsLoader();
         setLayout(null);
-        getContentPane().setPreferredSize(ResponsiveDimension.getNextResolution());
+        getContentPane().setPreferredSize(ResponsiveDimension.getNextResolution().getSize());
         initComponents();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         pack();
@@ -26,4 +26,5 @@ public abstract class CustomJFrame extends JFrame {
     }
 
     public abstract void initComponents();
+
 }

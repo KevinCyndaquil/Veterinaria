@@ -2,6 +2,7 @@ package application.views;
 
 
 import application.views.components.Banner;
+import application.views.components.TextDisplay;
 import application.views.components.abstracts.CustomJFrame;
 import application.views.utils.*;
 
@@ -21,7 +22,7 @@ public class MainView extends CustomJFrame {
     @Override
     public void initComponents() {
         mainPanel = new JPanel();
-        mainPanel.setSize(ResponsiveDimension.getNextResolution());
+        mainPanel.setSize(ResponsiveDimension.getNextResolution().getSize());
         mainPanel.setLocation(0, 0);
         mainPanel.setLayout(null);
         add(mainPanel);
@@ -29,7 +30,7 @@ public class MainView extends CustomJFrame {
         Banner banner = new Banner();
         mainPanel.add(banner);
 
-        JLabel welcomeJL = new JLabel("Bienvenido");
+        TextDisplay welcomeJL = new TextDisplay("Bienvenido");
         welcomeJL.setFont(getFontsLoader().load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 36f));
         welcomeJL.setSize(313, 60);
         mainPanel.add(welcomeJL);
@@ -40,15 +41,17 @@ public class MainView extends CustomJFrame {
         mainPanel.add(loadingJL);
 
         this.addComponentListener(new ComponentAdapter() {
+
             @Override
             public void componentResized(ComponentEvent e) {
-                System.out.println("content\t" + getContentPane().getSize());
-                System.out.println("frame\t" + getSize());
+                //System.out.println("content\t" + getContentPane().getSize());
+                //System.out.println("frame\t" + getSize());
                 //if size window is bigger than HD then resize mainPanel to window size
                 mainPanel.setSize(getContentPane().getSize());
                 banner.setLocation(mainPanel, Positions.CENTER, 0, -120);
-                welcomeJL.setLocation(mainPanel.getWidth() / 2 - welcomeJL.getWidth() / 2 + 60, mainPanel.getHeight() / 2 - welcomeJL.getHeight() / 2 + 200);
+                welcomeJL.setLocation(mainPanel, Positions.CENTER, 0, 200);
                 loadingJL.setLocation(mainPanel.getWidth() / 2 - loadingJL.getWidth() / 2, mainPanel.getHeight() / 2 - loadingJL.getHeight() / 2 + 280);
+
             }
         });
     }
