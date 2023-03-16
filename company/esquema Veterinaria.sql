@@ -6,13 +6,6 @@ CREATE DATABASE veterinaria;
 
 \c veterinaria
 
--- CREAMOS LOS ESQUEMAS
-
-CREATE SCHEMA receta;
-CREATE SCHEMA ticket;
-CREATE SCHEMA stock;
-CREATE SCHEMA factura;
-
 -- CREAMOS LAS TABLAS,
 
 
@@ -84,6 +77,8 @@ CREATE TABLE alimentos(
     CONSTRAINT gramaje_invalido
         CHECK ( gramaje > 0 ),
     descripcion VARCHAR(100) DEFAULT '',
+    stock INTEGER NOT NULL DEFAULT 0,
+    CONSTRAINT stock_invalido CHECK ( stock >= 0 ),
     activo BOOLEAN DEFAULT TRUE
 );
 
@@ -98,25 +93,30 @@ CREATE TABLE productos(
     descripcion VARCHAR(100) DEFAULT '',
     tipo VARCHAR(10),
     CHECK ( tipo = 'accesorio' OR tipo = 'ropa' OR tipo = 'juguete' OR tipo = 'seguridad' OR tipo = 'higiene' ),
+    stock INTEGER NOT NULL DEFAULT 0,
+    CONSTRAINT stock_invalido CHECK ( stock >= 0 ),
     activo BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE medicamentos(
     id_medicamento SERIAL PRIMARY KEY,
-    nombre VARCHAR(30) NOT NULL,
+    nombre         VARCHAR(30)    NOT NULL,
     CONSTRAINT nombre_invalido
         CHECK ( nombre ~ '^[A-Z0-9 ]+$' ),
-    monto DECIMAL(10, 2) NOT NULL,
+    monto          DECIMAL(10, 2) NOT NULL,
     CONSTRAINT monto_invalido
         CHECK ( monto > 0 ),
-    gramaje DECIMAL(10, 2) NOT NULL,
+    gramaje        DECIMAL(10, 2) NOT NULL,
     CONSTRAINT gramaje_invalido
         CHECK ( gramaje > 0 ),
-    laboratorio VARCHAR(30) NOT NULL,
-    descripcion VARCHAR(100) DEFAULT '',
-    via VARCHAR(13) NOT NULL,
-    CHECK ( via = 'oral' OR via = 'intravenosa' OR via = 'intramuscular' OR via = 'rectal' OR via = 'ocular' OR via = 'nasal' OR via = 'cutaneo'),
-    activo BOOLEAN DEFAULT TRUE
+    laboratorio    VARCHAR(30)    NOT NULL,
+    descripcion    VARCHAR(100)            DEFAULT '',
+    via            VARCHAR(13)    NOT NULL,
+    CHECK ( via = 'oral' OR via = 'intravenosa' OR via = 'intramuscular' OR via = 'rectal' OR via = 'ocular' OR
+            via = 'nasal' OR via = 'cutaneo'),
+    stock          INTEGER        NOT NULL DEFAULT 0,
+    CONSTRAINT stock_invalido CHECK ( stock >= 0 ),
+    activo         BOOLEAN                 DEFAULT TRUE
 );
 
 CREATE TABLE puestos(
@@ -157,6 +157,7 @@ CREATE TABLE empleados(
     activo BOOLEAN DEFAULT TRUE
 );
 
+-- tabla especializada
 CREATE TABLE detalles_nomina(
     cns_nomina SERIAL NOT NULL,
     fecha_inicio DATE NOT NULL,
@@ -197,8 +198,8 @@ CREATE TABLE facturas(
     activo BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE factura.alimentos(
-    cns_factura_a INTEGER NOT NULL,
+-- tabla muchos a muchos
+CREATE TABLE factura_alimentos(
     cantidad INTEGER NOT NULL,
     CONSTRAINT cantidad_invalida
         CHECK ( cantidad > 0 ),
@@ -207,11 +208,11 @@ CREATE TABLE factura.alimentos(
         CHECK ( subtotal > 0 ),
     id_alimento INTEGER NOT NULL REFERENCES alimentos,
     id_factura INTEGER NOT NULL REFERENCES facturas,
-    PRIMARY KEY(id_factura, cns_factura_a)
+    PRIMARY KEY(id_factura, id_alimento)
 );
 
-CREATE TABLE factura.productos(
-    cns_factura_p INTEGER NOT NULL,
+-- tabla muchos a muchos
+CREATE TABLE factura_productos(
     cantidad INTEGER NOT NULL,
     CONSTRAINT cantidad_invalida
         CHECK ( cantidad > 0 ),
@@ -220,11 +221,11 @@ CREATE TABLE factura.productos(
         CHECK ( subtotal > 0 ),
     id_producto INTEGER NOT NULL REFERENCES productos,
     id_factura INTEGER NOT NULL REFERENCES facturas,
-    PRIMARY KEY(id_factura, cns_factura_p)
+    PRIMARY KEY(id_factura, id_producto)
 );
 
-CREATE TABLE factura.medicamentos(
-    cns_factura_m INTEGER NOT NULL,
+-- tabla muchos a muchos
+CREATE TABLE factura_medicamentos(
     cantidad INTEGER NOT NULL,
     CONSTRAINT cantidad_invalida
         CHECK ( cantidad > 0 ),
@@ -233,43 +234,7 @@ CREATE TABLE factura.medicamentos(
         CHECK ( subtotal > 0 ),
     id_medicamento INTEGER REFERENCES medicamentos,
     id_factura INTEGER REFERENCES facturas,
-    PRIMARY KEY(id_factura, cns_factura_m)
-);
-
-CREATE TABLE stock.alimentos(
-    cns_stock_a INTEGER NOT NULL,
-    caducidad DATE NOT NULL,
-    CONSTRAINT caducidad_invalidad
-        CHECK ( caducidad > now() ),
-    cantidad INTEGER NOT NULL,
-    CONSTRAINT cantidad_invalida
-        CHECK ( cantidad > 0 ),
-    id_alimento INTEGER NOT NULL REFERENCES alimentos,
-    PRIMARY KEY(id_alimento,cns_stock_a)
-);
-
-CREATE TABLE stock.productos(
-    cns_stock_p INTEGER NOT NULL,
-    caducidad DATE NOT NULL,
-    CONSTRAINT caducidad_invalidad
-        CHECK ( caducidad > now() ),
-    cantidad INTEGER NOT NULL,
-    CONSTRAINT cantidad_invalida
-        CHECK ( cantidad > 0 ),
-    id_producto INTEGER NOT NULL REFERENCES productos,
-    PRIMARY KEY(id_producto, cns_stock_p)
-);
-
-CREATE TABLE stock.medicamentos(
-    cns_stock_m INTEGER NOT NULL,
-    caducidad DATE NOT NULL,
-    CONSTRAINT caducidad_invalidad
-        CHECK ( caducidad > now() ),
-    cantidad INTEGER NOT NULL,
-    CONSTRAINT cantidad_invalida
-        CHECK ( cantidad > 0 ),
-    id_medicamento INTEGER NOT NULL REFERENCES medicamentos,
-    PRIMARY KEY(id_medicamento, cns_stock_m)
+    PRIMARY KEY(id_factura, id_medicamento)
 );
 
 CREATE TABLE formas_pago(
@@ -305,8 +270,8 @@ CREATE TABLE pagos(
     PRIMARY KEY(id_ticket, cns_pago)
 );
 
-CREATE TABLE ticket.alimentos(
-    cns_alimento_ve serial,
+-- tabla muchos a muchos
+CREATE TABLE ticket_alimentos(
     cantidad INTEGER NOT NULL,
     CONSTRAINT cantidad_invalida
         CHECK ( cantidad > 0 ),
@@ -315,13 +280,12 @@ CREATE TABLE ticket.alimentos(
         CHECK ( subtotal > 0 ),
     id_alimento INTEGER NOT NULL REFERENCES alimentos,
     id_ticket INTEGER NOT NULL REFERENCES tickets,
-    activo BOOLEAN DEFAULT TRUE,
-    PRIMARY KEY(id_ticket, cns_alimento_ve)
+    PRIMARY KEY(id_ticket, id_alimento)
 
 );
 
-CREATE TABLE ticket.productos(
-    cns_producto_ve serial,
+-- tabla muchos a muchos
+CREATE TABLE ticket_productos(
     cantidad INTEGER NOT NULL,
     CONSTRAINT cantidad_invalida
         CHECK ( cantidad > 0 ),
@@ -330,18 +294,30 @@ CREATE TABLE ticket.productos(
         CHECK ( subtotal > 0 ),
     id_producto INTEGER NOT NULL REFERENCES productos,
     id_ticket INTEGER NOT NULL REFERENCES tickets,
-    activo BOOLEAN DEFAULT TRUE,
-    PRIMARY KEY(id_ticket, cns_producto_ve)
+    PRIMARY KEY(id_ticket, id_producto)
 );
 
+-- tabla muchos a muchos
+CREATE TABLE ticket_medicamentos(
+    cantidad INTEGER NOT NULL,
+    CONSTRAINT cantidad_invalida
+        CHECK ( cantidad > 0 ),
+    subtotal DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT subtotal_invalido
+        CHECK ( subtotal > 0 ),
+    id_medicamento INTEGER NOT NULL REFERENCES medicamentos,
+    id_ticket INTEGER NOT NULL REFERENCES tickets,
+    PRIMARY KEY(id_ticket, id_medicamento)
+);
+
+-- tabla especializada
 CREATE TABLE vacunas_expediente(
-    cns_vacuna serial,
+    cns_vacuna SERIAL,
     fecha_vacuna DATE NOT NULL,
     CONSTRAINT fecha_invalida
         CHECK ( fecha_vacuna <= now() ),
     id_mascota INTEGER NOT NULL REFERENCES mascotas,
     id_medicamento INTEGER NOT NULL REFERENCES medicamentos,
-    activo BOOLEAN DEFAULT TRUE,
     primary key(id_mascota, cns_vacuna)
 );
 
@@ -362,8 +338,7 @@ CREATE TABLE citas(
     activo BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE receta.alimentos(
-    cns_alimentos_re SERIAL,
+CREATE TABLE receta_alimentos(
     tomar_dias INTEGER NOT NULL,
     fre_dias INTEGER NOT NULL,
     can_fre DECIMAL(10, 1) NOT NULL,
@@ -371,11 +346,10 @@ CREATE TABLE receta.alimentos(
         CHECK ( fre_dias > 0 AND can_fre > 0 AND tomar_dias > 0 ),
     id_alimento INTEGER NOT NULL REFERENCES alimentos,
     id_cita INTEGER NOT NULL REFERENCES citas,
-    PRIMARY KEY (id_cita, cns_alimentos_re)
+    PRIMARY KEY (id_cita, id_alimento)
 );
 
-CREATE TABLE receta.medicamentos(
-    cns_medicamentos_re SERIAL,
+CREATE TABLE receta_medicamentos(
     tomar_dias INTEGER NOT NULL,
     fre_dias INTEGER NOT NULL,
     can_fre DECIMAL(10, 1) NOT NULL,
@@ -383,52 +357,5 @@ CREATE TABLE receta.medicamentos(
         CHECK ( fre_dias > 0 AND can_fre > 0 AND tomar_dias > 0 ),
     id_medicamento INTEGER NOT NULL REFERENCES medicamentos,
     id_cita INTEGER NOT NULL REFERENCES citas,
-    PRIMARY KEY (id_cita, cns_medicamentos_re)
+    PRIMARY KEY (id_cita, id_medicamento)
 );
-
-
--- PROCEDIMIENTOS ALMACENADOS --
---- Los procedimientos regresarán 0 en caso de haber ocurrido un error durante el proceso.
-
---- agrega un alimento a la tabla alimentos;
-DROP FUNCTION IF EXISTS agrAlimento;
-CREATE OR REPLACE FUNCTION  agrAlimento (reg ANYARRAY) RETURNS INTEGER AS $$
-    DECLARE
-        vNmb VARCHAR        := null;
-        vMnt DECIMAL(10, 2) := null;
-        vGrm DECIMAL(10, 2) := null;
-        vDsc VARCHAR        := null;
-        vId  INTEGER        := 0;
-    BEGIN
-        -- preguntamos si el arreglo está vacío
-        IF array_length(reg, 1) = 0 OR array_length(reg, 1) < 4 THEN
-            RETURN 0;
-        END IF;
-
-        vNmb := upper(reg[1]);
-        vMnt := reg[2]::DECIMAL;
-        vGrm := reg[3]::DECIMAL;
-        vDsc := upper(reg[4]);
-
-        -- consulta
-        INSERT INTO
-            alimentos
-        VALUES (
-                DEFAULT,
-                vNmb,
-                vMnt,
-                vGrm,
-                vDsc,
-                DEFAULT)
-        RETURNING id_alimento INTO vId;
-        -- fin consulta
-
-        IF vId > 0 THEN
-            RAISE NOTICE 'alimento % de id %, insertado correctamente', vNmb, vId;
-            RETURN vId;
-        END IF;
-
-        RAISE NOTICE 'ERROR: alimento no insertado a la base de datos';
-        RETURN 0;
-    END;
-$$ LANGUAGE plpgsql;
