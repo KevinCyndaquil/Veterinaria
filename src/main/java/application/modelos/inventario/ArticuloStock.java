@@ -1,7 +1,7 @@
 package application.modelos.inventario;
 
 import application.modelos.Tabla;
-import application.modelos.entidades.Articulo;
+import application.modelos.entidades.ArticuloVenta;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,18 +13,18 @@ public class ArticuloStock extends Tabla {
     @Getter @Setter
     private Integer cantidad;
     @Getter @Setter
-    private Articulo articulo;
+    private ArticuloVenta articuloVenta;
 
-    public ArticuloStock(LocalDate caducidad, Integer cantidad, Articulo articulo) {
+    public ArticuloStock(LocalDate caducidad, Integer cantidad, ArticuloVenta articuloVenta) {
         this.caducidad = caducidad;
         this.cantidad = cantidad;
-        this.articulo = articulo;
+        this.articuloVenta = articuloVenta;
     }
 
-    public ArticuloStock(Integer cns, LocalDate caducidad, Integer cantidad, Articulo articulo) {
+    public ArticuloStock(Integer cns, LocalDate caducidad, Integer cantidad, ArticuloVenta articuloVenta) {
         super(cns);
         this.caducidad = caducidad;
         this.cantidad = cantidad;
-        this.articulo = articulo;
+        this.articuloVenta = articuloVenta;
     }
 }

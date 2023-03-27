@@ -26,8 +26,6 @@ public class Cita extends Tabla {
     private Ticket ticket;
     @Getter @Setter
     private EstatusCita estatus;
-    @Getter @Setter
-    private List<ArticuloReceta> articuloReceta;
 
     public Cita(LocalDate fecha, LocalTime hora, String detalle, Mascota mascota, Empleado veterinario, Ticket ticket, EstatusCita estatus) {
         this.fecha = fecha;

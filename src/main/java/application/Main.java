@@ -1,14 +1,21 @@
 package application;
 
-import application.basededatos.repositorios.AlimentoRep;
-import application.modelos.entidades.Alimento;
+import application.basededatos.repositorios.FacturaRep;
+import application.modelos.entidades.TiposProducto;
+
+import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
 
-        AlimentoRep alimentoRep = new AlimentoRep();
+        FacturaRep read = new FacturaRep();
+        try {
+            read.read(new Integer[]{1}).getArticuloFacturas().forEach(articuloFactura -> System.out.println(articuloFactura.getNombre()));
 
-        alimentoRep.create(new Alimento("GANADOiR", 1000d, "para perros ganadores", 0.5d));
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 }

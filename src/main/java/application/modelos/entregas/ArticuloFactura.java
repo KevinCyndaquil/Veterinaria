@@ -1,28 +1,46 @@
 package application.modelos.entregas;
 
-import application.modelos.Tabla;
-import application.modelos.entidades.Articulo;
+import application.modelos.entidades.ArticuloProveedor;
+import application.modelos.entidades.Proveedor;
 import lombok.Getter;
-import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
-public class ArticuloFactura extends Tabla {
-    @Getter @Setter
+public class ArticuloFactura extends ArticuloProveedor {
+    @Getter
     private Integer cantidad;
-    @Getter @Setter
+    @Getter
     private Double monto_subtotal;
-    @Getter @Setter
-    private Articulo articulo;
 
-    public ArticuloFactura(Integer cantidad, Double monto_subtotal, Articulo articulo) {
+    public ArticuloFactura(@NotNull ArticuloProveedor articuloProveedor, Integer cantidad) {
+        super(
+                articuloProveedor.getId(),
+                articuloProveedor.getNombre(),
+                articuloProveedor.getMontoCompra(),
+                articuloProveedor.getProveedor());
         this.cantidad = cantidad;
-        this.monto_subtotal = monto_subtotal;
-        this.articulo = articulo;
+        this.monto_subtotal = getMontoCompra() * cantidad;
     }
 
-    public ArticuloFactura(Integer cns, Integer cantidad, Double monto_subtotal, Articulo articulo) {
-        super(cns);
+    public ArticuloFactura(String nombre, Double monto, Proveedor proveedor, Integer cantidad) {
+        super(nombre, monto, proveedor);
         this.cantidad = cantidad;
-        this.monto_subtotal = monto_subtotal;
-        this.articulo = articulo;
+        this.monto_subtotal = getMontoCompra() * cantidad;
+    }
+
+    public ArticuloFactura(Integer id, String nombre, Double monto, Proveedor proveedor, Integer cantidad) {
+        super(id, nombre, monto, proveedor);
+        this.cantidad = cantidad;
+        this.monto_subtotal = getMontoCompra() * cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+        this.monto_subtotal = getMontoCompra() * cantidad;
+    }
+
+    @Override
+    public void setMontoCompra(Double montoCompra) {
+        super.setMontoCompra(montoCompra);
+        this.monto_subtotal = getMontoCompra() * cantidad;
     }
 }

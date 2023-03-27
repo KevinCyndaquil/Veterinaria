@@ -1,7 +1,7 @@
 package application.modelos.entidades;
 
 import application.modelos.Tabla;
-import application.modelos.citas.VacunaExpediente;
+import application.modelos.citas.DetalleMascota;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,15 +20,15 @@ public class Mascota extends Tabla {
     @Getter @Setter
     private Raza raza;
     @Getter @Setter
-    private List<VacunaExpediente> vacunas;
+    private List<DetalleMascota> detalle;
 
-    public Mascota(String nombre, LocalDate fecha_nacimiento, String sexo, Propietario propietario, Raza raza, List<VacunaExpediente> vacunas) {
+    public Mascota(String nombre, LocalDate fecha_nacimiento, String sexo, Propietario propietario, Raza raza, List<DetalleMascota> detalle) {
         this.nombre = nombre;
         this.fecha_nacimiento = fecha_nacimiento;
         this.sexo = sexo;
         this.propietario = propietario;
         this.raza = raza;
-        this.vacunas = vacunas;
+        this.detalle = detalle;
     }
 
     public Mascota(Integer id, String nombre, LocalDate fecha_nacimiento, String sexo, Propietario propietario, Raza raza) {

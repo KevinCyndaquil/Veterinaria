@@ -3,17 +3,17 @@ package application.modelos.entidades;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Producto extends Articulo{
+public class Producto extends ArticuloProveedor {
    @Getter @Setter
    TiposProducto tipo;
 
-    public Producto(String nombre, Double monto, String descripcion, TiposProducto tipo) {
-        super(nombre, monto, descripcion);
+    public Producto(String nombre, Double monto, Proveedor proveedor, TiposProducto tipo) {
+        super(nombre, monto, proveedor);
         this.tipo = tipo;
     }
 
-    public Producto(Integer id, String nombre, Double monto, String descripcion, TiposProducto tipo) {
-        super(id, nombre, monto, descripcion);
+    public Producto(Integer id, String nombre, Double monto, Proveedor proveedor, TiposProducto tipo) {
+        super(id, nombre, monto, proveedor);
         this.tipo = tipo;
     }
 }

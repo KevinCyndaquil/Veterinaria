@@ -6,10 +6,10 @@ CREATE DATABASE veterinaria;
 
 \c veterinaria
 
--- CREAMOS LAS TABLAS,
+-- CREAMOS LAS TABLAS
 
-
-CREATE TABLE animales(
+CREATE TABLE animales
+(
     id_animal SERIAL NOT NULL PRIMARY KEY,
     nombre VARCHAR(15) NOT NULL,
     CONSTRAINT nombre_invalido
@@ -17,7 +17,8 @@ CREATE TABLE animales(
     activo BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE razas(
+CREATE TABLE razas
+(
     id_raza SERIAL NOT NULL PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     CONSTRAINT nombre_invalido
@@ -30,7 +31,8 @@ CREATE TABLE razas(
 );
 
 -- Esta es una super tabla, hay generalización
-CREATE TABLE personas(
+CREATE TABLE personas
+(
     id_persona SERIAL NOT NULL PRIMARY KEY,
     rfc VARCHAR(13),
     CONSTRAINT rfc_unique
@@ -55,13 +57,15 @@ CREATE TABLE personas(
 );
 
 -- tabla débil
-CREATE TABLE propietarios(
+CREATE TABLE propietarios
+(
     id_propietario INTEGER NOT NULL REFERENCES personas,
     PRIMARY KEY(id_propietario)
 );
 
 -- tabla débil
-CREATE TABLE empleados(
+CREATE TABLE empleados
+(
     id_empleado INTEGER NOT NULL REFERENCES personas,
     PRIMARY KEY (id_empleado),
     fecha_ini DATE NOT NULL,
@@ -69,20 +73,14 @@ CREATE TABLE empleados(
         CHECK ( fecha_ini <= now() ),
     jor_ini TIME NOT NULL,
     jor_fin TIME NOT NULL,
+    CONSTRAINT jornada_invalida
+        CHECK ( (jor_fin - jor_ini) <= '08:00:00' ),
     salario DECIMAL(10, 2) NOT NULL,
     CONSTRAINT salario_invalido
         CHECK ( salario > 0 ),
-    CONSTRAINT jornada_invalida
-        CHECK ( (jor_fin - jor_ini) <= '08:00:00' )
-);
-
--- tabla débil
-CREATE TABLE veterinarios(
-    id_veterinario INTEGER NOT NULL REFERENCES empleados,
-    PRIMARY KEY(id_veterinario),
-    fecha_servicio DATE NOT NULL,
-    CONSTRAINT fecha_invalida
-        CHECK ( fecha_servicio <= now() )
+    puesto VARCHAR NOT NULL,
+    CONSTRAINT puesto_invalido
+        CHECK ( puesto IN ('mostrador','veterinario', 'limpieza', 'gerente') )
 );
 
 -- tabla débil
@@ -102,121 +100,20 @@ CREATE TABLE nominas
     activo BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE mascotas(
+CREATE TABLE mascotas
+(
     id_mascota       SERIAL NOT NULL PRIMARY KEY,
     nombre           VARCHAR(30) NOT NULL,
-                     CONSTRAINT nombre_invalido
-                         CHECK ( nombre ~ '^[A-Z ]+$' ),
+    CONSTRAINT nombre_invalido
+        CHECK ( nombre ~ '^[A-Z ]+$' ),
     fecha_nacimiento DATE NOT NULL,
-                     CONSTRAINT fecha_invalida
-                         CHECK ( fecha_nacimiento <= now() ),
+    CONSTRAINT fecha_invalida
+        CHECK ( fecha_nacimiento <= now() ),
     sexo             VARCHAR(6),
-                     CHECK ( sexo = 'macho' OR sexo = 'hembra' ),
+    CHECK ( sexo = 'macho' OR sexo = 'hembra' ),
     id_propietario   INTEGER NOT NULL REFERENCES propietarios,
     id_raza          INTEGER NOT NULL REFERENCES razas,
     activo           BOOLEAN DEFAULT TRUE
-);
-
-CREATE TABLE articulos(
-    id_articulo SERIAL NOT NULL PRIMARY KEY,
-    nombre VARCHAR(30) NOT NULL,
-    CONSTRAINT nombre_invalido
-        CHECK ( nombre ~ '^[A-Z0-9.-/ ]+$' ),
-    monto DECIMAL(10, 2) NOT NULL,
-    CONSTRAINT monto_invalido
-        CHECK ( monto > 0 ),
-    descripcion VARCHAR(100) DEFAULT '',
-    stock INTEGER NOT NULL DEFAULT 0,
-    CONSTRAINT stock_invalido CHECK ( stock >= 0 ),
-    activo BOOLEAN DEFAULT TRUE
-);
-
--- esta función devuelve true si hay un id referenciado por las tablas alimentos, medicamentos, productos
--- la usamos para validar que un solo articulo sea referenciado por cualquiera de esas tablas
-CREATE OR REPLACE FUNCTION check_articulos(id_articulo integer) RETURNS boolean LANGUAGE plpgsql AS $$
-    DECLARE
-        si_ali boolean;
-        si_pro boolean;
-        si_med boolean;
-    BEGIN
-        si_ali = exists(
-                SELECT
-                    *
-                FROM
-                    alimentos
-                WHERE
-                        id_alimento = id_articulo);
-
-        si_pro = exists(
-                SELECT
-                    *
-                FROM
-                    productos
-                WHERE id_producto = id_articulo);
-
-        si_med = exists(
-                SELECT
-                    *
-                FROM
-                    medicamentos
-                WHERE id_medicamento = id_articulo);
-
-        RETURN si_ali OR si_pro OR si_med;
-    END;
-$$;
-
-CREATE TABLE alimentos
-(
-    id_alimento SERIAL NOT NULL REFERENCES articulos,
-    CONSTRAINT referencia_invalida
-        CHECK (check_articulos(id_alimento) = FALSE),
-    PRIMARY KEY(id_alimento),
-    gramaje DECIMAL(10, 2) NOT NULL,
-    CONSTRAINT gramaje_invalido
-        CHECK ( gramaje > 0 )
-);
-
-CREATE TABLE productos
-(
-    id_producto SERIAL NOT NULL REFERENCES articulos,
-    CONSTRAINT referencia_invalida
-        CHECK (check_articulos(id_producto) = FALSE),
-    PRIMARY KEY (id_producto),
-    tipo VARCHAR(10),
-    CHECK (
-                tipo = 'accesorio'
-            OR
-                tipo = 'ropa'
-            OR
-                tipo = 'juguete'
-            OR
-                tipo = 'seguridad'
-            OR
-                tipo = 'higiene' )
-);
-
-CREATE TABLE medicamentos
-(
-    id_medicamento SERIAL REFERENCES articulos,
-    CONSTRAINT referencia_invalida
-        CHECK (check_articulos(id_medicamento) = FALSE),
-    gramaje        DECIMAL(10, 2) NOT NULL,
-    laboratorio    VARCHAR(30)    NOT NULL,
-    via            VARCHAR(13)    NOT NULL,
-    CHECK (
-        via = 'oral'
-            OR
-        via = 'intravenosa'
-            OR
-        via = 'intramuscular'
-            OR
-        via = 'rectal'
-            OR
-        via = 'ocular'
-            OR
-        via = 'nasal'
-            OR
-        via = 'cutaneo')
 );
 
 CREATE TABLE proveedores
@@ -233,7 +130,95 @@ CREATE TABLE proveedores
     activo BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE facturas
+CREATE TABLE articulos_proveedor(
+    id_articulo_proveedor SERIAL NOT NULL PRIMARY KEY,
+    nombre VARCHAR(30) NOT NULL,
+    CONSTRAINT nombre_invalido
+        CHECK ( nombre ~ '^[A-Z0-9.-/ ]+$' ),
+    monto DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT monto_invalido
+        CHECK ( monto > 0 ),
+    id_proveedor INTEGER NOT NULL REFERENCES proveedores,
+    activo BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE articulos_venta
+(
+    id_articulo_venta SERIAL NOT NULL PRIMARY KEY,
+    monto DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT monto_invalido
+        CHECK ( monto > 0 ),
+    descripcion VARCHAR(100) DEFAULT '',
+    stock INTEGER NOT NULL DEFAULT 0,
+    CONSTRAINT stock_invalido CHECK ( stock >= 0 ),
+    id_articulo INTEGER NOT NULL REFERENCES articulos_proveedor,
+    CONSTRAINT articulo_repetido
+        UNIQUE(id_articulo),
+    activo BOOLEAN DEFAULT TRUE
+);
+
+-- esta función devuelve true si hay un id referenciado por las tablas alimentos, medicamentos, productos
+-- la usamos para validar que un solo articulo sea referenciado por cualquiera de esas tablas
+CREATE OR REPLACE FUNCTION check_articulos(id_articulo integer) RETURNS boolean LANGUAGE plpgsql AS $$
+    DECLARE
+        si_ali boolean;
+        si_pro boolean;
+        si_med boolean;
+    BEGIN
+        si_ali = exists(
+                SELECT *
+                FROM alimentos
+                WHERE id_articulo_alimento = id_articulo);
+
+        si_pro = exists(
+                SELECT *
+                FROM productos
+                WHERE id_articulo_producto = id_articulo);
+
+        si_med = exists(
+                SELECT *
+                FROM medicamentos
+                WHERE id_articulo_medicamento = id_articulo);
+
+        RETURN si_ali OR si_pro OR si_med;
+    END;
+$$;
+
+CREATE TABLE alimentos
+(
+    id_articulo_alimento INT NOT NULL REFERENCES articulos_proveedor,
+    CONSTRAINT referencia_invalida
+        CHECK (check_articulos(id_articulo_alimento) = FALSE),
+    PRIMARY KEY(id_articulo_alimento),
+    gramaje DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT gramaje_invalido
+        CHECK ( gramaje > 0 )
+);
+
+CREATE TABLE productos
+(
+    id_articulo_producto int NOT NULL REFERENCES articulos_proveedor,
+    CONSTRAINT referencia_invalida
+        CHECK (check_articulos(id_articulo_producto) = FALSE),
+    PRIMARY KEY (id_articulo_producto),
+    tipo VARCHAR(10),
+    CHECK ( tipo IN ('accesorio','ropa','juguete','seguridad','higiene'))
+);
+
+CREATE TABLE medicamentos
+(
+    id_articulo_medicamento SERIAL REFERENCES articulos_proveedor,
+    CONSTRAINT referencia_invalida
+        CHECK (check_articulos(id_articulo_medicamento) = FALSE),
+    gramaje        DECIMAL(10, 2) NOT NULL,
+    laboratorio    VARCHAR(30)    NOT NULL,
+    CONSTRAINT laboratorio_invalido
+        CHECK ( laboratorio ~ '^[A-Z0-9.-/ ]+$' ),
+    via            VARCHAR(13)    NOT NULL,
+    CHECK ( via IN ('oral','intravenosa','intramuscular','rectal','ocular','nasal','cutaneo') )
+);
+
+CREATE TABLE facturas_proveedor
 (
     id_factura SERIAL NOT NULL PRIMARY KEY,
     fecha_factura DATE NOT NULL,
@@ -248,7 +233,7 @@ CREATE TABLE facturas
 
 CREATE TABLE detalle_factura
 (
-    id_factura INTEGER NOT NULL REFERENCES facturas,
+    id_factura INTEGER NOT NULL REFERENCES facturas_proveedor,
     cns_detalle_factura INTEGER NOT NULL,
     cantidad INTEGER NOT NULL,
     CONSTRAINT cantidad_invalida
@@ -256,13 +241,14 @@ CREATE TABLE detalle_factura
     subtotal DECIMAL(10, 2) NOT NULL,
     CONSTRAINT subtotal_invalido
         CHECK ( subtotal >= 0 ),
-    id_articulo INTEGER NOT NULL REFERENCES articulos,
+    id_articulo INTEGER NOT NULL REFERENCES articulos_proveedor,
     CONSTRAINT alimento_repetido
         UNIQUE (id_articulo, cns_detalle_factura),
     PRIMARY KEY (id_factura, cns_detalle_factura)
 );
 
-CREATE TABLE formas_pago(
+CREATE TABLE formas_pago
+(
     id_forma_pago SERIAL NOT NULL PRIMARY KEY,
     nombre VARCHAR(30) NOT NULL,
     CONSTRAINT nombre_invalido
@@ -271,7 +257,8 @@ CREATE TABLE formas_pago(
     activo BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE tickets(
+CREATE TABLE tickets
+(
     id_ticket SERIAL PRIMARY KEY,
     monto_total DECIMAL(10, 2) NOT NULL,
     CONSTRAINT monto_invalido
@@ -285,7 +272,8 @@ CREATE TABLE tickets(
     activo BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE pagos(
+CREATE TABLE pagos
+(
     cns_pago SERIAL NOT NULL ,
     subtotal DECIMAL(10, 2) NOT NULL,
     CONSTRAINT subtotal_invalido
@@ -306,7 +294,7 @@ CREATE TABLE detalle_ticket
     subtotal DECIMAL(10, 2) NOT NULL,
     CONSTRAINT subtotal_invalido
         CHECK ( subtotal > 0 ),
-    id_articulo INTEGER NOT NULL REFERENCES articulos,
+    id_articulo INTEGER NOT NULL REFERENCES articulos_venta,
     PRIMARY KEY (id_ticket, cns_detalle_ticket)
 );
 
@@ -321,11 +309,12 @@ CREATE TABLE detalle_mascota
     cantidad INTEGER NOT NULL,
     CONSTRAINT cantidad_invalida
         CHECK ( cantidad > 0 ),
-    id_articulo INTEGER NOT NULL REFERENCES articulos,
+    id_articulo INTEGER NOT NULL REFERENCES articulos_venta,
     primary key(id_mascota, cns_detalle_mascota)
 );
 
-CREATE TABLE citas(
+CREATE TABLE citas
+(
     id_cita SERIAL PRIMARY KEY,
     fecha_cita DATE NOT NULL,
     CONSTRAINT fecha_invalida
@@ -335,18 +324,135 @@ CREATE TABLE citas(
         CHECK ( hora >= '09:00:00' AND hora <= '21:00:00' ), -- la cita no puede realizarse fuera del horario de atención
     detalle VARCHAR(100) DEFAULT '',
     id_mascota INTEGER NOT NULL REFERENCES mascotas,
-    id_veterinario INTEGER NOT NULL REFERENCES veterinarios, --validar que sea un veterinario
+    id_veterinario INTEGER NOT NULL REFERENCES empleados, --validar que sea un veterinario
     id_ticket INTEGER NOT NULL REFERENCES tickets,
     estatus VARCHAR(12) NOT NULL,
-    CHECK (
-        estatus = 'pendiente'
-            OR
-        estatus = 'realizada'
-            OR
-        estatus = 'cancelada'
-            OR
-        estatus = 'no realizada'
-            OR
-        estatus = 'pospuesta' ),
+    CHECK ( estatus IN ('pendiente','realizada','cancelada','no realizada','pospuesta') ),
     activo BOOLEAN DEFAULT TRUE
 );
+
+
+DROP FUNCTION IF EXISTS agrAlimentoProveedor;
+CREATE OR REPLACE FUNCTION agrAlimento (reg ANYARRAY) RETURNS INTEGER AS $$
+DECLARE
+    vNmb VARCHAR        := null;
+    vMnt DECIMAL(10, 2) := null;
+    vGrm DECIMAL(10, 2) := null;
+    vIdP VARCHAR        := null;
+    vId  INTEGER        := 0;
+BEGIN
+    -- preguntamos si el arreglo está vacío
+    IF array_length(reg, 1) < 4 THEN
+        RETURN 0;
+    END IF;
+
+    vNmb := upper(reg[1]);
+    vMnt := reg[2]::DECIMAL;
+    vGrm := reg[3]::DECIMAL;
+    vIdP := reg[4]::INTEGER;
+
+    INSERT INTO
+        articulos_proveedor
+    VALUES
+    (
+        DEFAULT,
+        vNmb,
+        vMnt,
+        vIdP,
+        DEFAULT)
+    RETURNING id_articulo_proveedor INTO vId;
+
+    IF vId = 0 THEN
+        RAISE EXCEPTION 'articulo de proveedor no añadido, función cancelada';
+    END IF;
+
+    -- consulta
+    INSERT INTO
+        alimentos
+    VALUES (
+           vId,
+           vGrm)
+    RETURNING id_articulo_alimento INTO vId;
+    -- fin consulta
+
+    IF vId > 0 THEN
+        RAISE NOTICE 'alimento % de id %, insertado correctamente', vNmb, vId;
+        RETURN vId;
+    END IF;
+
+    RAISE NOTICE 'ERROR: alimento no insertado a la base de datos';
+    RETURN 0;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- agrega un articulo de proveedor a la base de datos, especificando el tipo 
+-- del articulo en sus parámetros
+
+-- 0 = alimentos
+-- 1 = productos
+-- 2 = medicamentos
+DROP FUNCTION IF EXISTS agrArticuloProveedor;
+CREATE OR REPLACE FUNCTION agrArticuloProveedor (reg ANYARRAY, tipo INTEGER) RETURNS INTEGER LANGUAGE plpgsql AS $$
+    DECLARE
+        vNmb VARCHAR        := null;
+        vMnt DECIMAL(10, 2) := null;
+        vIdP VARCHAR        := null;
+        vId  INTEGER        := 0;
+        -- alimentos
+        vGrm DECIMAL(10, 2) := null;
+        -- productos
+        vTpo VARCHAR        := null;
+        -- medicamentos *incluye vGrm*
+        vLbt VARCHAR        := null;
+        vVia VARCHAR        := null;
+
+        vTbl VARCHAR[]      := ['alimento', 'producto', 'medicamento'];
+    BEGIN
+        IF array_length(reg, 1) < 4 AND (tipo < 0 OR tipo > 2) THEN
+            RETURN 0;
+        END IF;
+
+        vNmb := upper(reg[1]);
+        vMnt := reg[2]::DECIMAL;
+        vGrm := reg[3]::DECIMAL;
+        vIdP := reg[4]::INTEGER;        
+
+        INSERT INTO
+            articulos_proveedor
+        VALUES
+        (
+            DEFAULT,
+            vNmb,
+            vMnt,
+            vIdP,
+            DEFAULT)
+        RETURNING id_articulo_proveedor INTO vId;
+        IF vId = 0 THEN
+            RAISE EXCEPTION 'articulo de proveedor no añadido, función cancelada';
+        END IF;
+
+        CASE tipo
+            WHEN 0 THEN
+                INSERT INTO alimentos
+                VALUES (vId, vGrm)
+                RETURNING id_articulo_alimento INTO vId;
+            WHEN 1 THEN
+                INSERT INTO productos
+                VALUES (vId, vTpo)
+                RETURNING id_articulo_producto INTO vId;
+            WHEN 2 THEN
+                INSERT INTO medicamentos
+                VALUES (vId, vGrm, vLbt, vVia)
+                RETURNING id_articulo_medicamento INTO vId;
+        END CASE;
+
+        IF vId = 0 THEN
+            RAISE EXCEPTION '% no insertado a la base de datos', vTbl[tipo];
+        END IF;
+
+        RAISE NOTICE '% de id % insertado correctamente', vTbl[tipo], vId;
+
+        RETURN vId;
+    END;
+$$;

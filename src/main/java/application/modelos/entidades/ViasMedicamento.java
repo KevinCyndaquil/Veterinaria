@@ -1,6 +1,7 @@
 package application.modelos.entidades;
 
 import lombok.Getter;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author KevinCyndaquil
@@ -21,5 +22,13 @@ public enum ViasMedicamento {
 
     ViasMedicamento(String via) {
         this.via = via;
+    }
+
+    public static @Nullable ViasMedicamento getValueFrom(String via) {
+        for (ViasMedicamento v : ViasMedicamento.values()) {
+            if (v.getVia().equalsIgnoreCase(via))
+                return v;
+        }
+        return null;
     }
 }

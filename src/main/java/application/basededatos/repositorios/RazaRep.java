@@ -1,30 +1,36 @@
 package application.basededatos.repositorios;
 
 import application.basededatos.Postgres;
-import application.basededatos.interfaces.*;
-import application.modelos.entidades.Alimento;
-import org.jetbrains.annotations.NotNull;
+import application.basededatos.interfaces.Create;
+import application.basededatos.interfaces.Hide;
+import application.basededatos.interfaces.ReadFull;
+import application.basededatos.interfaces.Update;
+import application.modelos.entidades.Raza;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlimentoRep implements
-        Create<Alimento>,
-        ReadFull<Integer, Alimento>,
-        Update<Alimento>,
-        Hide<Integer> {
+public class RazaRep implements
+        Create<Raza>,
+        ReadFull<Integer, Raza>,
+        Hide<Integer>,
+        Update<Raza> {
+
+    private AnimalRep animalRep;
     @Override
-    public String create (@NotNull Alimento alimento) {
+    public String create (Raza raza) {
+        if (raza == null)
+            return null;
+
         try (Postgres postgres = new Postgres();
              PreparedStatement statement = postgres.getConnection().prepareStatement(
-                "SELECT agrarticulo_proveedor(?, 1)")) {
+                     "SELECT agrRaza(?)")) {
 
             Array array = postgres.getConnection().createArrayOf("VARCHAR", new Object[]{
-                    alimento.getNombre(),
-                    alimento.getMontoCompra(),
-                    alimento.getProveedor().getId(),
-                    alimento.getGramaje(),
+                    raza.getNombre(),
+                    raza.getTotal_adopcion(),
+                    raza.getAnimal().getId()
             });
 
             statement.setArray(1, array);
@@ -34,8 +40,8 @@ public class AlimentoRep implements
             if (resultSet.next())
                 return "SQL SUCCESSFULLY: " + resultSet.getInt(1);
 
-            return "SQL MISSING: " + alimento;
-        } catch (SQLException ex) {
+            return "SQL MISSING: " + raza;
+        }  catch (SQLException ex) {
             return "SQL ERROR: " + ex.getMessage();
         }
     }
@@ -50,7 +56,7 @@ public class AlimentoRep implements
 
         try (Postgres postgres = new Postgres();
              PreparedStatement statement = postgres.getConnection().prepareStatement(
-                     "UPDATE articulos_proveedor SET activo = NOT activo WHERE id_articulo_proveedor = ?")) {
+                     "UPDATE razas SET activo = NOT activo WHERE id_raza = ?")) {
 
             statement.setInt(1, id[0]);
 
@@ -63,7 +69,7 @@ public class AlimentoRep implements
     }
 
     @Override
-    public Alimento read (Integer[] id) throws SQLException {
+    public Raza read (Integer[] id) throws SQLException {
         if (id == null)
             return null;
         if (id.length == 0)
@@ -71,23 +77,20 @@ public class AlimentoRep implements
 
         try (Postgres postgres = new Postgres();
              PreparedStatement statement = postgres.getConnection().prepareStatement(
-                "SELECT * FROM articulos_proveedor INNER JOIN alimentos " +
-                        "ON id_articulo_proveedor = id_articulo_alimento " +
-                        "WHERE id_articulo_alimento = ? AND activo = true")) {
+                     "SELECT * FROM razas WHERE id_raza = ? AND activo = true")) {
 
             statement.setInt(1, id[0]);
 
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                ProveedorRep proveedorRep = new ProveedorRep();
+                animalRep = new AnimalRep();
 
-                return new Alimento(
+                return new Raza(
                         resultSet.getInt(1),
                         resultSet.getString(2),
-                        resultSet.getDouble(3),
-                        proveedorRep.read(new Integer[]{resultSet.getInt(4)}),
-                        resultSet.getDouble(7)
+                        resultSet.getInt(3),
+                        animalRep.read(new Integer[]{resultSet.getInt(4)})
                 );
             }
             return null;
@@ -95,24 +98,22 @@ public class AlimentoRep implements
     }
 
     @Override
-    public List<Alimento> readAll () throws SQLException {
+    public List<Raza> readAll () throws SQLException {
         try (Postgres postgres = new Postgres();
              Statement statement = postgres.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(
-                     "SELECT * FROM articulos_proveedor INNER JOIN alimentos " +
-                             "ON id_articulo_proveedor = id_articulo_alimento " +
-                             "WHERE activo = true")) {
+                     "SELECT * FROM razas WHERE activo = true ORDER BY nombre")) {
 
-            List<Alimento> list = new ArrayList<>();
-            ProveedorRep proveedorRep = new ProveedorRep();
+            List<Raza> list = new ArrayList<>();
 
-            while (resultSet.next()) {
-                list.add(new Alimento(
+            if (resultSet.next()) {
+                animalRep = new AnimalRep();
+
+                list.add(new Raza(
                         resultSet.getInt(1),
                         resultSet.getString(2),
-                        resultSet.getDouble(3),
-                        proveedorRep.read(new Integer[]{resultSet.getInt(4)}),
-                        resultSet.getDouble(7)
+                        resultSet.getInt(3),
+                        animalRep.read(new Integer[]{resultSet.getInt(4)})
                 ));
             }
             return list;
@@ -120,29 +121,26 @@ public class AlimentoRep implements
     }
 
     @Override
-    public Alimento update (Alimento alimento) throws SQLException {
-        if (alimento == null)
+    public Raza update (Raza raza) throws SQLException {
+        if (raza == null)
             return null;
 
         try(Postgres postgres = new Postgres();
             PreparedStatement statement = postgres.getConnection().prepareStatement(
-                "SELECT actarticulo_proveedor(?, 1)")) {
+                    "SELECT actraza(?)")) {
 
             Array array = postgres.getConnection().createArrayOf("VARCHAR", new Object[]{
-                    alimento.getNombre(),
-                    alimento.getMontoCompra(),
-                    alimento.getProveedor().getId(),
-                    alimento.getId(),
-                    alimento.getGramaje(),
+                    raza.getNombre(),
+                    raza.getTotal_adopcion(),
+                    raza.getAnimal().getId(),
+                    raza.getId()
             });
 
-            statement.setArray(1, array);
-
-            ResultSet resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.getResultSet();
 
             if (resultSet.next())
                 if (resultSet.getInt(1) > 0)
-                    return alimento;
+                    return raza;
             return null;
         }
     }

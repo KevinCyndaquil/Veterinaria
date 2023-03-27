@@ -18,19 +18,23 @@ public class Persona extends Tabla {
     private String apellido_paterno;
     @Getter @Setter
     private String apellido_materno;
+    @Getter @Setter
+    private String no_cuenta;
 
-    public Persona(String rfc, String nombre, String apellido_paterno, String apellido_materno) {
+    public Persona(String rfc, String nombre, String apellido_paterno, String apellido_materno, String noCuenta) {
         this.rfc = rfc;
         this.nombre = nombre;
         this.apellido_paterno = apellido_paterno;
         this.apellido_materno = apellido_materno;
+        no_cuenta = noCuenta;
     }
 
-    public Persona(Integer id, String rfc, String nombre, String apellido_paterno, String apellido_materno) {
+    public Persona(Integer id, String rfc, String nombre, String apellido_paterno, String apellido_materno, String noCuenta) {
         super(id);
         this.rfc = rfc;
         this.nombre = nombre;
         this.apellido_paterno = apellido_paterno;
         this.apellido_materno = apellido_materno;
+        no_cuenta = noCuenta;
     }
 }
