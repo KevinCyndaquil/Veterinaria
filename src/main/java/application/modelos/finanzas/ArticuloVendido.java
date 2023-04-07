@@ -11,14 +11,14 @@ public class ArticuloVendido extends ArticuloVenta {
     @Getter @Setter
     private Double monto_subtotal;
 
-    public ArticuloVendido(ArticuloProveedor articulo, Double montoVenta, Integer stock, String descripcion, Integer cantidad) {
-        super(articulo, montoVenta, stock, descripcion);
+    public ArticuloVendido(ArticuloProveedor articulo, Double montoVenta, Integer stock, String descripcion, Integer cantidad, String tipo) {
+        super(articulo, montoVenta, stock, descripcion, tipo);
         this.cantidad = cantidad;
         this.monto_subtotal = cantidad * getMontoVenta();
     }
 
-    public ArticuloVendido(Integer id, ArticuloProveedor articulo, Double montoVenta, Integer stock, String descripcion, Integer cantidad) {
-        super(id, articulo, montoVenta, stock, descripcion);
+    public ArticuloVendido(Integer id, ArticuloProveedor articulo, Double montoVenta, Integer stock, String descripcion, Integer cantidad, String tipo) {
+        super(id, articulo, montoVenta, stock, descripcion, tipo);
         this.cantidad = cantidad;
         this.monto_subtotal = cantidad * getMontoVenta();
     }

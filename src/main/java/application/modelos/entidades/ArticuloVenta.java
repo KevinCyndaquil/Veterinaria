@@ -19,20 +19,24 @@ public class ArticuloVenta extends Tabla {
     private Integer stock;
     @Getter @Setter
     private String descripcion;
+    @Getter @Setter
+    private String tipo;
 
-    public ArticuloVenta(ArticuloProveedor articulo, Double montoVenta, Integer stock, String descripcion) {
+    public ArticuloVenta(ArticuloProveedor articulo, Double montoVenta, Integer stock, String descripcion, String tipo) {
         this.articulo = articulo;
         this.montoVenta = montoVenta;
         this.stock = stock;
         this.descripcion = descripcion;
+        this.tipo = tipo;
     }
 
-    public ArticuloVenta(Integer id, ArticuloProveedor articulo, Double montoVenta, Integer stock, String descripcion) {
+    public ArticuloVenta(Integer id, ArticuloProveedor articulo, Double montoVenta, Integer stock, String descripcion, String tipo) {
         super(id);
         this.articulo = articulo;
         this.montoVenta = montoVenta;
         this.stock = stock;
         this.descripcion = descripcion;
+        this.tipo = tipo;
     }
 
     @Override

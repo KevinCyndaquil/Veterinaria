@@ -2,6 +2,8 @@ package application.basededatos.repositorios;
 
 import application.basededatos.Postgres;
 import application.basededatos.interfaces.*;
+import application.modelos.entidades.ArticuloProveedor;
+import application.modelos.entregas.ArticuloFactura;
 import application.modelos.entregas.Factura;
 
 import java.sql.*;
@@ -81,17 +83,20 @@ public class FacturaRep implements
                 Integer[] id_art_pro = new Integer[]{resultSet.getInt(1)};
 
                 ProveedorRep proRep = new ProveedorRep();
-                AlimentoFacturaRep aliFacRep = new AlimentoFacturaRep();
-                ProductoFacturaRep proFacRep = new ProductoFacturaRep();
-                MedicamentoFacturaRep medFacRep = new MedicamentoFacturaRep();
+                List<Read<Integer, List<ArticuloFactura>>> art_rep = List.of(
+                        new AlimentoFacturaRep(),
+                        new ProductoFacturaRep(),
+                        new MedicamentoFacturaRep());
+
                 Factura factura = new Factura(
                         resultSet.getInt(1),
                         resultSet.getDate(2).toLocalDate(),
                         proRep.read(new Integer[]{resultSet.getInt(4)}));
 
-                factura.agregarArticulos(aliFacRep.read(id_art_pro));
-                factura.agregarArticulos(proFacRep.read(id_art_pro));
-                factura.agregarArticulos(medFacRep.read(id_art_pro));
+                art_rep.forEach(ar -> {
+                    try { ar.read(id_art_pro); }
+                    catch (SQLException ex) { throw new RuntimeException(); }
+                });
 
                 return factura;
             }
@@ -108,9 +113,10 @@ public class FacturaRep implements
 
             List<Factura> facturas = new ArrayList<>();
             ProveedorRep proRep = new ProveedorRep();
-            AlimentoFacturaRep aliFacRep = new AlimentoFacturaRep();
-            ProductoFacturaRep proFacRep = new ProductoFacturaRep();
-            MedicamentoFacturaRep medFacRep = new MedicamentoFacturaRep();
+            List<Read<Integer, List<ArticuloFactura>>> art_rep = List.of(
+                    new AlimentoFacturaRep(),
+                    new ProductoFacturaRep(),
+                    new MedicamentoFacturaRep());
 
             while (resultSet.next()) {
                 Integer[] id_art_pro = new Integer[]{resultSet.getInt(5)};
@@ -119,9 +125,11 @@ public class FacturaRep implements
                         resultSet.getInt(1),
                         resultSet.getDate(2).toLocalDate(),
                         proRep.read(new Integer[]{resultSet.getInt(4)}));
-                factura.agregarArticulos(aliFacRep.read(id_art_pro));
-                factura.agregarArticulos(proFacRep.read(id_art_pro));
-                factura.agregarArticulos(medFacRep.read(id_art_pro));
+
+                art_rep.forEach(ar -> {
+                    try { ar.read(id_art_pro); }
+                    catch (SQLException ex) { throw new RuntimeException(); }
+                });
 
                 facturas.add(factura);
             }

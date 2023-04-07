@@ -483,339 +483,79 @@ BEGIN
 END;
 $$;
 
-/*
---- agrega un alimento a la tabla alimentos;
-DROP FUNCTION IF EXISTS agrAlimento;
-CREATE OR REPLACE FUNCTION agrAlimento (reg ANYARRAY) RETURNS INTEGER AS $$
+DROP FUNCTION IF EXISTS agrArticulo_venta;
+CREATE OR REPLACE FUNCTION agrArticulo_venta (reg ANYARRAY) RETURNS INTEGER AS $BODY$
 DECLARE
-    vMnt DECIMAL(10, 2) := null;
-    vDsc VARCHAR        := null;
-    vStc INTEGER        := 0;
-    vIdA INTEGER        := 0;
-    vId  INTEGER        := 0;
-
+    vMonto decimal(10, 2) := 0;
+    vDesc varchar := NULL;
+    vStock int := 0;
+    vId_articulo int := 0;
+    vTipo varchar := NULL;
+    vId int := 0;
 BEGIN
-    -- preguntamos si el arreglo está vacío
-    IF array_length(reg, 1) < 4 THEN
-        RETURN 0;
-    END IF;
-
-    vMnt := reg[1]::DECIMAL;
-    vDsc := upper(reg[2]);
-    vStc := reg[3]::INTEGER;
-    vIdA := reg[4]::INTEGER;
-
-    INSERT INTO
-        articulos_venta
-    VALUES
-    (
-        DEFAULT,
-        vMnt,
-        vDsc,
-        vStc,
-        vIdA,
-        DEFAULT)
-    RETURNING id_articulo_venta INTO vId;
-
-    IF vId = 0 THEN
-        RAISE EXCEPTION 'articuloVenta de venta no añadido, función cancelada';
-    END IF;
-
-    IF vId > 0 THEN
-        RAISE NOTICE 'alimento % de id %, insertado correctamente', vNmb, vId;
-        RETURN vId;
-    END IF;
-
-    RAISE NOTICE 'ERROR: alimento no insertado a la base de datos';
-    RETURN 0;
-END;
-$$ LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS actAlimento;
-CREATE OR REPLACE FUNCTION actAlimento (reg ANYARRAY) RETURNS INTEGER AS $$
-DECLARE
-    vNmb VARCHAR        := null;
-    vMnt DECIMAL(10, 2) := null;
-    vGrm DECIMAL(10, 2) := null;
-    vDsc VARCHAR        := null;
-    vStc INTEGER        := null;
-    vId  INTEGER        := 0;
-BEGIN
-    -- preguntamos si el arreglo está vacío
-    IF array_length(reg, 1) < 6 THEN
-        RETURN 0;
-    END IF;
-
-    vNmb := upper(reg[1]);
-    vMnt := reg[2]::DECIMAL;
-    vGrm := reg[3]::DECIMAL;
-    vDsc := upper(reg[4]);
-    vStc := reg[5]::INTEGER;
-    vId  := reg[6]::INTEGER;
-
-    -- consulta
-    UPDATE
-        articuloVendidos
-    SET
-        nombre = vNmb,
-        montoCompra = vMnt,
-        descripcion = vDsc,
-        stock = vStc
-    WHERE
-            id_articulo = vId;
-    IF NOT found THEN
-        RAISE EXCEPTION 'articuloVenta no actualizado, función cancelada';
-    END IF;
-
-
-    UPDATE
-        alimentos
-    SET
-        gramaje =
-    WHERE id_alimento = vId;
-    -- fin consulta
-
-    IF vId > 0 THEN
-        RAISE NOTICE 'alimento % de id %, actualizado correctamente', vNmb, vId;
-        RETURN vId;
-    END IF;
-
-    RAISE NOTICE 'ERROR: alimento no actualizado';
-    RETURN 0;
-END;
-$$ LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS agrProducto;
-CREATE OR REPLACE FUNCTION agrProducto (reg ANYARRAY) RETURNS INTEGER AS $$
-DECLARE
-    vNmb VARCHAR        := null;
-    vMnt DECIMAL(10, 2) := null;
-    vDsc VARCHAR        := null;
-    vTpo VARCHAR        := null;
-    vStc INTEGER        := null;
-    vId  INTEGER        := 0;
-BEGIN
-    -- preguntamos si el arreglo está vacío
     IF array_length(reg, 1) < 5 THEN
         RETURN 0;
     END IF;
 
-    vNmb := upper(reg[1]);
-    vMnt := reg[2]::DECIMAL;
-    vDsc := upper(reg[3]);
-    vTpo := lower(reg[4]);
-    vStc := reg[5]::INTEGER;
+    vMonto := reg[1]::decimal;
+    vDesc := reg[2];
+    vstock := reg[3]::int;
+    vid_articulo := reg[4]::int;
+    vtipo := lower(reg[5]);
 
-    -- consulta
-    INSERT INTO
-        articuloVendidos
-    VALUES
-        (
-            DEFAULT,
-            vNmb,
-            vMnt,
-            vDsc,
-            vStc,
-            DEFAULT)
-    RETURNING id_articulo INTO vId;
+    INSERT INTO articulos_venta
+    VALUES (DEFAULT, vmonto, vdesc, vstock, vid_articulo, vtipo)
+    RETURNING id_articulo_venta INTO vid;
 
-    IF vId = 0 THEN
-        RAISE EXCEPTION 'articuloVenta no añadido, función cancelada';
+    IF vid = 0 THEN
+        RAISE EXCEPTION 'articulo de venta no insertado correctamente';
     END IF;
 
-    INSERT INTO
-        productos
-    VALUES (
-            vid,
-            vTpo)
-    RETURNING id_producto INTO vId;
-    -- fin consulta
+    RAISE NOTICE 'articulo % insertado correctamente', vid;
 
-    IF vId > 0 THEN
-        RAISE NOTICE 'producto % de id %, insertado correctamente', vNmb, vId;
-        RETURN vId;
-    END IF;
-
-    RAISE NOTICE 'ERROR: producto no insertado a la base de datos';
-    RETURN 0;
+    RETURN vid;
 END;
-$$ LANGUAGE plpgsql;
+$BODY$ LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS actProducto;
-CREATE OR REPLACE FUNCTION actProducto (reg ANYARRAY) RETURNS INTEGER AS $$
+DROP FUNCTION IF EXISTS actArticulo_venta;
+CREATE OR REPLACE FUNCTION actArticulo_venta (reg ANYARRAY) RETURNS INTEGER AS $BODY$
 DECLARE
-    vNmb VARCHAR        := null;
-    vMnt DECIMAL(10, 2) := null;
-    vDsc VARCHAR        := null;
-    vTpo VARCHAR        := null;
-    vStc INTEGER        := null;
-    vId  INTEGER        := 0;
+    vMonto decimal(10, 2) := 0;
+    vDesc varchar := NULL;
+    vStock int := 0;
+    vId_articulo int := 0;
+    vTipo varchar := NULL;
+    vId int := 0;
 BEGIN
-    -- preguntamos si el arreglo está vacío
     IF array_length(reg, 1) < 6 THEN
         RETURN 0;
     END IF;
 
-    vNmb := upper(reg[1]);
-    vMnt := reg[2]::DECIMAL;
-    vDsc := upper(reg[3]);
-    vTpo := lower(reg[4]);
-    vStc := reg[5]::INTEGER;
-    vId  := reg[6]::INTEGER;
+    vMonto := reg[1]::decimal;
+    vDesc := reg[2];
+    vstock := reg[3]::int;
+    vid_articulo := reg[4]::int;
+    vtipo := lower(reg[5]);
+    vId := reg[6]::int;
 
-    -- consulta
-    UPDATE
-        articuloVendidos
-    SET
-        nombre = vNmb,
-        montoCompra = vMnt,
-        descripcion = vDsc,
-        stock = vStc
-    WHERE
-            id_articulo = vId;
-    IF NOT found THEN
-        RAISE EXCEPTION 'articuloVenta no actualizado, función cancelada';
+    UPDATE articulos_venta
+    SET monto = vmonto,
+        descripcion = vdesc,
+        stock = vstock,
+        id_articulo = vid_articulo,
+        tipo = vtipo
+    WHERE id_articulo_venta = id_articulo;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'articulo de venta no actualizado';
     END IF;
 
-    UPDATE
-        productos
-    SET
-        tipo        = vTpo
-    WHERE
-            id_producto = vId;
-    -- fin consulta
+    RAISE NOTICE 'articulo % actualizado correctamente', vid;
 
-    IF vId > 0 THEN
-        RAISE NOTICE 'producto % de id %, actualizado correctamente', vNmb, vId;
-        RETURN vId;
-    END IF;
-
-    RAISE NOTICE 'ERROR: producto no actualizado';
-    RETURN 0;
+    RETURN vid;
 END;
-$$ LANGUAGE plpgsql;
+$BODY$ LANGUAGE plpgsql;
 
-DROP FUNCTION IF EXISTS agrMedicamento;
-CREATE OR REPLACE FUNCTION agrMedicamento (reg ANYARRAY) RETURNS INTEGER AS $$
-DECLARE
-    vNmb VARCHAR        := null;
-    vMnt DECIMAL(10, 2) := null;
-    vGrm DECIMAL(10, 2) := null;
-    vLbr VARCHAR        := null;
-    vDsc VARCHAR        := null;
-    vVia VARCHAR        := null;
-    vStc INTEGER        := null;
-    vId  INTEGER        := 0;
-BEGIN
-    -- preguntamos si el arreglo está vacío
-    IF array_length(reg, 1) < 7 THEN
-        RETURN 0;
-    END IF;
-
-    vNmb := upper(reg[1]);
-    vMnt := reg[2]::DECIMAL;
-    vGrm := reg[3]::DECIMAL;
-    vLbr := upper(reg[4]);
-    vDsc := upper(reg[5]);
-    vVia := lower(reg[6]);
-    vStc := reg[7]::INTEGER;
-
-    -- consulta
-    INSERT INTO
-        articuloVendidos
-    VALUES
-        (
-            DEFAULT,
-            vNmb,
-            vMnt,
-            vDsc,
-            vStc,
-            DEFAULT)
-    RETURNING id_articulo INTO vId;
-
-    IF vId = 0 THEN
-        RAISE EXCEPTION 'articuloVenta no añadido, función cancelada';
-    END IF;
-
-    INSERT INTO
-        medicamentos
-    VALUES (
-            vId,
-            vGrm,
-            vLbr,
-            vVia)
-    RETURNING id_medicamento INTO vId;
-    -- fin consulta
-
-    IF vId > 0 THEN
-        RAISE NOTICE 'medicamento % de id %, insertado correctamente', vNmb, vId;
-        RETURN vId;
-    END IF;
-
-    RAISE NOTICE 'ERROR: medicamento no insertado a la base de datos';
-    RETURN 0;
-END;
-$$ LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS actMedicamento;
-CREATE OR REPLACE FUNCTION actMedicamento (reg ANYARRAY) RETURNS INTEGER AS $$
-DECLARE
-    vNmb VARCHAR        := null;
-    vMnt DECIMAL(10, 2) := null;
-    vGrm DECIMAL(10, 2) := null;
-    vLbr VARCHAR        := null;
-    vDsc VARCHAR        := null;
-    vVia VARCHAR        := null;
-    vStc INTEGER        := null;
-    vId  INTEGER        := 0;
-BEGIN
-    -- preguntamos si el arreglo está vacío
-    IF array_length(reg, 1) < 8 THEN
-        RETURN 0;
-    END IF;
-
-    vNmb := upper(reg[1]);
-    vMnt := reg[2]::DECIMAL;
-    vGrm := reg[3]::DECIMAL;
-    vLbr := upper(reg[4]);
-    vDsc := upper(reg[5]);
-    vVia := lower(reg[6]);
-    vStc := reg[7]::INTEGER;
-    vId  := reg[8]::INTEGER;
-
-    -- consulta
-    UPDATE
-        articuloVendidos
-    SET
-        nombre = vNmb,
-        montoCompra = vMnt,
-        descripcion = vDsc,
-        stock = vStc
-    WHERE
-            id_articulo = vId;
-    IF NOT found THEN
-        RAISE EXCEPTION 'articuloVenta no actualizado, función cancelada';
-    END IF;
-
-    UPDATE
-        medicamentos
-    SET
-        gramaje     = vGrm,
-        laboratorio = vLbr,
-        via         = vVia
-    WHERE id_medicamento = vId;
-    -- fin consulta
-
-    IF vId > 0 THEN
-        RAISE NOTICE 'medicamento % de id %, actualizado correctamente', vNmb, vId;
-        RETURN vId;
-    END IF;
-
-    RAISE NOTICE 'ERROR: medicamento no actualizado';
-    RETURN 0;
-END;
-$$ LANGUAGE plpgsql;
-*/
 DROP FUNCTION IF EXISTS agrEmpleado;
 CREATE OR REPLACE FUNCTION agrEmpleado (reg ANYARRAY) RETURNS INTEGER AS $$
 DECLARE
@@ -1479,7 +1219,6 @@ BEGIN
     VALUES (
            DEFAULT,
            vMnT,
-            0,
            vFcC,
            vHrC,
            DEFAULT)
@@ -1496,45 +1235,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-/*
-DROP FUNCTION IF EXISTS actTicket;
-CREATE OR REPLACE FUNCTION actTicket (reg ANYARRAY) RETURNS INTEGER AS $$
-DECLARE
-    vMnT DECIMAL(10, 2) := null;
-    --vFcC DATE           := null;
-    --vHrC TIME           := null;
-    vId  INTEGER        := 0;
-BEGIN
-    -- preguntamos si el arreglo está vacío
-    IF array_length(reg, 1) < 1 THEN
-        RETURN 0;
-    END IF;
-
-    vMnT := reg[1]::DECIMAL;
-    --vFcC := reg[2]::DATE;
-    --vHrC := reg[3]::TIME;
-    vId  := reg[4]::INTEGER;
-
-    -- consulta
-    UPDATE
-        tickets
-    SET
-        monto_total = vMnT
-        --fecha_cobro = vFcC,
-        --hora_cobro  = vHrC
-    WHERE id_ticket = vId;
-    -- fin consulta
-
-    IF vId > 0 THEN
-        RAISE NOTICE 'Ticket de id % , actualizado correctamente', vId;
-        RETURN vId;
-    END IF;
-
-    RAISE NOTICE 'ERROR: Ticket, no actualizado';
-    RETURN 0;
-END;
-$$ LANGUAGE plpgsql;
-*/
 -- este procedimiento debe ser una transacción
 DROP PROCEDURE IF EXISTS agrPago;
 CREATE OR REPLACE PROCEDURE agrPago (reg ANYARRAY) AS $$
@@ -1543,6 +1243,7 @@ DECLARE
     vIdF INTEGER        := 0;
     vIdT INTEGER        := 0;
     vCms DECIMAL(10, 2) := 0;
+    vPgs DECIMAL(10, 2) := 0;
     vCns INTEGER        := 0;
 BEGIN
     -- preguntamos si el arreglo está vacío
@@ -1554,7 +1255,9 @@ BEGIN
     vIdF := reg[2]::INTEGER;
     vIdT := reg[3]::INTEGER;
 
-    IF exists(SELECT * FROM tickets WHERE pago_total >= tickets.monto_total) THEN
+    SELECT INTO vPgs sum(subtotal) FROM detalle_ticket WHERE id_ticket = vIdT;
+
+    IF exists(SELECT * FROM tickets WHERE vPgs >= tickets.monto_total) THEN
         RAISE EXCEPTION 'ticket % ya pagado, no se permiten más pagos', vIdT;
     END IF;
 
@@ -1588,7 +1291,7 @@ BEGIN
 
     -- actualizamos el ticket
     UPDATE tickets
-    SET pago_total = pago_total + vSbT
+    SET monto_total = monto_total + vSbT
     WHERE id_ticket = vIdT;
 
     IF NOT FOUND THEN
@@ -1600,45 +1303,6 @@ BEGIN
     COMMIT;
 END;
 $$ LANGUAGE plpgsql;
-
-/*
-DROP FUNCTION IF EXISTS actPago;
-CREATE OR REPLACE FUNCTION actPago (reg ANYARRAY) RETURNS INTEGER AS $$
-DECLARE
-    vSbT DECIMAL(10, 2) := null;
-    vIdF INTEGER        := 0;
-    vIdT INTEGER        := 0;
-    vCns INTEGER        := 0;
-BEGIN
-    -- preguntamos si el arreglo está vacío
-    IF array_length(reg, 1) < 3 THEN
-        RETURN 0;
-    END IF;
-
-    vSbT := reg[1]::DECIMAL;
-    vIdF := reg[2]::INTEGER;
-    vIdT := reg[3]::INTEGER;
-    vCns := reg[4]::INTEGER;
-
-    -- consulta
-    UPDATE
-        pagos
-    SET
-        subtotal      = vSbT,
-        id_forma_pago = vIdF
-    WHERE id_ticket = vIdT AND cns_pago = vCns;
-    -- fin consulta
-
-    IF vCns > 0 THEN
-        RAISE NOTICE 'Pago de ticket %:% de id % , actualizado correctamente', vIdT, vIdF, vCns;
-        RETURN vCns;
-    END IF;
-
-    RAISE NOTICE 'ERROR: Ticket de %:%, no actualizado', vIdT, vIdF;
-    RETURN 0;
-END;
-$$ LANGUAGE plpgsql;
- */
 
 -- esta función debe ser una transacción
 DROP PROCEDURE IF EXISTS agrArticulo_ticket;
@@ -1921,104 +1585,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-/*
-DROP FUNCTION IF EXISTS agrAlimentoReceta;
-CREATE OR REPLACE FUNCTION agrAlimentoReceta (reg ANYARRAY) RETURNS INTEGER AS $$
-DECLARE
-    vTmD INTEGER        := null;
-    vFrD INTEGER        := null;
-    vCnF DECIMAL(10, 2) := null;
-    vIdA INTEGER        := 0;
-    vIdC INTEGER        := 0;
-    vVal BOOLEAN        := FALSE;
-BEGIN
-    -- preguntamos si el arreglo está vacío
-    IF array_length(reg, 1) < 5 THEN
-        RETURN 0;
-    END IF;
-
-    vTmD := reg[1]::INTEGER;
-    vFrD := reg[2]::INTEGER;
-    vCnF := reg[3]::DECIMAL;
-    vIdA := reg[3]::INTEGER;
-    vIdC := reg[4]::INTEGER;
-
-    -- consulta
-    INSERT INTO
-        receta_alimentos
-    VALUES (
-           vTmD,
-           vFrD,
-           vCnF,
-           vIdA,
-           vIdC)
-    RETURNING TRUE INTO vVal;
-    -- fin consulta
-
-    IF vVal THEN
-        RAISE EXCEPTION 'ERROR: Alimento % de receta %, no insertado', vIdA, vIdC;
-    END IF;
-
-    RAISE NOTICE 'Alimento % de receta %, insertado correctamente', vIdA, vIdC;
-    RETURN 1;
-END;
-$$ LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS agrMedicamentoReceta;
-CREATE OR REPLACE FUNCTION agrMedicamentoReceta (reg ANYARRAY) RETURNS INTEGER AS $$
-DECLARE
-    vTmD INTEGER        := null;
-    vFrD INTEGER        := null;
-    vCnF DECIMAL(10, 2) := null;
-    vIdM INTEGER        := 0;
-    vIdC INTEGER        := 0;
-    vVal BOOLEAN        := FALSE;
-BEGIN
-    -- preguntamos si el arreglo está vacío
-    IF array_length(reg, 1) < 5 THEN
-        RETURN 0;
-    END IF;
-
-    vTmD := reg[1]::INTEGER;
-    vFrD := reg[2]::INTEGER;
-    vCnF := reg[3]::DECIMAL;
-    vIdM := reg[3]::INTEGER;
-    vIdC := reg[4]::INTEGER;
-
-    -- consulta
-    INSERT INTO
-        receta_medicamentos
-    VALUES (
-           vTmD,
-           vFrD,
-           vCnF,
-           vIdM,
-           vIdC)
-    RETURNING TRUE INTO vVal;
-    -- fin consulta
-
-    IF vVal THEN
-        RAISE NOTICE 'Medicamento % de receta %, insertado correctamente', vIdM, vIdC;
-        RETURN 1;
-    END IF;
-
-    RAISE NOTICE 'ERROR: Medicamento % de receta %, no insertado', vIdM, vIdC;
-    RETURN 0;
-END;
-$$ LANGUAGE plpgsql;*/
-
-/*
- esta función devuelve la consulta de los articulos de una factura, dependiendo si se requiere un alimento,
- un medicamento o un producto.
-
- Parámetros:
-    pIdf - id de la factura a leer
-    pTpo - si se desea conocer los alimentos, productos o medicamentos o todos los articulos de la factura.
-        0 = articulos en general;
-        1 = alimentos;
-        2 = productos;
-        3 = medicamentos;
- */
 CREATE OR REPLACE FUNCTION obtAlimentos_factura(pIdF INTEGER, pTpo INTEGER) RETURNS refcursor AS $$
 DECLARE
     vCursor refcursor;

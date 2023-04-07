@@ -154,6 +154,9 @@ CREATE TABLE articulos_venta
     id_articulo INTEGER NOT NULL REFERENCES articulos_proveedor,
     CONSTRAINT articulo_repetido
         UNIQUE(id_articulo),
+    tipo varchar NOT NULL,
+    CONSTRAINT tipo_articulo_invalido
+        CHECK ( tipo IN ('alimento', 'medicamento', 'producto') ),
     activo BOOLEAN DEFAULT TRUE
 );
 
@@ -330,129 +333,3 @@ CREATE TABLE citas
     CHECK ( estatus IN ('pendiente','realizada','cancelada','no realizada','pospuesta') ),
     activo BOOLEAN DEFAULT TRUE
 );
-
-
-DROP FUNCTION IF EXISTS agrAlimentoProveedor;
-CREATE OR REPLACE FUNCTION agrAlimento (reg ANYARRAY) RETURNS INTEGER AS $$
-DECLARE
-    vNmb VARCHAR        := null;
-    vMnt DECIMAL(10, 2) := null;
-    vGrm DECIMAL(10, 2) := null;
-    vIdP VARCHAR        := null;
-    vId  INTEGER        := 0;
-BEGIN
-    -- preguntamos si el arreglo está vacío
-    IF array_length(reg, 1) < 4 THEN
-        RETURN 0;
-    END IF;
-
-    vNmb := upper(reg[1]);
-    vMnt := reg[2]::DECIMAL;
-    vGrm := reg[3]::DECIMAL;
-    vIdP := reg[4]::INTEGER;
-
-    INSERT INTO
-        articulos_proveedor
-    VALUES
-    (
-        DEFAULT,
-        vNmb,
-        vMnt,
-        vIdP,
-        DEFAULT)
-    RETURNING id_articulo_proveedor INTO vId;
-
-    IF vId = 0 THEN
-        RAISE EXCEPTION 'articulo de proveedor no añadido, función cancelada';
-    END IF;
-
-    -- consulta
-    INSERT INTO
-        alimentos
-    VALUES (
-           vId,
-           vGrm)
-    RETURNING id_articulo_alimento INTO vId;
-    -- fin consulta
-
-    IF vId > 0 THEN
-        RAISE NOTICE 'alimento % de id %, insertado correctamente', vNmb, vId;
-        RETURN vId;
-    END IF;
-
-    RAISE NOTICE 'ERROR: alimento no insertado a la base de datos';
-    RETURN 0;
-END;
-$$ LANGUAGE plpgsql;
-
-
--- agrega un articulo de proveedor a la base de datos, especificando el tipo 
--- del articulo en sus parámetros
-
--- 0 = alimentos
--- 1 = productos
--- 2 = medicamentos
-DROP FUNCTION IF EXISTS agrArticuloProveedor;
-CREATE OR REPLACE FUNCTION agrArticuloProveedor (reg ANYARRAY, tipo INTEGER) RETURNS INTEGER LANGUAGE plpgsql AS $$
-    DECLARE
-        vNmb VARCHAR        := null;
-        vMnt DECIMAL(10, 2) := null;
-        vIdP VARCHAR        := null;
-        vId  INTEGER        := 0;
-        -- alimentos
-        vGrm DECIMAL(10, 2) := null;
-        -- productos
-        vTpo VARCHAR        := null;
-        -- medicamentos *incluye vGrm*
-        vLbt VARCHAR        := null;
-        vVia VARCHAR        := null;
-
-        vTbl VARCHAR[]      := ['alimento', 'producto', 'medicamento'];
-    BEGIN
-        IF array_length(reg, 1) < 4 AND (tipo < 0 OR tipo > 2) THEN
-            RETURN 0;
-        END IF;
-
-        vNmb := upper(reg[1]);
-        vMnt := reg[2]::DECIMAL;
-        vGrm := reg[3]::DECIMAL;
-        vIdP := reg[4]::INTEGER;        
-
-        INSERT INTO
-            articulos_proveedor
-        VALUES
-        (
-            DEFAULT,
-            vNmb,
-            vMnt,
-            vIdP,
-            DEFAULT)
-        RETURNING id_articulo_proveedor INTO vId;
-        IF vId = 0 THEN
-            RAISE EXCEPTION 'articulo de proveedor no añadido, función cancelada';
-        END IF;
-
-        CASE tipo
-            WHEN 0 THEN
-                INSERT INTO alimentos
-                VALUES (vId, vGrm)
-                RETURNING id_articulo_alimento INTO vId;
-            WHEN 1 THEN
-                INSERT INTO productos
-                VALUES (vId, vTpo)
-                RETURNING id_articulo_producto INTO vId;
-            WHEN 2 THEN
-                INSERT INTO medicamentos
-                VALUES (vId, vGrm, vLbt, vVia)
-                RETURNING id_articulo_medicamento INTO vId;
-        END CASE;
-
-        IF vId = 0 THEN
-            RAISE EXCEPTION '% no insertado a la base de datos', vTbl[tipo];
-        END IF;
-
-        RAISE NOTICE '% de id % insertado correctamente', vTbl[tipo], vId;
-
-        RETURN vId;
-    END;
-$$;
