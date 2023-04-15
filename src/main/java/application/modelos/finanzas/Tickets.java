@@ -1,43 +1,39 @@
 package application.modelos.finanzas;
 
-import application.modelos.Tabla;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
-public class Ticket extends Tabla {
-    @Getter @Setter
-    private Double monto_total;
-    @Getter @Setter
-    private Double pago_total;
-    @Getter @Setter
+@Getter
+@Setter
+public class Tickets {
+    private Integer id_ticket;
+    private BigDecimal monto_total;
     private LocalDate fecha_cobro;
-    @Getter @Setter
     private LocalTime hora_cobro;
-    @Getter @Setter
     private List<ArticuloVendido> articuloVendidos;
-    @Getter @Setter
-    private List<Pago> pagos;
+    private List<Pagos> pagos;
 
-    public Ticket(LocalDate fecha_cobro, LocalTime hora_cobro) {
+    public Tickets(Integer id_ticket, BigDecimal monto_total, LocalDate fecha_cobro, LocalTime hora_cobro, List<ArticuloVendido> articulosVendidos,List<Pagos> pagos) {
+        this.id_ticket = id_ticket;
+        this.monto_total = monto_total;
         this.fecha_cobro = fecha_cobro;
         this.hora_cobro = hora_cobro;
-        this.articuloVendidos = new ArrayList<>();
-        this.pagos = new ArrayList<>();
+        this.articuloVendidos = articulosVendidos;
+        this.pagos = pagos;
     }
 
-    public Ticket(Integer id, LocalDate fecha_cobro, LocalTime hora_cobro) {
-        super(id);
+    public Tickets(BigDecimal monto_total, LocalDate fecha_cobro, LocalTime hora_cobro, List<ArticuloVendido> articulosVendidos,List<Pagos> pagos) {
+        this.monto_total = monto_total;
         this.fecha_cobro = fecha_cobro;
         this.hora_cobro = hora_cobro;
-        this.articuloVendidos = new ArrayList<>();
-        this.pagos = new ArrayList<>();
+        this.articuloVendidos = articulosVendidos;
+        this.pagos = pagos;
     }
-
     public void agregarArticulo(ArticuloVendido articuloVendido) {
         this.articuloVendidos.add(articuloVendido);
         this.monto_total += articuloVendido.getMonto_subtotal();
@@ -53,12 +49,12 @@ public class Ticket extends Tabla {
         this.articuloVendidos.forEach(a -> monto_total += a.getMonto_subtotal());
     }
 
-    public void agregarPago(Pago pago) {
+    public void agregarPago(Pagos pago) {
         this.pagos.add(pago);
         this.pago_total += pago.getMonto_subtotal();
     }
 
-    public void agregarPagos(List<Pago> pagos) {
+    public void agregarPagos(List<Pagos> pagos) {
         this.pagos.addAll(pagos);
         calcularPago();
     }

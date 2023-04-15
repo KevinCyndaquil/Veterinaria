@@ -3,7 +3,7 @@ package application.modelos.entidades;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Medicamento extends ArticuloProveedor {
+public class Medicamento extends ArticulosProveedor {
     @Getter
     @Setter
     private Double gramaje;
@@ -14,14 +14,14 @@ public class Medicamento extends ArticuloProveedor {
     @Setter
     private ViasMedicamento via;
 
-    public Medicamento(String nombre, Double monto, Proveedor proveedor, Double gramaje, String laboratorio, ViasMedicamento via) {
+    public Medicamento(String nombre, Double monto, Proveedores proveedor, Double gramaje, String laboratorio, ViasMedicamento via) {
         super(nombre, monto, proveedor);
         this.gramaje = gramaje;
         this.laboratorio = laboratorio;
         this.via = via;
     }
 
-    public Medicamento(Integer id, String nombre, Double monto, Proveedor proveedor, Double gramaje, String laboratorio, ViasMedicamento via) {
+    public Medicamento(Integer id, String nombre, Double monto, Proveedores proveedor, Double gramaje, String laboratorio, ViasMedicamento via) {
         super(id, nombre, monto, proveedor);
         this.gramaje = gramaje;
         this.laboratorio = laboratorio;

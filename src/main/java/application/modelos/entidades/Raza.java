@@ -1,27 +1,24 @@
 package application.modelos.entidades;
 
-import application.modelos.Tabla;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Raza extends Tabla {
-    @Getter @Setter
-    private String nombre;
-    @Getter @Setter
-    private int total_adopcion;
-    @Getter @Setter
-    private Animal animal;
+import java.io.Serial;
 
-    public Raza(String nombre, int total_adopcion, Animal animal) {
+@Getter @Setter
+public class Raza  {
+    private Integer id_raza;
+    private String nombre;
+    private Integer total_adopcion;
+
+    public Raza(Integer id_raza, String nombre, Integer total_adopcion) {
+        this.id_raza = id_raza;
         this.nombre = nombre;
         this.total_adopcion = total_adopcion;
-        this.animal = animal;
     }
 
-    public Raza(Integer id, String nombre, int total_adopcion, Animal animal) {
-        super(id);
+    public Raza(String nombre, Integer total_adopcion) {
         this.nombre = nombre;
         this.total_adopcion = total_adopcion;
-        this.animal = animal;
     }
 }

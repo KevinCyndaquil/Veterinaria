@@ -8,32 +8,33 @@ CREATE DATABASE veterinaria;
 
 -- CREAMOS LAS TABLAS
 
-CREATE TABLE animales
-(
-    id_animal SERIAL NOT NULL PRIMARY KEY,
-    nombre VARCHAR(15) NOT NULL,
-    CONSTRAINT nombre_invalido
-        CHECK ( nombre ~ '^[A-Z]+$' ),
-    activo BOOLEAN DEFAULT TRUE
-);
-
 CREATE TABLE razas
 (
-    id_raza SERIAL NOT NULL PRIMARY KEY,
+    id_raza SERIAL PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     CONSTRAINT nombre_invalido
         CHECK ( nombre ~ '^[A-Z ]+$' ),
     total_adopción INTEGER NOT NULL DEFAULT 0,
     CONSTRAINT adopcion_invalido --No pueden haber razas en adopción negativos
         CHECK ( total_adopción >= 0 ),
-    id_animal INTEGER NOT NULL REFERENCES animales,
     activo BOOLEAN DEFAULT TRUE
 );
+
+CREATE TABLE animales
+(
+    id_animal SERIAL NOT NULL PRIMARY KEY,
+    nombre VARCHAR(15) NOT NULL,
+    CONSTRAINT nombre_invalido
+        CHECK ( nombre ~ '^[A-Z]+$' ),
+    activo BOOLEAN DEFAULT TRUE,
+    id_raza INTEGER REFERENCES razas
+);
+
 
 -- Esta es una super tabla, hay generalización
 CREATE TABLE personas
 (
-    id_persona SERIAL NOT NULL PRIMARY KEY,
+    id_persona SERIAL PRIMARY KEY,
     rfc VARCHAR(13),
     CONSTRAINT rfc_unique
         UNIQUE(rfc),
@@ -75,9 +76,8 @@ CREATE TABLE empleados
     jor_fin TIME NOT NULL,
     CONSTRAINT jornada_invalida
         CHECK ( (jor_fin - jor_ini) <= '08:00:00' ),
-    salario DECIMAL(10, 2) NOT NULL,
-    CONSTRAINT salario_invalido
-        CHECK ( salario > 0 ),
+    salario_bruto DECIMAL(10, 2) NOT NULL DEFAULT 0 CHECK ( salario_bruto > 0 ),
+    salario_neto DECIMAL(10, 2) NOT NULL DEFAULT 0 CHECK ( salario_neto > 0 ),
     puesto VARCHAR NOT NULL,
     CONSTRAINT puesto_invalido
         CHECK ( puesto IN ('mostrador','veterinario', 'limpieza', 'gerente') )
@@ -100,6 +100,26 @@ CREATE TABLE nominas
     activo BOOLEAN DEFAULT TRUE
 );
 
+CREATE TABLE tipos_deducciones
+(
+    id_tipo_deduccion SERIAL NOT NULL PRIMARY KEY,
+    nombre VARCHAR(30) NOT NULL,
+    descripcion VARCHAR(100) NOT NULL,
+    CONSTRAINT nombre_invalido
+        CHECK ( nombre ~ '^[A-Z ]+$' ),
+    porcentaje DECIMAL(10, 2) NOT NULL CHECK ( porcentaje > 0 ),
+    activo BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE deducciones
+(
+    id_empleado INTEGER,
+    cns_nomina INTEGER,
+    id_tipo_deduccion INTEGER REFERENCES tipos_deducciones,
+    foreign key(id_empleado, cns_nomina) references nominas,
+    primary key(id_empleado, cns_nomina, id_tipo_deduccion)
+);
+
 CREATE TABLE mascotas
 (
     id_mascota       SERIAL NOT NULL PRIMARY KEY,
@@ -114,7 +134,7 @@ CREATE TABLE mascotas
     id_propietario   INTEGER NOT NULL REFERENCES propietarios,
     id_raza          INTEGER NOT NULL REFERENCES razas,
     activo           BOOLEAN DEFAULT TRUE
-);
+);r
 
 CREATE TABLE proveedores
 (
@@ -223,7 +243,7 @@ CREATE TABLE medicamentos
 
 CREATE TABLE facturas_proveedor
 (
-    id_factura SERIAL NOT NULL PRIMARY KEY,
+    id_factura SERIAL PRIMARY KEY,
     fecha_factura DATE NOT NULL,
     CONSTRAINT fecha_invalida
         CHECK ( fecha_factura <= now() ),
@@ -252,7 +272,7 @@ CREATE TABLE detalle_factura
 
 CREATE TABLE formas_pago
 (
-    id_forma_pago SERIAL NOT NULL PRIMARY KEY,
+    id_forma_pago SERIAL PRIMARY KEY,
     nombre VARCHAR(30) NOT NULL,
     CONSTRAINT nombre_invalido
         CHECK ( nombre ~ '^[A-Za-z\s]$' ),

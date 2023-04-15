@@ -1,38 +1,38 @@
 package application.modelos.finanzas;
 
-import application.modelos.Tabla;
-import application.modelos.entidades.Empleado;
+import application.modelos.entidades.Empleados;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
-public class Nomina extends Tabla {
-    @Getter @Setter
+@Getter
+@Setter
+public class Nominas {
+    private Integer cns_nomina;
     private LocalDate fecha_inicio;
-    @Getter @Setter
     private LocalDate fecha_fin;
-    @Getter @Setter
     private Integer total_horas;
-    @Getter @Setter
     private Double total_bono;
-    @Getter @Setter
-    private Empleado empleado;
+    private Empleados empleado;
+    private List<Deducciones> deducciones;
 
-    public Nomina(LocalDate fecha_inicio, LocalDate fecha_fin, Integer total_horas, Double total_bono, Empleado empleado) {
+    public Nominas(LocalDate fecha_inicio, LocalDate fecha_fin, Integer total_horas, Double total_bono, Empleados empleado, List<Deducciones> deducciones) {
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
         this.total_horas = total_horas;
         this.total_bono = total_bono;
         this.empleado = empleado;
+        this.deducciones = deducciones;
     }
 
-    public Nomina(Integer cns, LocalDate fecha_inicio, LocalDate fecha_fin, Integer total_horas, Double total_bono, Empleado empleado) {
-        super(cns);
+    public Nominas(Integer cns, LocalDate fecha_inicio, LocalDate fecha_fin, Integer total_horas, Double total_bono, Empleados empleado, List<Deducciones> deducciones) {
         this.fecha_inicio = fecha_inicio;
         this.fecha_fin = fecha_fin;
         this.total_horas = total_horas;
         this.total_bono = total_bono;
         this.empleado = empleado;
+        this.deducciones = deducciones;
     }
 }

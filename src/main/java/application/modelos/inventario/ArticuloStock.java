@@ -1,28 +1,26 @@
 package application.modelos.inventario;
 
-import application.modelos.Tabla;
-import application.modelos.entidades.ArticuloVenta;
+import application.modelos.entidades.ArticulosVenta;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
-public class ArticuloStock extends Tabla {
+public class ArticuloStock  {
     @Getter @Setter
     private LocalDate caducidad;
     @Getter @Setter
     private Integer cantidad;
     @Getter @Setter
-    private ArticuloVenta articuloVenta;
+    private ArticulosVenta articuloVenta;
 
-    public ArticuloStock(LocalDate caducidad, Integer cantidad, ArticuloVenta articuloVenta) {
+    public ArticuloStock(LocalDate caducidad, Integer cantidad, ArticulosVenta articuloVenta) {
         this.caducidad = caducidad;
         this.cantidad = cantidad;
         this.articuloVenta = articuloVenta;
     }
 
-    public ArticuloStock(Integer cns, LocalDate caducidad, Integer cantidad, ArticuloVenta articuloVenta) {
-        super(cns);
+    public ArticuloStock(Integer cns, LocalDate caducidad, Integer cantidad, ArticulosVenta articuloVenta) {
         this.caducidad = caducidad;
         this.cantidad = cantidad;
         this.articuloVenta = articuloVenta;

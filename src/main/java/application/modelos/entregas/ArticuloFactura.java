@@ -1,19 +1,19 @@
 package application.modelos.entregas;
 
-import application.modelos.entidades.ArticuloProveedor;
-import application.modelos.entidades.Proveedor;
+import application.modelos.entidades.ArticulosProveedor;
+import application.modelos.entidades.Proveedores;
 import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
-
-public class ArticuloFactura extends ArticuloProveedor {
-    @Getter
+@Getter
+@Setter
+public class ArticuloFactura extends ArticulosProveedor {
     private Integer cantidad;
-    @Getter
     private Double monto_subtotal;
 
-    public ArticuloFactura(@NotNull ArticuloProveedor articuloProveedor, Integer cantidad) {
+    public ArticuloFactura(@NotNull ArticulosProveedor articuloProveedor, Integer cantidad) {
         super(
-                articuloProveedor.getId(),
+
                 articuloProveedor.getNombre(),
                 articuloProveedor.getMontoCompra(),
                 articuloProveedor.getProveedor());
@@ -21,13 +21,13 @@ public class ArticuloFactura extends ArticuloProveedor {
         this.monto_subtotal = getMontoCompra() * cantidad;
     }
 
-    public ArticuloFactura(String nombre, Double monto, Proveedor proveedor, Integer cantidad) {
+    public ArticuloFactura(String nombre, Double monto, Proveedores proveedor, Integer cantidad) {
         super(nombre, monto, proveedor);
         this.cantidad = cantidad;
         this.monto_subtotal = getMontoCompra() * cantidad;
     }
 
-    public ArticuloFactura(Integer id, String nombre, Double monto, Proveedor proveedor, Integer cantidad) {
+    public ArticuloFactura(Integer id, String nombre, Double monto, Proveedores proveedor, Integer cantidad) {
         super(id, nombre, monto, proveedor);
         this.cantidad = cantidad;
         this.monto_subtotal = getMontoCompra() * cantidad;

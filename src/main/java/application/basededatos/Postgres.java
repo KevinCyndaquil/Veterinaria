@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 
 public class Postgres implements AutoCloseable{
-    private final String url = "jdbc:postgresql://localhost:5433/veterinaria";
+    private final String url = "jdbc:postgresql://localhost:5432/veterinaria";
     private static String user;
     private static String password;
 
@@ -48,7 +48,7 @@ public class Postgres implements AutoCloseable{
     private void connectTo() {
         try {
             Class.forName("org.postgresql.Driver");
-            connection = (connection == null) ? DriverManager.getConnection(url, (user == null) ? "postgres" : user, (password == null) ? "qw6xdg7sB!" : password) : connection;
+            connection = (connection == null) ? DriverManager.getConnection(url, (user == null) ? "jackinjaxx" : user, (password == null) ? "0804" : password) : connection;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Driver de postgresql no instalado.");
         } catch (SQLException e) {

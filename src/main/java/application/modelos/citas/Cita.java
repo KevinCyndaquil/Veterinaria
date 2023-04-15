@@ -1,17 +1,15 @@
 package application.modelos.citas;
 
-import application.modelos.Tabla;
-import application.modelos.entidades.Empleado;
-import application.modelos.entidades.Mascota;
-import application.modelos.finanzas.Ticket;
+import application.modelos.entidades.Empleados;
+import application.modelos.entidades.Mascotas;
+import application.modelos.finanzas.Tickets;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
-public class Cita extends Tabla {
+public class Cita{
     @Getter @Setter
     private LocalDate fecha;
     @Getter @Setter
@@ -19,15 +17,15 @@ public class Cita extends Tabla {
     @Getter @Setter
     private String detalle;
     @Getter @Setter
-    private Mascota mascota;
+    private Mascotas mascota;
     @Getter @Setter
-    private Empleado veterinario;
+    private Empleados veterinario;
     @Getter @Setter
-    private Ticket ticket;
+    private Tickets ticket;
     @Getter @Setter
     private EstatusCita estatus;
 
-    public Cita(LocalDate fecha, LocalTime hora, String detalle, Mascota mascota, Empleado veterinario, Ticket ticket, EstatusCita estatus) {
+    public Cita(LocalDate fecha, LocalTime hora, String detalle, Mascotas mascota, Empleados veterinario, Tickets ticket, EstatusCita estatus) {
         this.fecha = fecha;
         this.hora = hora;
         this.detalle = detalle;
@@ -37,8 +35,7 @@ public class Cita extends Tabla {
         this.estatus = estatus;
     }
 
-    public Cita(Integer id, LocalDate fecha, LocalTime hora, String detalle, Mascota mascota, Empleado veterinario, Ticket ticket, EstatusCita estatus) {
-        super(id);
+    public Cita(Integer id, LocalDate fecha, LocalTime hora, String detalle, Mascotas mascota, Empleados veterinario, Tickets ticket, EstatusCita estatus) {
         this.fecha = fecha;
         this.hora = hora;
         this.detalle = detalle;
