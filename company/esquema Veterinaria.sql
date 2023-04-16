@@ -150,34 +150,32 @@ CREATE TABLE proveedores
     activo BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE articulos_proveedor(
-    id_articulo_proveedor SERIAL NOT NULL PRIMARY KEY,
+CREATE TABLE articulos(
+    id_articulo SERIAL NOT NULL PRIMARY KEY,
     nombre VARCHAR(30) NOT NULL,
     CONSTRAINT nombre_invalido
         CHECK ( nombre ~ '^[A-Z0-9.-/ ]+$' ),
-    monto DECIMAL(10, 2) NOT NULL,
+    monto_compra DECIMAL(10, 2) NOT NULL,
+    descripcion VARCHAR(100) DEFAULT '',
     CONSTRAINT monto_invalido
         CHECK ( monto > 0 ),
-    id_proveedor INTEGER NOT NULL REFERENCES proveedores,
     activo BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE articulos_venta
 (
-    id_articulo_venta SERIAL NOT NULL PRIMARY KEY,
+    id_articulo INTEGER REFERENCES articulos primary key,
     monto DECIMAL(10, 2) NOT NULL,
     CONSTRAINT monto_invalido
         CHECK ( monto > 0 ),
-    descripcion VARCHAR(100) DEFAULT '',
     stock INTEGER NOT NULL DEFAULT 0,
     CONSTRAINT stock_invalido CHECK ( stock >= 0 ),
-    id_articulo INTEGER NOT NULL REFERENCES articulos_proveedor,
+   
     CONSTRAINT articulo_repetido
         UNIQUE(id_articulo),
     tipo varchar NOT NULL,
     CONSTRAINT tipo_articulo_invalido
         CHECK ( tipo IN ('alimento', 'medicamento', 'producto') ),
-    activo BOOLEAN DEFAULT TRUE
 );
 
 -- esta función devuelve true si hay un id referenciado por las tablas alimentos, medicamentos, productos
@@ -262,6 +260,7 @@ CREATE TABLE detalle_factura
     CONSTRAINT cantidad_invalida
         CHECK ( cantidad > 0 ),
     subtotal DECIMAL(10, 2) NOT NULL,
+
     CONSTRAINT subtotal_invalido
         CHECK ( subtotal >= 0 ),
     id_articulo INTEGER NOT NULL REFERENCES articulos_proveedor,
@@ -292,7 +291,7 @@ CREATE TABLE tickets
     hora_cobro TIME NOT NULL,
     CONSTRAINT hora_invalida
         CHECK ( hora_cobro >= '09:00:00' AND hora_cobro <= '21:00:00' ),
-    activo BOOLEAN DEFAULT TRUE
+    estatus varchar CHECK 
 );
 
 CREATE TABLE pagos

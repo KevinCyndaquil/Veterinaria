@@ -1,7 +1,6 @@
 package application;
 
-import application.basededatos.repositorios.FacturaRep;
-import application.modelos.entidades.TiposProducto;
+import application.database.repositorios.FacturaRep;
 
 import java.sql.SQLException;
 
