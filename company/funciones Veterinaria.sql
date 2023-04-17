@@ -10,13 +10,17 @@ DROP FUNCTION IF EXISTS agrAnimal;
 CREATE OR REPLACE FUNCTION agrAnimal (reg VARCHAR[]) RETURNS INTEGER AS $$
 DECLARE
     vNmb VARCHAR := null;
+    vTotalA INTEGER := 0;
+    vIdRaza INTEGER := 0;
     vId  INTEGER := 0;
 BEGIN
     vNmb := upper(reg[1]);
+    vTotalA := reg[2]::INTEGER;
+    vIdRaza := reg[3]::INTEGER;
 
     -- consulta
     INSERT INTO animales
-    VALUES (DEFAULT, vNmb, DEFAULT)
+    VALUES (DEFAULT, vNmb, vTotalA, DEFAULT, vIdRaza)
     RETURNING id_animal INTO vId;
     -- fin consulta
 
@@ -64,8 +68,6 @@ DROP FUNCTION IF EXISTS agrRaza;
 CREATE OR REPLACE FUNCTION agrRaza (reg ANYARRAY) RETURNS INTEGER AS $$
 DECLARE
     vNmb VARCHAR := null;
-    vTtl INTEGER := null;
-    vIdA INTEGER := 0;
     vId  INTEGER := 0;
 BEGIN
     -- preguntamos si el arreglo está vacío
@@ -74,12 +76,10 @@ BEGIN
     END IF;
 
     vNmb := upper(reg[1]);
-    vTtl := reg[2]::INTEGER;
-    vIdA := reg[3]::INTEGER;
 
     -- consulta
     INSERT INTO razas
-    VALUES (DEFAULT, vNmb, vTtl, vIdA, DEFAULT)
+    VALUES (DEFAULT, vNmb, DEFAULT)
     RETURNING id_raza INTO vId;
     -- fin consulta
 
@@ -97,27 +97,22 @@ DROP FUNCTION IF EXISTS actRaza;
 CREATE OR REPLACE FUNCTION actRaza (reg ANYARRAY) RETURNS INTEGER AS $$
 DECLARE
     vNmb VARCHAR := null;
-    vTtl INTEGER := null;
-    vIdA INTEGER := 0;
     vId  INTEGER := 0;
 BEGIN
     -- preguntamos si el arreglo está vacío
-    IF array_length(reg, 1) < 4 THEN
+    IF array_length(reg, 1) < 1 THEN
         RETURN 0;
     END IF;
 
-    vNmb := upper(reg[1]);
-    vTtl := reg[2]::INTEGER;
-    vIdA := reg[3]::INTEGER;
-    vId  := reg[4]::INTEGER;
+    vId  := reg[1]::INTEGER;
+    vNmb := upper(reg[2]);
+    
 
     -- consulta
     UPDATE
         razas
     SET
-        nombre = vNmb,
-        total_adopción = vTtl,
-        id_animal = vIdA
+        nombre = vNmb
     WHERE
             id_raza = vId;
     -- fin consulta
@@ -800,7 +795,7 @@ DECLARE
 BEGIN
     -- preguntamos si el arreglo está vacío
     IF array_length(reg, 1) < 4 THEN
-        RETURN 0;
+        RETURN -1;
     END IF;
 
     vNmb := upper(reg[1]);
@@ -814,7 +809,7 @@ BEGIN
     VALUES (
            DEFAULT,
            vNmb,
-           vDsc,
+           vDrc,
            vTlf,
            vDsc,
            DEFAULT)
@@ -827,7 +822,7 @@ BEGIN
     END IF;
 
     RAISE NOTICE 'ERROR: proveedor % no insertado a la base de datos', vNmb;
-    RETURN 0;
+    RETURN -1;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -856,7 +851,7 @@ BEGIN
         proveedores
     SET
         nombre      = vNmb,
-        direccion   = vDsc,
+        direccion   = vDrc,
         telefono    = vTlf,
         descripcion = vDsc
     WHERE id_proveedor = vId;

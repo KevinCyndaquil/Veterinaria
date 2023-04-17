@@ -14,9 +14,6 @@ CREATE TABLE razas
     nombre VARCHAR(50) NOT NULL,
     CONSTRAINT nombre_invalido
         CHECK ( nombre ~ '^[A-Z ]+$' ),
-    total_adopción INTEGER NOT NULL DEFAULT 0,
-    CONSTRAINT adopcion_invalido --No pueden haber razas en adopción negativos
-        CHECK ( total_adopción >= 0 ),
     activo BOOLEAN DEFAULT TRUE
 );
 
@@ -26,8 +23,12 @@ CREATE TABLE animales
     nombre VARCHAR(15) NOT NULL,
     CONSTRAINT nombre_invalido
         CHECK ( nombre ~ '^[A-Z]+$' ),
-    activo BOOLEAN DEFAULT TRUE,
-    id_raza INTEGER REFERENCES razas
+    total_adopción INTEGER NOT NULL DEFAULT 0,
+    CONSTRAINT adopcion_invalido --No pueden haber razas en adopción negativos
+        CHECK ( total_adopción >= 0 ),
+    id_raza INTEGER REFERENCES razas,
+    activo BOOLEAN DEFAULT TRUE
+    
 );
 
 
@@ -134,12 +135,12 @@ CREATE TABLE mascotas
     id_propietario   INTEGER NOT NULL REFERENCES propietarios,
     id_raza          INTEGER NOT NULL REFERENCES razas,
     activo           BOOLEAN DEFAULT TRUE
-);r
+);
 
 CREATE TABLE proveedores
 (
     id_proveedor SERIAL PRIMARY KEY,
-    nombre VARCHAR(30) NOT NULL,
+    nombre VARCHAR(30) NOT NULL UNIQUE,
     CONSTRAINT nombre_invalido
         CHECK ( nombre ~ '^[A-Z ]+$' ),
     direccion VARCHAR(50),
@@ -156,9 +157,9 @@ CREATE TABLE articulos(
     CONSTRAINT nombre_invalido
         CHECK ( nombre ~ '^[A-Z0-9.-/ ]+$' ),
     monto_compra DECIMAL(10, 2) NOT NULL,
-    descripcion VARCHAR(100) DEFAULT '',
     CONSTRAINT monto_invalido
-        CHECK ( monto > 0 ),
+        CHECK ( monto_compra > 0 ),
+    descripcion VARCHAR(100) DEFAULT '',
     activo BOOLEAN DEFAULT TRUE
 );
 
@@ -175,7 +176,7 @@ CREATE TABLE articulos_venta
         UNIQUE(id_articulo),
     tipo varchar NOT NULL,
     CONSTRAINT tipo_articulo_invalido
-        CHECK ( tipo IN ('alimento', 'medicamento', 'producto') ),
+        CHECK ( tipo IN ('alimento', 'medicamento', 'producto') )
 );
 
 -- esta función devuelve true si hay un id referenciado por las tablas alimentos, medicamentos, productos
@@ -207,7 +208,7 @@ $$;
 
 CREATE TABLE alimentos
 (
-    id_articulo_alimento INT NOT NULL REFERENCES articulos_proveedor,
+    id_articulo_alimento INT NOT NULL REFERENCES articulos,
     CONSTRAINT referencia_invalida
         CHECK (check_articulos(id_articulo_alimento) = FALSE),
     PRIMARY KEY(id_articulo_alimento),
@@ -218,7 +219,7 @@ CREATE TABLE alimentos
 
 CREATE TABLE productos
 (
-    id_articulo_producto int NOT NULL REFERENCES articulos_proveedor,
+    id_articulo_producto int NOT NULL REFERENCES articulos,
     CONSTRAINT referencia_invalida
         CHECK (check_articulos(id_articulo_producto) = FALSE),
     PRIMARY KEY (id_articulo_producto),
@@ -228,7 +229,7 @@ CREATE TABLE productos
 
 CREATE TABLE medicamentos
 (
-    id_articulo_medicamento SERIAL REFERENCES articulos_proveedor,
+    id_articulo_medicamento SERIAL REFERENCES articulos,
     CONSTRAINT referencia_invalida
         CHECK (check_articulos(id_articulo_medicamento) = FALSE),
     gramaje        DECIMAL(10, 2) NOT NULL,
@@ -263,7 +264,7 @@ CREATE TABLE detalle_factura
 
     CONSTRAINT subtotal_invalido
         CHECK ( subtotal >= 0 ),
-    id_articulo INTEGER NOT NULL REFERENCES articulos_proveedor,
+    id_articulo INTEGER NOT NULL REFERENCES articulos,
     CONSTRAINT alimento_repetido
         UNIQUE (id_articulo, cns_detalle_factura),
     PRIMARY KEY (id_factura, cns_detalle_factura)
@@ -282,6 +283,7 @@ CREATE TABLE formas_pago
 CREATE TABLE tickets
 (
     id_ticket SERIAL PRIMARY KEY,
+    fecha_factura DATE NOT NULL,
     monto_total DECIMAL(10, 2) NOT NULL,
     CONSTRAINT monto_invalido
         CHECK ( monto_total > 0 ),
@@ -291,7 +293,7 @@ CREATE TABLE tickets
     hora_cobro TIME NOT NULL,
     CONSTRAINT hora_invalida
         CHECK ( hora_cobro >= '09:00:00' AND hora_cobro <= '21:00:00' ),
-    estatus varchar CHECK 
+    estatus varchar NOT NULL CHECK(estatus in('PAGADO','PENDIENTE','CANCELADO'))
 );
 
 CREATE TABLE pagos

@@ -3,10 +3,10 @@ package application.models.entidades;
 import lombok.Getter;
 import lombok.Setter;
 @Getter @Setter
-public class Animales extends Raza {
+public class Animales extends Razas {
 
     private Integer id_animal;
-    private String nombre;
+    private String nombre_animal;
     private Integer total_adopcion;
 
 
