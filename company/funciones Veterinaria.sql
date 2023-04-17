@@ -10,17 +10,19 @@ DROP FUNCTION IF EXISTS agrAnimal;
 CREATE OR REPLACE FUNCTION agrAnimal (reg VARCHAR[]) RETURNS INTEGER AS $$
 DECLARE
     vNmb VARCHAR := null;
-    vTotalA INTEGER := 0;
     vIdRaza INTEGER := 0;
     vId  INTEGER := 0;
 BEGIN
+    IF array_length(reg, 1) < 2 THEN
+        RETURN 0;
+    END IF;
+
     vNmb := upper(reg[1]);
-    vTotalA := reg[2]::INTEGER;
-    vIdRaza := reg[3]::INTEGER;
+    vIdRaza := reg[2]::INTEGER;
 
     -- consulta
     INSERT INTO animales
-    VALUES (DEFAULT, vNmb, vTotalA, DEFAULT, vIdRaza)
+    VALUES (DEFAULT, vNmb, DEFAULT)
     RETURNING id_animal INTO vId;
     -- fin consulta
 
@@ -68,6 +70,8 @@ DROP FUNCTION IF EXISTS agrRaza;
 CREATE OR REPLACE FUNCTION agrRaza (reg ANYARRAY) RETURNS INTEGER AS $$
 DECLARE
     vNmb VARCHAR := null;
+    vTotalA INTEGER := 0;
+    vIdA INTEGER := 0;
     vId  INTEGER := 0;
 BEGIN
     -- preguntamos si el arreglo está vacío
@@ -76,10 +80,12 @@ BEGIN
     END IF;
 
     vNmb := upper(reg[1]);
+    vTotalA := reg[2]::INTEGER;
+    vIdA := reg[3]::INTEGER;
 
     -- consulta
     INSERT INTO razas
-    VALUES (DEFAULT, vNmb, DEFAULT)
+    VALUES (DEFAULT, vNmb, vTotalA, vIdA)
     RETURNING id_raza INTO vId;
     -- fin consulta
 
@@ -1638,3 +1644,44 @@ BEGIN
     RETURN vcursor;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE FUNCTION obtArticulos_factura(pFecha date, pId_proveedor integer) RETURNS refcursor
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    refCrs refcursor;
+BEGIN
+    OPEN refcrs FOR SELECT  row_number() OVER (ORDER BY tipo) as cns,
+                            ap.nombre,
+                            coalesce(df.cantidad, 0) as cantidad,
+                            ap.monto,
+                            coalesce(df.subtotal, 0) as subtotal,
+                            ap.id_articulo_proveedor,
+                            CASE
+                                WHEN a.id_articulo_alimento IS NOT NULL THEN
+                                    'Alimento'
+                                WHEN p.id_articulo_producto IS NOT NULL THEN
+                                    'Producto'
+                                WHEN m.id_articulo_medicamento IS NOT NULL THEN
+                                    'Medicamento'
+                                END AS tipo
+                    FROM articulos_proveedor ap
+                             LEFT JOIN (SELECT *
+                                        FROM detalle_factura df
+                                                 LEFT JOIN facturas_proveedor fp
+                                                           ON df.id_factura = fp.id_factura
+                                        WHERE fp.fecha_factura = pfecha
+                                          AND fp.id_proveedor = pid_proveedor) df
+                                       ON ap.id_articulo_proveedor = df.id_articulo
+                             LEFT JOIN alimentos a
+                                       ON ap.id_articulo_proveedor = a.id_articulo_alimento
+                             LEFT JOIN productos p
+                                       ON ap.id_articulo_proveedor = p.id_articulo_producto
+                             LEFT JOIN medicamentos m
+                                       ON ap.id_articulo_proveedor = m.id_articulo_medicamento
+                    ORDER BY tipo;
+
+    RAISE NOTICE 'cursor abierto correctamente';
+    RETURN refCrs;
+END;
+$$;

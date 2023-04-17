@@ -14,7 +14,7 @@ public class Facturas_Proveedor extends Facturas{
     private final Proveedores proveedor;
 
     //first: Articulo, second: cantidad
-    private Map<Articulos, Integer> articulos;
+    private final Map<Articulos, Integer> articulos;
 
     public Facturas_Proveedor(Integer id_factura, LocalDate fecha_generacion, Proveedores proveedor) {
         super(id_factura, fecha_generacion);

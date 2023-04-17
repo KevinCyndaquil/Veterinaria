@@ -65,8 +65,8 @@ public class AnimalRep implements Find<Animales>, Hide<Animales>, Save<Animales>
         ) {
             Array array = postgres.getConnection().createArrayOf("VARCHAR", new Object[]{
                     animal.getNombre_animal(),
-                    animal.getTotal_adopcion(),
-                    animal.getId_raza()
+                    //animal.getTotal_adopcion(),
+                    //animal.getId_raza()
             });
 
             statement.setArray(1, array);

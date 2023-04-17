@@ -1,12 +1,5 @@
 package application.models.database.repository;
 
-import application.models.database.interfaces.Save;
-import application.models.database.interfaces.Find;
-import application.models.database.interfaces.Update;
-import application.models.finanzas.Nominas;
-
-import java.sql.SQLException;
-import java.util.List;
 /*
 public class NominaRep implements
         Save<Nominas>,

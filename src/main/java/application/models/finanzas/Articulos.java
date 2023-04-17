@@ -2,9 +2,12 @@ package application.models.finanzas;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.function.Function;
 
 @Getter
 @Setter

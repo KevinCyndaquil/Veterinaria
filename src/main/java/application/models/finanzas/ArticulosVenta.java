@@ -12,17 +12,23 @@ import java.math.BigDecimal;
  */
 @Setter
 @Getter
-public abstract class ArticulosVenta extends Articulos {
+public class ArticulosVenta extends Articulos {
     private BigDecimal ganancia;
     private BigDecimal monto_venta;
     private Integer stock;
 
-    public ArticulosVenta(Integer id_articulo, String nombre, BigDecimal monto_compra, String descripcion) {
+    public ArticulosVenta(Integer id_articulo, String nombre, BigDecimal monto_compra, String descripcion, BigDecimal ganancia, BigDecimal monto_venta, Integer stock) {
         super(id_articulo, nombre, monto_compra, descripcion);
+        this.ganancia = ganancia;
+        this.monto_venta = monto_venta;
+        this.stock = stock;
     }
 
-    public ArticulosVenta(String nombre, BigDecimal monto_compra, String descripcion) {
+    public ArticulosVenta(String nombre, BigDecimal monto_compra, String descripcion, BigDecimal ganancia, BigDecimal monto_venta, Integer stock) {
         super(nombre, monto_compra, descripcion);
+        this.ganancia = ganancia;
+        this.monto_venta = monto_venta;
+        this.stock = stock;
     }
 
     public void setGanancia(BigDecimal ganancia) {

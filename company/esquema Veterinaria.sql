@@ -8,27 +8,27 @@ CREATE DATABASE veterinaria;
 
 -- CREAMOS LAS TABLAS
 
-CREATE TABLE razas
-(
-    id_raza SERIAL PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    CONSTRAINT nombre_invalido
-        CHECK ( nombre ~ '^[A-Z ]+$' ),
-    activo BOOLEAN DEFAULT TRUE
-);
-
 CREATE TABLE animales
 (
     id_animal SERIAL NOT NULL PRIMARY KEY,
     nombre VARCHAR(15) NOT NULL,
     CONSTRAINT nombre_invalido
         CHECK ( nombre ~ '^[A-Z]+$' ),
+    activo BOOLEAN DEFAULT TRUE
+
+);
+
+CREATE TABLE razas
+(
+    id_raza INTEGER PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    CONSTRAINT nombre_invalido
+        CHECK ( nombre ~ '^[A-Z ]+$' ),
     total_adopción INTEGER NOT NULL DEFAULT 0,
     CONSTRAINT adopcion_invalido --No pueden haber razas en adopción negativos
         CHECK ( total_adopción >= 0 ),
-    id_raza INTEGER REFERENCES razas,
+    id_animal INTEGER NOT NULL REFERENCES animales,
     activo BOOLEAN DEFAULT TRUE
-    
 );
 
 
@@ -61,14 +61,14 @@ CREATE TABLE personas
 -- tabla débil
 CREATE TABLE propietarios
 (
-    id_propietario INTEGER NOT NULL REFERENCES personas,
+    id_propietario INTEGER NOT NULL NOT NULL REFERENCES personas,
     PRIMARY KEY(id_propietario)
 );
 
 -- tabla débil
 CREATE TABLE empleados
 (
-    id_empleado INTEGER NOT NULL REFERENCES personas,
+    id_empleado INTEGER NOT NULL NOT NULL REFERENCES personas,
     PRIMARY KEY (id_empleado),
     fecha_ini DATE NOT NULL,
     CONSTRAINT fecha_invalida
@@ -83,7 +83,7 @@ CREATE TABLE empleados
     CONSTRAINT puesto_invalido
         CHECK ( puesto IN ('mostrador','veterinario', 'limpieza', 'gerente') )
 );
-
+/*
 -- tabla débil
 CREATE TABLE nominas
 (
@@ -96,7 +96,7 @@ CREATE TABLE nominas
     CONSTRAINT jornada_invalida
         CHECK ( total_horas > 0 ),
     total_bono DECIMAL(10, 2) DEFAULT 0,
-    id_empleado INTEGER NOT NULL REFERENCES empleados,
+    id_empleado INTEGER NOT NULL NOT NULL REFERENCES empleados,
     PRIMARY KEY(id_empleado, cns_nomina),
     activo BOOLEAN DEFAULT TRUE
 );
@@ -114,13 +114,13 @@ CREATE TABLE tipos_deducciones
 
 CREATE TABLE deducciones
 (
-    id_empleado INTEGER,
-    cns_nomina INTEGER,
-    id_tipo_deduccion INTEGER REFERENCES tipos_deducciones,
-    foreign key(id_empleado, cns_nomina) references nominas,
+    id_empleado INTEGER NOT NULL,
+    cns_nomina INTEGER NOT NULL,
+    id_tipo_deduccion INTEGER NOT NULL REFERENCES tipos_deducciones,
+    foreign key(id_empleado, cns_nomina) REFERENCES nominas,
     primary key(id_empleado, cns_nomina, id_tipo_deduccion)
 );
-
+*/
 CREATE TABLE mascotas
 (
     id_mascota       SERIAL NOT NULL PRIMARY KEY,
@@ -132,8 +132,8 @@ CREATE TABLE mascotas
         CHECK ( fecha_nacimiento <= now() ),
     sexo             VARCHAR(6),
     CHECK ( sexo = 'macho' OR sexo = 'hembra' ),
-    id_propietario   INTEGER NOT NULL REFERENCES propietarios,
-    id_raza          INTEGER NOT NULL REFERENCES razas,
+    id_propietario   INTEGER NOT NULL NOT NULL REFERENCES propietarios,
+    id_raza          INTEGER NOT NULL NOT NULL REFERENCES razas,
     activo           BOOLEAN DEFAULT TRUE
 );
 
@@ -165,7 +165,7 @@ CREATE TABLE articulos(
 
 CREATE TABLE articulos_venta
 (
-    id_articulo INTEGER REFERENCES articulos primary key,
+    id_articulo INTEGER NOT NULL REFERENCES articulos primary key,
     monto DECIMAL(10, 2) NOT NULL,
     CONSTRAINT monto_invalido
         CHECK ( monto > 0 ),
@@ -181,7 +181,10 @@ CREATE TABLE articulos_venta
 
 -- esta función devuelve true si hay un id referenciado por las tablas alimentos, medicamentos, productos
 -- la usamos para validar que un solo articulo sea referenciado por cualquiera de esas tablas
-CREATE OR REPLACE FUNCTION check_articulos(id_articulo integer) RETURNS boolean LANGUAGE plpgsql AS $$
+-- 1 = alimento
+-- 2 = producto
+-- 3 = medicamento
+CREATE OR REPLACE FUNCTION check_articulos(id_articulo integer, tipo integer) RETURNS boolean LANGUAGE plpgsql AS $$
     DECLARE
         si_ali boolean;
         si_pro boolean;
@@ -202,15 +205,24 @@ CREATE OR REPLACE FUNCTION check_articulos(id_articulo integer) RETURNS boolean 
                 FROM medicamentos
                 WHERE id_articulo_medicamento = id_articulo);
 
-        RETURN si_ali OR si_pro OR si_med;
+        CASE
+            WHEN tipo = 1 THEN
+                RETURN si_pro OR si_med;
+            WHEN tipo = 2 THEN
+                RETURN si_ali OR si_med;
+            WHEN tipo = 3 THEN
+                RETURN si_ali OR si_pro;
+        END CASE;
+
+        RETURN TRUE;
     END;
 $$;
 
 CREATE TABLE alimentos
 (
-    id_articulo_alimento INT NOT NULL REFERENCES articulos,
+    id_articulo_alimento INT NOT NULL NOT NULL REFERENCES articulos,
     CONSTRAINT referencia_invalida
-        CHECK (check_articulos(id_articulo_alimento) = FALSE),
+        CHECK (check_articulos(id_articulo_alimento, 1) = FALSE),
     PRIMARY KEY(id_articulo_alimento),
     gramaje DECIMAL(10, 2) NOT NULL,
     CONSTRAINT gramaje_invalido
@@ -219,9 +231,9 @@ CREATE TABLE alimentos
 
 CREATE TABLE productos
 (
-    id_articulo_producto int NOT NULL REFERENCES articulos,
+    id_articulo_producto int NOT NULL NOT NULL REFERENCES articulos,
     CONSTRAINT referencia_invalida
-        CHECK (check_articulos(id_articulo_producto) = FALSE),
+        CHECK (check_articulos(id_articulo_producto, 2) = FALSE),
     PRIMARY KEY (id_articulo_producto),
     tipo VARCHAR(10),
     CHECK ( tipo IN ('accesorio','ropa','juguete','seguridad','higiene'))
@@ -229,9 +241,9 @@ CREATE TABLE productos
 
 CREATE TABLE medicamentos
 (
-    id_articulo_medicamento SERIAL REFERENCES articulos,
+    id_articulo_medicamento SERIAL NOT NULL REFERENCES articulos,
     CONSTRAINT referencia_invalida
-        CHECK (check_articulos(id_articulo_medicamento) = FALSE),
+        CHECK (check_articulos(id_articulo_medicamento, 3) = FALSE),
     gramaje        DECIMAL(10, 2) NOT NULL,
     laboratorio    VARCHAR(30)    NOT NULL,
     CONSTRAINT laboratorio_invalido
@@ -249,23 +261,22 @@ CREATE TABLE facturas_proveedor
     monto_total DECIMAL(10, 2) NOT NULL,
     CONSTRAINT monto_invalido
         CHECK ( monto_total >= 0 ),
-    id_proveedor INTEGER NOT NULL REFERENCES proveedores,
+    id_proveedor INTEGER NOT NULL NOT NULL REFERENCES proveedores,
     activo BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE detalle_factura
 (
-    id_factura INTEGER NOT NULL REFERENCES facturas_proveedor,
+    id_factura INTEGER NOT NULL NOT NULL REFERENCES facturas_proveedor,
     cns_detalle_factura INTEGER NOT NULL,
     cantidad INTEGER NOT NULL,
     CONSTRAINT cantidad_invalida
         CHECK ( cantidad > 0 ),
     subtotal DECIMAL(10, 2) NOT NULL,
-
     CONSTRAINT subtotal_invalido
         CHECK ( subtotal >= 0 ),
     id_articulo INTEGER NOT NULL REFERENCES articulos,
-    CONSTRAINT alimento_repetido
+    CONSTRAINT articulo_repetido
         UNIQUE (id_articulo, cns_detalle_factura),
     PRIMARY KEY (id_factura, cns_detalle_factura)
 );
@@ -302,15 +313,15 @@ CREATE TABLE pagos
     subtotal DECIMAL(10, 2) NOT NULL,
     CONSTRAINT subtotal_invalido
         CHECK ( subtotal > 0 ),
-    id_forma_pago INTEGER NOT NULL REFERENCES formas_pago,
-    id_ticket INTEGER NOT NULL REFERENCES tickets,
+    id_forma_pago INTEGER NOT NULL NOT NULL REFERENCES formas_pago,
+    id_ticket INTEGER NOT NULL NOT NULL REFERENCES tickets,
     activo BOOLEAN DEFAULT TRUE,
     PRIMARY KEY(id_ticket, cns_pago)
 );
 
 CREATE TABLE detalle_ticket
 (
-    id_ticket INTEGER NOT NULL REFERENCES tickets,
+    id_ticket INTEGER NOT NULL NOT NULL REFERENCES tickets,
     cns_detalle_ticket INTEGER NOT NULL,
     cantidad INTEGER NOT NULL,
     CONSTRAINT cantidad_invalida
@@ -318,14 +329,15 @@ CREATE TABLE detalle_ticket
     subtotal DECIMAL(10, 2) NOT NULL,
     CONSTRAINT subtotal_invalido
         CHECK ( subtotal > 0 ),
-    id_articulo INTEGER NOT NULL REFERENCES articulos_venta,
+    id_articulo INTEGER NOT NULL NOT NULL REFERENCES articulos_venta,
     PRIMARY KEY (id_ticket, cns_detalle_ticket)
 );
 
+/*
 -- tabla especializada
 CREATE TABLE detalle_mascota
 (
-    id_mascota INTEGER NOT NULL REFERENCES mascotas,
+    id_mascota INTEGER NOT NULL NOT NULL REFERENCES mascotas,
     cns_detalle_mascota SERIAL,
     fecha DATE NOT NULL,
     CONSTRAINT fecha_invalida
@@ -333,10 +345,10 @@ CREATE TABLE detalle_mascota
     cantidad INTEGER NOT NULL,
     CONSTRAINT cantidad_invalida
         CHECK ( cantidad > 0 ),
-    id_articulo INTEGER NOT NULL REFERENCES articulos_venta,
+    id_articulo INTEGER NOT NULL NOT NULL REFERENCES articulos_venta,
     primary key(id_mascota, cns_detalle_mascota)
 );
-
+*/
 CREATE TABLE citas
 (
     id_cita SERIAL PRIMARY KEY,
@@ -347,9 +359,9 @@ CREATE TABLE citas
     CONSTRAINT hora_invalida
         CHECK ( hora >= '09:00:00' AND hora <= '21:00:00' ), -- la cita no puede realizarse fuera del horario de atención
     detalle VARCHAR(100) DEFAULT '',
-    id_mascota INTEGER NOT NULL REFERENCES mascotas,
-    id_veterinario INTEGER NOT NULL REFERENCES empleados, --validar que sea un veterinario
-    id_ticket INTEGER NOT NULL REFERENCES tickets,
+    id_mascota INTEGER NOT NULL NOT NULL REFERENCES mascotas,
+    id_veterinario INTEGER NOT NULL NOT NULL REFERENCES empleados, --validar que sea un veterinario
+    id_ticket INTEGER NOT NULL NOT NULL REFERENCES tickets,
     estatus VARCHAR(12) NOT NULL,
     CHECK ( estatus IN ('pendiente','realizada','cancelada','no realizada','pospuesta') ),
     activo BOOLEAN DEFAULT TRUE

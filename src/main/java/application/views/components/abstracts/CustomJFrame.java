@@ -7,10 +7,6 @@ import lombok.Getter;
 import javax.swing.*;
 
 public abstract class CustomJFrame extends JFrame {
-    /**
-     * This method is used to load the fonts that will be used in the application
-     * @return FontsLoader
-     */
     @Getter
     private final FontsLoader fontsLoader;
 

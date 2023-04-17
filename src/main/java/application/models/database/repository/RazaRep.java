@@ -1,4 +1,4 @@
-package application.models.database.repository;
+/*package application.models.database.repository;
 
 import application.models.database.Postgres;
 import application.models.database.interfaces.Save;
@@ -263,6 +263,6 @@ public class RazaRep implements Find<Razas>, Hide<Razas>, Save<Razas>, Update<Ra
             return null;
         }
     }
-}
+}*/
 
 

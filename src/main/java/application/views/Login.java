@@ -21,7 +21,6 @@ public class Login extends CustomJFrame {
 
     @Override
     public void initComponents() {
-
         mainPanel = new JPanel();
         mainPanel.setSize(ResponsiveDimension.getNextResolution().getSize());
         mainPanel.setLocation(0, 0);
@@ -69,7 +68,6 @@ public class Login extends CustomJFrame {
                 userJT.setLocation(mainPanel, Positions.RIGHT, -135, -10);
                 passwordJT.setLocation(mainPanel, Positions.RIGHT, -135, 60);
                 loginJB.setLocation(mainPanel, Positions.RIGHT, -200, 150);
-
             }
         });
     }
