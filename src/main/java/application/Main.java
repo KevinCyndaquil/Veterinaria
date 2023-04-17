@@ -1,31 +1,39 @@
 package application;
 
-import application.basededatos.repositorios.FacturaRep;
-import application.modelos.entidades.TiposProducto;
+import application.models.database.interfaces.Find;
+import application.models.database.interfaces.Hide;
+import application.models.database.interfaces.Save;
+import application.models.database.interfaces.Update;
+import application.models.database.repository.ProveedorRep;
+import application.models.entidades.Proveedores;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        /*
+        Proveedores proveedor = new Proveedores("DECHRA", "962 101 5739", "Venta de vacunas rabia");
+        proveedor.setDireccion("Calle 2");
 
-        Class<String> a = String.class;
+        Proveedores proveedor2 = new Proveedores("DEA", "962 102 5739", "Venta de vacunas asma");
+        proveedor2.setDireccion("Calle 3");
 
-        System.out.println(a.getName());
-        System.out.println(a.getCanonicalName());
-        System.out.println(a.getPackageName());
-        System.out.println(a.getTypeName());
-        System.out.println(a.getSimpleName());
+        Proveedores proveedor3 = new Proveedores("SAN FR", "962 102 5239", "Venta de vacunas y medicamentos");
 
-        FacturaRep read = new FacturaRep();
-        try {
-            read.read(new Integer[]{1}).getArticuloFacturas().forEach(articuloFactura -> System.out.println(articuloFactura.getNombre()));
+        List<Proveedores> proveedores = List.of(proveedor, proveedor2, proveedor3);
 
+        Save<Proveedores, Integer> proveedorRep = new ProveedorRep();
 
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        } catch (NullPointerException ex) {
-            System.out.println("No existe esa factura");
-        }
+        proveedorRep.
+                saveAll(proveedores).forEach(System.out::println);
+
+         */
+
+        Hide<Proveedores> proveedorRep = new ProveedorRep();
+
+        proveedorRep.areHidden(List.of(new Proveedores(1), new Proveedores(2), new Proveedores(3))).
+                forEach((k, v) -> System.out.println(k.getId_proveedor() + " " + v));
+
     }
 }
