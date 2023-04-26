@@ -1,7 +1,8 @@
-package application.models.entidades;
+/*package application.models.entidades;
 
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Getter @Setter
 public class Propietarios extends Personas {
@@ -14,4 +15,4 @@ public class Propietarios extends Personas {
     public Propietarios(String nombre, String apellido_p) {
         super(nombre, apellido_p);
     }
-}
+}*/

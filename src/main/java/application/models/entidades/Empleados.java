@@ -1,4 +1,4 @@
-/*package application.models.entidades;
+package application.models.entidades;
 
 import application.models.finanzas.Puestos;
 import lombok.Getter;
@@ -29,4 +29,4 @@ public class Empleados extends Personas {
     }
 
 
-}*/
+}

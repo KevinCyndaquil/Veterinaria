@@ -12,14 +12,14 @@ public class Mascotas extends Animales {
     private String nombre;
     private LocalDate fecha_nacimiento;
     private String sexo;
-    private Propietarios propietario;
+    private Personas propietario;
 
-    public Mascotas(Integer id_raza, String nombre, Propietarios propietario) {
+    public Mascotas(Integer id_raza, String nombre, Personas propietario) {
         super(id_raza, nombre);
         this.propietario = propietario;
     }
 
-    public Mascotas(String nombre, Propietarios propietario) {
+    public Mascotas(String nombre, Personas propietario) {
         super(nombre);
         this.propietario = propietario;
     }
