@@ -1,6 +1,5 @@
 package application.models.entidades;
 
-import application.models.utils.DoNotUse;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,9 +8,9 @@ import lombok.Setter;
 public class Razas extends Animales{
 
     private Integer id_raza;
-    @DoNotUse(reason = "oa")
     private String nombre_raza;
     private Integer total_adopcion;
+
 
     public Razas(Integer id_animal, String nombre_animal, String nombre_raza, Integer total_adopcion) {
         super(id_animal, nombre_animal);

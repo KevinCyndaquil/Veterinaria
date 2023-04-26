@@ -12,11 +12,14 @@ import java.util.function.Function;
 @Getter
 @Setter
 public abstract class Articulos {
+    public static final String ALIMENTO = "alimento";
+    public static final String MEDICAMENTO = "medicamento";
+    public static final String PRODUCTO = "producto";
+
     private Integer id_articulo;
     private String nombre;
     private BigDecimal monto_compra;
     private String descripcion;
-    private Boolean activo = true;
 
     public Articulos(Integer id_articulo, String nombre, BigDecimal monto_compra, String descripcion) {
         this.id_articulo = id_articulo;
@@ -24,7 +27,9 @@ public abstract class Articulos {
         this.monto_compra = monto_compra;
         this.descripcion = descripcion;
     }
+
     public Articulos(String nombre, BigDecimal monto_compra, String descripcion) {
+        this.id_articulo = null;
         this.nombre = nombre;
         this.monto_compra = monto_compra;
         this.descripcion = descripcion;

@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class Personas {
+public class Personas {
     private Integer id_persona;
     private String rfc;
     private String nombre;

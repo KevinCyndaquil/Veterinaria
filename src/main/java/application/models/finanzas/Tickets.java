@@ -13,9 +13,8 @@ import java.util.Map;
 
 public class Tickets extends Facturas implements IGestorPagos {
 
-    //first Articulo, second cantidad
-    private Map<ArticulosVenta, Integer> articuloVendidos;
-    private List<Pagos> pagos;
+    private final Map<ArticulosVenta, Integer> articuloVendidos;
+    private final List<Pagos> pagos;
 
     @Getter
     @Setter
@@ -36,7 +35,7 @@ public class Tickets extends Facturas implements IGestorPagos {
     }
 
     private void validarStatus() {
-        if (pagos.stream().map(Pagos::getSubtotal).reduce(BigDecimal.ZERO, BigDecimal::add).compareTo(getMonto_total()) >= 0) {
+        if (pagos.stream().map(Pagos::subtotal).reduce(BigDecimal.ZERO, BigDecimal::add).compareTo(getMonto_total()) >= 0) {
             estatusTicket = Estatus.PAGADO;
         } else {
             estatusTicket = Estatus.PENDIENTE;
