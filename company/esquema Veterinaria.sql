@@ -230,7 +230,6 @@ CREATE TABLE formas_pago (
 
 CREATE TABLE tickets (
     id_ticket serial PRIMARY KEY,
-    fecha_factura date NOT NULL,
     monto_total decimal(10, 2) NOT NULL,
     CONSTRAINT monto_invalido
         CHECK ( monto_total > 0 ),
