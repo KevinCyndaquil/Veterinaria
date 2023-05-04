@@ -1,27 +1,37 @@
 package application.models.entidades;
 
-import lombok.Getter;
-import lombok.Setter;
+import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.Entity_Manager.annotations.SqlAttribute;
+import application.models.Entity_Manager.annotations.SqlEntity;
+import application.models.Entity_Manager.annotations.SqlInstance;
+import application.models.Entity_Manager.annotations.SqlKey;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
-public class Mascotas extends Animales {
-    private Integer id_mascota;
-    private String nombre;
-    private LocalDate fecha_nacimiento;
-    private String sexo;
-    private Personas propietario;
+@SqlEntity("mascotas")
+public record Mascotas (
+        @SqlAttribute
+        @SqlKey
+        Integer id_mascota,
+        @SqlAttribute
+        String nombre,
+        @SqlAttribute
+        LocalDate fecha_nacimiento,
+        @SqlAttribute
+        String sexo,
+        @SqlAttribute
+        @SqlKey(SqlKey.FOREIGN_KEY)
+        Animales animal,
+        @SqlAttribute
+        @SqlKey(SqlKey.FOREIGN_KEY)
+        Personas propietario) implements Entity {
 
-    public Mascotas(Integer id_raza, String nombre, Personas propietario) {
-        super(id_raza, nombre);
-        this.propietario = propietario;
+    @SqlInstance
+    public Mascotas {
     }
 
-    public Mascotas(String nombre, Personas propietario) {
-        super(nombre);
-        this.propietario = propietario;
+    public Mascotas(String nombre, LocalDate fecha_nacimiento, String sexo, Animales animal, Personas propietario) {
+        this(null, nombre, fecha_nacimiento, sexo, animal, propietario);
     }
 }
 

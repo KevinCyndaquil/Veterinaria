@@ -1,8 +1,12 @@
 package application.models.finanzas;
 
+import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.Entity_Manager.annotations.SqlAttribute;
+import application.models.Entity_Manager.annotations.SqlEntity;
+import application.models.Entity_Manager.annotations.SqlInstance;
+import application.models.Entity_Manager.annotations.SqlKey;
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 
@@ -13,31 +17,39 @@ import java.math.BigDecimal;
  */
 @Setter
 @Getter
-public class ArticulosVenta extends Articulos {
+
+@SqlEntity("articulos_venta")
+public class ArticulosVenta implements Entity {
+    @SqlAttribute
+    @SqlKey(SqlKey.FOREIGN_KEY)
+    private Articulos articulo;
     private BigDecimal ganancia;
+    @SqlAttribute("monto")
     private BigDecimal monto_venta;
+    @SqlAttribute
     private Integer stock;
+    @SqlAttribute
     private String tipo;
 
-    public ArticulosVenta(Integer id_articulo, String nombre, BigDecimal monto_compra, String descripcion, BigDecimal monto_venta, Integer stock, @NotNull String tipo) {
-        super(id_articulo, nombre, monto_compra, descripcion);
+    @SqlInstance
+    public ArticulosVenta(Articulos articulo, BigDecimal ganancia, BigDecimal monto_venta, Integer stock, String tipo) {
+        this.articulo = articulo;
+        this.ganancia = ganancia;
         this.monto_venta = monto_venta;
         this.stock = stock;
-        if (tipo.equals(ALIMENTO) || tipo.equals(PRODUCTO) || tipo.equals(MEDICAMENTO))
-            this.tipo = tipo;
+        this.tipo = tipo;
     }
 
-    public ArticulosVenta(String nombre, BigDecimal monto_compra, String descripcion, BigDecimal monto_venta, Integer stock, @NotNull String tipo) {
-        super(nombre, monto_compra, descripcion);
+    public ArticulosVenta(BigDecimal ganancia, BigDecimal monto_venta, Integer stock, String tipo) {
+        this.ganancia = ganancia;
         this.monto_venta = monto_venta;
         this.stock = stock;
-        if (tipo.equals(ALIMENTO) || tipo.equals(PRODUCTO) || tipo.equals(MEDICAMENTO))
-            this.tipo = tipo;
+        this.tipo = tipo;
     }
 
     public void setGanancia(BigDecimal ganancia) {
         this.ganancia = ganancia;
-        this.monto_venta = this.getMonto_compra().add(ganancia);
+        this.monto_venta = this.articulo.getMonto_compra().add(ganancia);
     }
 
 }

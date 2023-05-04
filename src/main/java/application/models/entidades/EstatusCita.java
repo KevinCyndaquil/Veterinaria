@@ -1,5 +1,8 @@
 package application.models.entidades;
 
+import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.Entity_Manager.annotations.SqlAttribute;
+import application.models.Entity_Manager.annotations.SqlEntity;
 import lombok.Getter;
 
 /**
@@ -8,14 +11,15 @@ import lombok.Getter;
  * mascota.
  */
 
-public enum EstatusCita {
+@SqlEntity(type = SqlEntity.ATTRIBUTES_CLASS)
+public enum EstatusCita implements Entity {
     PENDIENTE("pendiente"),
     REALIZADA("realizada"),
     CANCELADA("cancelada"),
     NO_REALIZADA("no realizada"),
     POSPUESTA("pospuesta");
 
-    @Getter
+    @SqlAttribute
     private final String estatus;
 
     EstatusCita(String estatus) {

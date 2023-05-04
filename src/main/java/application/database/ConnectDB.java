@@ -1,10 +1,11 @@
-package application.models.database;
+package application.database;
 
+import application.models.Entity_Manager.repositories.GetConn;
 import lombok.Getter;
 
 import java.sql.Connection;
 
-public abstract class ConnectDB implements AutoCloseable {
+public abstract class ConnectDB implements AutoCloseable, GetConn {
     protected final String url;
     protected static String user;
     protected static String password;

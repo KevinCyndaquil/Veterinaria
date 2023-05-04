@@ -1,29 +1,32 @@
 package application.models.entidades;
 
+import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.Entity_Manager.annotations.SqlAttribute;
+import application.models.Entity_Manager.annotations.SqlEntity;
+import application.models.Entity_Manager.annotations.SqlInstance;
+import application.models.Entity_Manager.annotations.SqlKey;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
-public class Proveedores {
-    private Integer id_proveedor;
-    private String nombre;
-    private String direccion;
-    private String telefono;
-    private String descripcion;
+@SqlEntity("proveedores")
+public record Proveedores (
+        @SqlAttribute
+        @SqlKey
+        Integer id_proveedor,
+        @SqlAttribute
+        String nombre,
+        @SqlAttribute
+        String direccion,
+        @SqlAttribute
+        String telefono,
+        @SqlAttribute
+        String descripcion) implements Entity{
 
-    public Proveedores(Integer id_proveedor, String nombre, String telefono, String descripcion) {
-        this.id_proveedor = id_proveedor;
-        this.nombre = nombre;
-        this.telefono = telefono;
-        this.descripcion = descripcion;
+    @SqlInstance
+    public Proveedores {
     }
 
-    public Proveedores(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Proveedores(Integer id_proveedor) {
-        this.id_proveedor = id_proveedor;
+    public Proveedores(int id_proveedor) {
+        this(id_proveedor, null, null, null, null);
     }
 }

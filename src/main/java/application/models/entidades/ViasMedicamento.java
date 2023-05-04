@@ -1,5 +1,8 @@
 package application.models.entidades;
 
+import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.Entity_Manager.annotations.SqlAttribute;
+import application.models.Entity_Manager.annotations.SqlEntity;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,7 +11,8 @@ import org.jetbrains.annotations.Nullable;
  * Enumeración que contiene los posibles medios de administración de un medicamento en la veterinaria.
  */
 
-public enum ViasMedicamento {
+@SqlEntity(type = SqlEntity.ATTRIBUTES_CLASS)
+public enum ViasMedicamento implements Entity {
     ORAL("oral"), //boca
     INTRAVENOSA("intravenosa"), //en las venas
     INTRAMUSCULAR("intramuscular"), //en el músculo
@@ -18,17 +22,10 @@ public enum ViasMedicamento {
     CUTANEO("cutaneo"); //por la piel
 
     @Getter
+    @SqlAttribute
     private final String via;
 
     ViasMedicamento(String via) {
         this.via = via;
-    }
-
-    public static @Nullable ViasMedicamento getValueFrom(String via) {
-        for (ViasMedicamento v : ViasMedicamento.values()) {
-            if (v.getVia().equalsIgnoreCase(via))
-                return v;
-        }
-        return null;
     }
 }

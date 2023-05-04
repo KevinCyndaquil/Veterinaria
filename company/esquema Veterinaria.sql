@@ -101,6 +101,7 @@ CREATE TABLE proveedores (
 
 CREATE TABLE articulos (
     id_articulo serial NOT NULL PRIMARY KEY,
+    id_proveedor integer NOT NULL REFERENCES proveedores,
     nombre varchar(30) NOT NULL,
     CONSTRAINT nombre_invalido
         CHECK ( nombre ~ '^[A-Z0-9.-/ ]+$' ),
@@ -111,8 +112,7 @@ CREATE TABLE articulos (
     active boolean DEFAULT TRUE
 );
 
-CREATE TABLE articulos_venta
-(
+CREATE TABLE articulos_venta (
     id_articulo integer NOT NULL REFERENCES articulos,
     PRIMARY KEY (id_articulo),
     monto decimal(10, 2) NOT NULL,
@@ -160,28 +160,31 @@ BEGIN
             RETURN si_ali OR si_med;
         WHEN tipo = 3 THEN
             RETURN si_ali OR si_pro;
-        END CASE;
+    END CASE;
 
     RETURN TRUE;
 END;
 $$;
 
 CREATE TABLE alimentos (
+    id_articulo integer NOT NULL REFERENCES articulos PRIMARY KEY,
     CONSTRAINT referencia_invalida
         CHECK (check_articulos(id_articulo, 1) = FALSE),
     gramaje decimal(10, 2) NOT NULL,
     CONSTRAINT gramaje_invalido
         CHECK ( gramaje > 0 )
-) INHERITS (articulos);
+);
 
 CREATE TABLE productos (
+    id_articulo integer NOT NULL REFERENCES articulos PRIMARY KEY,
     CONSTRAINT referencia_invalida
         CHECK (check_articulos(id_articulo, 2) = FALSE),
     tipo varchar(10),
     CHECK ( tipo IN ('accesorio','ropa','juguete','seguridad','higiene'))
-) INHERITS (articulos);
+);
 
 CREATE TABLE medicamentos (
+    id_articulo integer NOT NULL REFERENCES articulos PRIMARY KEY,
     CONSTRAINT referencia_invalida
         CHECK (check_articulos(id_articulo, 3) = FALSE),
     gramaje        decimal(10, 2) NOT NULL,
@@ -190,17 +193,19 @@ CREATE TABLE medicamentos (
         CHECK ( laboratorio ~ '^[A-Z0-9.-/ ]+$' ),
     via            varchar(13)    NOT NULL,
     CHECK ( via IN ('oral','intravenosa','intramuscular','rectal','ocular','nasal','cutaneo') )
-) INHERITS (articulos);
+);
 
 CREATE TABLE facturas_proveedor (
     id_factura serial PRIMARY KEY,
     fecha_factura date NOT NULL,
     CONSTRAINT fecha_invalida
         CHECK ( fecha_factura <= now() ),
-    monto_total decimal(10, 2) NOT NULL,
+    monto_total decimal(10, 2) DEFAULT 0 NOT NULL,
     CONSTRAINT monto_invalido
         CHECK ( monto_total >= 0 ),
     id_proveedor integer NOT NULL NOT NULL REFERENCES proveedores,
+    CONSTRAINT factura_proveedor_repetida
+        UNIQUE (fecha_factura, id_proveedor),
     active boolean DEFAULT TRUE
 );
 

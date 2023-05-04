@@ -1,5 +1,11 @@
 package application.models.entidades;
 
+import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.Entity_Manager.annotations.SqlAttribute;
+import application.models.Entity_Manager.annotations.SqlEntity;
+import application.models.Entity_Manager.annotations.SqlInstance;
+import application.models.Entity_Manager.annotations.SqlKey;
+import application.models.finanzas.Articulos;
 import application.models.finanzas.ArticulosGramaje;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,18 +14,45 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class Medicamentos extends ArticulosGramaje {
+@SqlEntity("medicamentos")
+public class Medicamentos implements Entity {
+    @SqlAttribute @SqlKey(SqlKey.FOREIGN_KEY)
+    private Articulos articulo;
+    @SqlAttribute
+    private Float gramaje;
+    @SqlAttribute
     private String laboratorio;
+    @SqlAttribute
     private ViasMedicamento via;
 
-    public Medicamentos(Integer id_articulo, String nombre, BigDecimal monto_compra, String descripcion, BigDecimal gramaje, String laboratorio, ViasMedicamento via) {
-        super(id_articulo, nombre, monto_compra, descripcion, gramaje);
+    @SqlInstance
+    public Medicamentos(Integer id_articulo, Proveedores proveedor, String nombre, BigDecimal monto_compra, String descripcion, Float gramaje, String laboratorio, ViasMedicamento via) {
+        articulo = new Articulos(
+                id_articulo,
+                proveedor,
+                nombre,
+                monto_compra,
+                descripcion);
+        this.gramaje = gramaje;
         this.laboratorio = laboratorio;
         this.via = via;
     }
 
-    public Medicamentos(String nombre, BigDecimal monto_compra, String descripcion, BigDecimal gramaje, String laboratorio, ViasMedicamento via) {
-        super(nombre, monto_compra, descripcion, gramaje);
+    public Medicamentos(Proveedores proveedor, String nombre, BigDecimal monto_compra, String descripcion, Float gramaje, String laboratorio, ViasMedicamento via) {
+        articulo = new Articulos(
+                proveedor,
+                nombre,
+                monto_compra,
+                descripcion);
+        this.gramaje = gramaje;
+        this.laboratorio = laboratorio;
+        this.via = via;
+    }
+
+    @SqlInstance
+    public Medicamentos(Articulos articulo, Float gramaje, String laboratorio, ViasMedicamento via) {
+        this.articulo = articulo;
+        this.gramaje = gramaje;
         this.laboratorio = laboratorio;
         this.via = via;
     }

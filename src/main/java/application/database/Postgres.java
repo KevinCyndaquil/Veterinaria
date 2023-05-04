@@ -1,4 +1,4 @@
-package application.models.database;
+package application.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -73,5 +73,18 @@ public class Postgres extends ConnectDB {
     @Override
     public void close() throws SQLException {
         this.connection.close();
+    }
+
+    @Override
+    public Connection get() {
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(url, (user == null) ? "postgres" : user, (password == null) ? "qw6xdg7sB!" : password);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Driver de postgresql no instalado.");
+        } catch (SQLException e) {
+            throw new RuntimeException("SQL ERROR: " + e.getMessage());
+        }
+        return connection;
     }
 }

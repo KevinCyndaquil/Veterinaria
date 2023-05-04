@@ -1,37 +1,58 @@
 package application.models.finanzas;
 
+import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.Entity_Manager.annotations.SqlAttribute;
+import application.models.Entity_Manager.annotations.SqlEntity;
+import application.models.Entity_Manager.annotations.SqlKey;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-public class Tickets extends Facturas implements IGestorPagos {
+@Getter
+@Setter
+@SqlEntity("tickets")
+public class Tickets implements IGestorPagos, IGestorArticulos <ArticulosVenta>, Entity {
+    @SqlAttribute
+    @SqlKey
+    private int id_ticket;
+    @SqlAttribute
+    private BigDecimal monto_total;
+    @SqlAttribute("fecha_cobro")
+    private LocalDate fecha;
+    @SqlAttribute("hora_cobro")
+    private LocalTime hora;
+    @SqlAttribute("estatus")
+    private Estatus estatusTicket;
 
     private final Map<ArticulosVenta, Integer> articuloVendidos;
     private final List<Pagos> pagos;
 
-    @Getter
-    @Setter
-    private Estatus estatusTicket;
 
-    public Tickets(Integer id_factura, LocalDate fecha_generacion) {
-        super(id_factura, fecha_generacion);
+    public Tickets(int id_ticket, LocalDate fecha, LocalTime hora, Estatus estatusTicket) {
+        this.id_ticket = id_ticket;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.estatusTicket = estatusTicket;
+
         articuloVendidos = new HashMap<>();
         pagos = new ArrayList<>();
-        estatusTicket = Estatus.PENDIENTE;
     }
 
-    public Tickets(BigDecimal monto_total, LocalDate fecha_generacion) {
-        super(monto_total, fecha_generacion);
+    public Tickets(LocalDate fecha, LocalTime hora) {
+        this.fecha = fecha;
+        this.hora = hora;
+        this.estatusTicket = Estatus.PENDIENTE;
+
         articuloVendidos = new HashMap<>();
         pagos = new ArrayList<>();
-        estatusTicket = Estatus.PENDIENTE;
     }
 
     private void validarStatus() {
@@ -80,16 +101,16 @@ public class Tickets extends Facturas implements IGestorPagos {
     }
 
     @Override
-    public boolean agregarArticulo(Articulos articulo, Integer cantidad) {
+    public boolean agregarArticulo(ArticulosVenta articulo, Integer cantidad) {
         if (articulo == null || cantidad == null || cantidad <= 0) return false;
 
-        articuloVendidos.merge((ArticulosVenta) articulo, cantidad, Integer::sum);
-        setMonto_total(getMonto_total().add(((ArticulosVenta) articulo).getMonto_venta().multiply(BigDecimal.valueOf(cantidad))));
+        articuloVendidos.merge(articulo, cantidad, Integer::sum);
+        setMonto_total(getMonto_total().add((articulo).getMonto_venta().multiply(BigDecimal.valueOf(cantidad))));
         return true;
     }
 
     @Override
-    public boolean agregarArticulos(Map<Articulos, Integer> articulos) {
+    public boolean agregarArticulos(Map<ArticulosVenta, Integer> articulos) {
         if (articulos == null || articulos.isEmpty()) return false;
 
         articulos.forEach(this::agregarArticulo);
@@ -97,30 +118,31 @@ public class Tickets extends Facturas implements IGestorPagos {
     }
 
     @Override
-    public boolean eliminarArticulo(Articulos articulo) {
+    public boolean eliminarArticulo(ArticulosVenta articulo) {
         if (articulo == null) return false;
-        articuloVendidos.remove((ArticulosVenta) articulo);
+
+        articuloVendidos.remove(articulo);
         return true;
     }
 
     @Override
-    public boolean modificarCantidad(Articulos articulo, Integer cantidad) {
+    public boolean modificarCantidad(ArticulosVenta articulo, Integer cantidad) {
         if (articulo == null || cantidad == null || cantidad <= 0) return false;
 
-        if (articuloVendidos.containsKey((ArticulosVenta) articulo)) {
-            articuloVendidos.replace((ArticulosVenta) articulo, cantidad);
+        if (articuloVendidos.containsKey(articulo)) {
+            articuloVendidos.replace(articulo, cantidad);
             return true;
         } else return false;
     }
 
     @Override
-    public Integer consultarArticulo(Articulos articulo) {
+    public Integer consultarArticulo(ArticulosVenta articulo) {
         if (articulo == null) return null;
-        return articuloVendidos.get((ArticulosVenta) articulo);
+        return articuloVendidos.get(articulo);
     }
 
     @Override
     public void consultarArticulos() {
-        articuloVendidos.forEach((articulo, cantidad) -> System.out.println(articulo.getNombre() + " " + cantidad));
+        articuloVendidos.forEach((articulo, cantidad) -> System.out.println(articulo.getArticulo().getNombre() + " " + cantidad));
     }
 }

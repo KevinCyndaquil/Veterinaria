@@ -1,38 +1,56 @@
 package application.models.finanzas;
 
+import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.Entity_Manager.annotations.*;
 import application.models.entidades.Proveedores;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Facturas_Proveedor extends Facturas{
+@SqlEntity("facturas_proveedor")
+public class FacturasProveedor extends Facturas implements Entity {
 
     @Getter
-    private final Proveedores proveedor;
+    @SqlAttribute
+    @SqlKey(SqlKey.FOREIGN_KEY)
+    private Proveedores proveedor;
 
     //first: Articulo, second: cantidad
+    @Getter
     private final Map<Articulos, Integer> articulos;
 
-    public Facturas_Proveedor(Integer id_factura, LocalDate fecha_generacion, Proveedores proveedor) {
+    @SqlInstance
+    public FacturasProveedor(Proveedores proveedor, Integer id_factura, BigDecimal monto_total, Date fecha_generacion) {
+        super(id_factura, monto_total, fecha_generacion);
+        this.proveedor = proveedor;
+        this.articulos = new HashMap<>();
+    }
+
+    public FacturasProveedor(Integer id_factura, Date fecha_generacion, Proveedores proveedor) {
         super(id_factura, fecha_generacion);
         this.proveedor = proveedor;
         this.articulos = new HashMap<>();
     }
 
-    public Facturas_Proveedor(BigDecimal monto_total, LocalDate fecha_generacion, Proveedores proveedor) {
-        super(monto_total, fecha_generacion);
+    public FacturasProveedor(Date fecha_generacion, Proveedores proveedor) {
+        super(fecha_generacion);
         this.proveedor = proveedor;
         this.articulos = new HashMap<>();
     }
 
+    public FacturasProveedor(Integer id_factura) {
+        super(id_factura);
+        this.articulos = new HashMap<>();
+    }
 
     @Override
     public boolean agregarArticulo(Articulos articulo, Integer cantidad) {
 
-        if (articulo == null || cantidad == null || cantidad <= 0) return false;
+        if (articulo == null || cantidad == null || cantidad < 0) return false;
 
         if (articulos.containsKey(articulo)) {
             articulos.put(articulo, articulos.get(articulo) + cantidad);

@@ -1,38 +1,61 @@
 package application.models.finanzas;
 
+import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.Entity_Manager.annotations.SqlAttribute;
+import application.models.Entity_Manager.annotations.SqlEntity;
+import application.models.Entity_Manager.annotations.SqlInstance;
+import application.models.Entity_Manager.annotations.SqlKey;
+import application.models.entidades.Proveedores;
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.function.Function;
 
-@Getter
-@Setter
-public abstract class Articulos {
+
+@SqlEntity(value = "articulos", type = SqlEntity.GENERALIZED_CLASS)
+public class Articulos implements Entity {
     public static final String ALIMENTO = "alimento";
     public static final String MEDICAMENTO = "medicamento";
     public static final String PRODUCTO = "producto";
 
+    @Getter @Setter
+    @SqlAttribute @SqlKey
     private Integer id_articulo;
+    @Getter @Setter
+    @SqlAttribute
+    @SqlKey(SqlKey.FOREIGN_KEY)
+    private Proveedores proveedor;
+    @Getter @Setter
+    @SqlAttribute
     private String nombre;
+    @Getter @Setter
+    @SqlAttribute
     private BigDecimal monto_compra;
+    @Getter @Setter
+    @SqlAttribute
     private String descripcion;
+    @Getter @Setter
+    private String tipo;
 
-    public Articulos(Integer id_articulo, String nombre, BigDecimal monto_compra, String descripcion) {
+    @SqlInstance
+    public Articulos(Integer id_articulo, Proveedores proveedor, String nombre, BigDecimal monto_compra, String descripcion) {
         this.id_articulo = id_articulo;
+        this.proveedor = proveedor;
         this.nombre = nombre;
         this.monto_compra = monto_compra;
         this.descripcion = descripcion;
     }
 
-    public Articulos(String nombre, BigDecimal monto_compra, String descripcion) {
-        this.id_articulo = null;
+    public Articulos(Proveedores proveedor, String nombre, BigDecimal monto_compra, String descripcion) {
+        this.proveedor = proveedor;
         this.nombre = nombre;
         this.monto_compra = monto_compra;
         this.descripcion = descripcion;
+    }
+
+    public Articulos(Integer id_articulo) {
+        this.id_articulo = id_articulo;
     }
 
     @Override
@@ -46,5 +69,10 @@ public abstract class Articulos {
     @Override
     public int hashCode() {
         return Objects.hash(id_articulo);
+    }
+
+    @Override
+    public String toString() {
+        return nombre + ", " + monto_compra + ", " + descripcion + ": " + proveedor.nombre();
     }
 }

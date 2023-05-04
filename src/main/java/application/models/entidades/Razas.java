@@ -1,28 +1,28 @@
 package application.models.entidades;
 
+import application.models.Entity_Manager.annotations.SqlAttribute;
+import application.models.Entity_Manager.annotations.SqlInstance;
+import application.models.Entity_Manager.annotations.SqlKey;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+public record Razas (
+        @SqlAttribute
+        @SqlKey
+        Integer id_raza,
+        @SqlAttribute
+        String nombre_raza,
+        @SqlAttribute
+        Integer total_adopcion,
+        @SqlAttribute
+        @SqlKey(SqlKey.FOREIGN_KEY)
+        Animales animal) {
 
-public class Razas extends Animales{
-
-    private Integer id_raza;
-    private String nombre_raza;
-    private Integer total_adopcion;
-
-
-    public Razas(Integer id_animal, String nombre_animal, String nombre_raza, Integer total_adopcion) {
-        super(id_animal, nombre_animal);
-        this.id_raza = id_raza;
-        this.nombre_raza = nombre_raza;
-        this.total_adopcion = total_adopcion;
+    @SqlInstance
+    public Razas {
     }
 
-    public Razas(String nombre_animal, Integer id_raza, String nombre_raza, Integer total_adopcion) {
-        super(nombre_animal);
-        this.id_raza = id_raza;
-        this.nombre_raza = nombre_raza;
-        this.total_adopcion = total_adopcion;
+    public Razas(String nombre_raza, Integer total_adopcion, Animales animal) {
+        this(null, nombre_raza, total_adopcion, animal);
     }
 }

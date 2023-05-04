@@ -1,5 +1,9 @@
 package application.models.entidades;
 
+import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.Entity_Manager.annotations.SqlAttribute;
+import application.models.Entity_Manager.annotations.SqlEntity;
+import application.models.Entity_Manager.annotations.SqlInstance;
 import application.models.finanzas.Puestos;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,22 +15,35 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
-public class Empleados extends Personas {
+@SqlEntity("empleados")
+public class Empleados extends Personas implements Entity {
+    @SqlAttribute
     private LocalDate fecha_ini;
+    @SqlAttribute
     private LocalTime jor_ini;
+    @SqlAttribute
     private LocalTime jor_fin;
-    private BigDecimal salario_bruto;
+    @SqlAttribute
     private BigDecimal salario_neto;
+    @SqlAttribute
     private Puestos puesto;
 
-
-    public Empleados(Integer id_persona, String nombre, String apellido_p) {
-        super(id_persona, nombre, apellido_p);
+    @SqlInstance
+    public Empleados(Integer id_persona, String rfc, String nombre, String apellido_p, String apellido_m, String no_cuenta, LocalDate fecha_ini, LocalTime jor_ini, LocalTime jor_fin, BigDecimal salario_neto, Puestos puesto) {
+        super(id_persona, rfc, nombre, apellido_p, apellido_m, no_cuenta);
+        this.fecha_ini = fecha_ini;
+        this.jor_ini = jor_ini;
+        this.jor_fin = jor_fin;
+        this.salario_neto = salario_neto;
+        this.puesto = puesto;
     }
 
-    public Empleados(String nombre, String apellido_p) {
-        super(nombre, apellido_p);
+    public Empleados(String rfc, String nombre, String apellido_p, String apellido_m, String no_cuenta, LocalDate fecha_ini, LocalTime jor_ini, LocalTime jor_fin, BigDecimal salario_neto, Puestos puesto) {
+        super(rfc, nombre, apellido_p, apellido_m, no_cuenta);
+        this.fecha_ini = fecha_ini;
+        this.jor_ini = jor_ini;
+        this.jor_fin = jor_fin;
+        this.salario_neto = salario_neto;
+        this.puesto = puesto;
     }
-
-
 }

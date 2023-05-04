@@ -1,7 +1,9 @@
 package application.models.entidades;
 
+import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.Entity_Manager.annotations.SqlAttribute;
+import application.models.Entity_Manager.annotations.SqlEntity;
 import lombok.Getter;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author KevinCyndaquil
@@ -9,7 +11,8 @@ import org.jetbrains.annotations.Nullable;
  * en la veterinaria
  */
 
-public enum TiposProducto {
+@SqlEntity(type = SqlEntity.ATTRIBUTES_CLASS)
+public enum TiposProducto implements Entity {
     ACCESORIO("accesorio"),
     ROPA("ropa"),
     JUGUETE("juguete"),
@@ -17,17 +20,10 @@ public enum TiposProducto {
     HIGIENE("higiene");
 
     @Getter
+    @SqlAttribute("tipo")
     private final String descripcion;
 
     TiposProducto(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public static @Nullable TiposProducto getValueFrom(String descripcion) {
-        for(TiposProducto tp : TiposProducto.values()) {
-            if (tp.getDescripcion().equalsIgnoreCase(descripcion))
-                return tp;
-        }
-        return null;
     }
 }
