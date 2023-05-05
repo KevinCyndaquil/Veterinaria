@@ -26,7 +26,12 @@ public record Proveedores (
     public Proveedores {
     }
 
-    public Proveedores(int id_proveedor) {
+    public Proveedores(Integer id_proveedor) {
         this(id_proveedor, null, null, null, null);
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
     }
 }

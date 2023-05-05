@@ -1,9 +1,14 @@
 package application.views.components.abstracts;
 
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Implemente un modelo para tablas que se puede implementar según las necesidades de la tabla,
@@ -12,11 +17,11 @@ import java.util.List;
  */
 public abstract class CustomJTableModel <Item> implements TableModel {
     protected final LinkedList<TableModelListener> subscribers;
-    protected final LinkedList<Item> items;
+    protected final Map<Item, Integer> items;
 
     public CustomJTableModel() {
         subscribers = new LinkedList<>();
-        items = new LinkedList<>();
+        items = new HashMap<>();
     }
 
     @Override
@@ -29,8 +34,21 @@ public abstract class CustomJTableModel <Item> implements TableModel {
         subscribers.remove(listener);
     }
 
-    public abstract void addItem(Item item);
-    public abstract void addItems(List<Item> list);
-    public abstract Item getItem(int rowIndex);
-    public abstract void removeItem(Item item);
+    public void removeAll() {
+        items.clear();
+
+        TableModelEvent event = new TableModelEvent(
+                this,
+                getRowCount() - 1,
+                getRowCount() - 1,
+                TableModelEvent.ALL_COLUMNS,
+                TableModelEvent.INSERT);
+
+        subscribers.forEach(s -> s.tableChanged(event));
+    }
+
+    public abstract void addItem(@NotNull Map.Entry<Item, Integer> item);
+    public abstract void addItems(@NotNull Map<Item, Integer> list);
+    public abstract Map.Entry<Item, Integer> getItem(int rowIndex);
+    public abstract void removeItem(@NotNull Map.Entry<Item, Integer> item);
 }

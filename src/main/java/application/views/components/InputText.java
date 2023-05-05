@@ -10,7 +10,7 @@ public class InputText extends CustomJTextField {
     public InputText(String placeholder) {
         super();
         setSize(344, 58);
-        setFont(getFontsLoader().load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 20f));
+        setFont(Fonts.load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 20f));
         PromptSupport.setPrompt(placeholder, this);
         PromptSupport.setForeground(Color.black, this);
         PromptSupport.setFontStyle(Font.ITALIC, this);

@@ -98,4 +98,9 @@ public class FacturasProveedor extends Facturas implements Entity {
     public void consultarArticulos() {
         articulos.forEach((articulo, cantidad) -> System.out.println(articulo.getNombre() + " - " + cantidad));
     }
+
+    @Override
+    public String toString() {
+        return getId_factura().toString();
+    }
 }

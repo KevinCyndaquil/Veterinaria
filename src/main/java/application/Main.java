@@ -2,7 +2,6 @@ package application;
 
 import application.database.repository.FacturaProveedorRep;
 import application.models.Entity_Manager.annotations.SqlKey;
-import application.models.Entity_Manager.repositories.Find;
 import application.models.Entity_Manager.repositories.Repository;
 import application.models.Entity_Manager.repositories.Save;
 import application.database.Postgres;
@@ -14,18 +13,17 @@ import application.models.finanzas.FacturasProveedor;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         //hola wuichito
         Proveedores proveedor = new Proveedores(
-                3,
-                "GAMESA",
-                "lomas",
-                "962-696-9696",
-                "hacen galletas");
+                null,
+                "TECATE",
+                "lomas sajeo",
+                "962-891-1001",
+                "para mampos");
 
         List<Articulos> articulos = List.of(
                 new Articulos(
@@ -80,9 +78,9 @@ public class Main {
         try {
             //System.out.println(factura.getId_factura());
             //System.out.println(afsave.save(factura));
-            var fac = (FacturasProveedor) fp.findByDateAndProvider(Date.valueOf("2020-12-12"), new Proveedores(3));
-            System.out.println(fac.getArticulos());
-            System.out.println();
+            //var fac = (FacturasProveedor) fp.findByDateAndProvider(Date.valueOf("2020-12-12"), new Proveedores(3));
+            System.out.println(psave.save(proveedor));
+            //System.out.println();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

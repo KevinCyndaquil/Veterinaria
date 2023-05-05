@@ -86,18 +86,27 @@ public class Repository<M extends Entity> implements
      */
     static @NotNull String toSqlSequence(@NotNull Map<String, Object> attributes, int WHERE_TYPE) {
 
+        if (attributes.size() == 0)
+            return "";
+
         String conjunction;
+        StringBuilder where = new StringBuilder();
 
         switch (WHERE_TYPE) {
-            case 0 -> conjunction = " AND ";
-            case 1 -> conjunction = " OR ";
+            case 0 -> {
+                conjunction = " AND ";
+                where.append("WHERE ");
+            }
+            case 1 -> {
+                conjunction = " OR ";
+                where.append("WHERE ");
+            }
             case 2 -> conjunction = ", ";
             default -> {
                 return "";
             }
         }
 
-        StringBuilder where = new StringBuilder();
 
         attributes.forEach((name, value) -> {
             if (value == null)
@@ -106,7 +115,7 @@ public class Repository<M extends Entity> implements
         });
 
         if (where.isEmpty())
-            return where.toString();
+            return "";
         return where.delete(where.length() - conjunction.length(), where.length()).toString();
     }
 
@@ -143,7 +152,7 @@ public class Repository<M extends Entity> implements
             attributes.putAll(model.key(SqlKey.FOREIGN_KEY));
 
 
-        String query = "SELECT * FROM %s WHERE %s".formatted(
+        String query = "SELECT * FROM %s %s".formatted(
                 model.entityName(),
                 Repository.toSqlSequence(attributes, OR_WHERE));
 
@@ -172,7 +181,7 @@ public class Repository<M extends Entity> implements
     @Override
     public Object findById(@NotNull M model) throws SQLException{
 
-        String query = "SELECT * FROM %s WHERE %s".formatted(
+        String query = "SELECT * FROM %s %s".formatted(
                 model.entityName(),
                 Repository.toSqlSequence(model.key(SqlKey.PRIMARY_KEY), AND_WHERE));
 

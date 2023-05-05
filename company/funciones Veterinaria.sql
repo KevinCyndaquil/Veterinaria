@@ -1696,6 +1696,7 @@ BEGIN
                                        ON ap.id_articulo = p.id_articulo
                              LEFT JOIN medicamentos m
                                        ON ap.id_articulo = m.id_articulo
+                    WHERE ap.id_proveedor = pId_proveedor
                     ORDER BY tipo;
 
     RAISE NOTICE 'cursor abierto correctamente';

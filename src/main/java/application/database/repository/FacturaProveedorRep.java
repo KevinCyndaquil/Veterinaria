@@ -37,9 +37,11 @@ public class FacturaProveedorRep extends Repository<FacturasProveedor> {
         return factura;
     }
 
-    public Object findByDateAndProvider(@NotNull Date fecha, @NotNull Proveedores proveedor) throws SQLException{
+    public FacturasProveedor findFacturaWithArticles(@NotNull Date fecha, @NotNull Proveedores proveedor) throws SQLException, IndexOutOfBoundsException{
         FacturasProveedor f = new FacturasProveedor(fecha, proveedor);
-        FacturasProveedor factura = (FacturasProveedor) super.find(f).get(0);
+        var facturas = super.find(f);
+        FacturasProveedor factura = (FacturasProveedor) facturas.get(0);
+
         proveedor = factura.getProveedor();
         //System.out.println(proveedor.id_proveedor());
 
@@ -50,20 +52,23 @@ public class FacturaProveedorRep extends Repository<FacturasProveedor> {
             connection.setAutoCommit(false);
 
             call.registerOutParameter(1, Types.REF_CURSOR);
-            call.setDate(2, Date.valueOf("2020-12-12"));
+            call.setDate(2, fecha);
             call.setInt(3, proveedor.id_proveedor());
 
             call.execute();
 
             try (ResultSet resultSet = call.getObject(1, ResultSet.class)) {
                 while (resultSet.next()) {
+                    Articulos articulo = new Articulos(
+                            resultSet.getInt("id_articulo"),
+                            proveedor,
+                            resultSet.getString("nombre"),
+                            resultSet.getBigDecimal("monto_compra"),
+                            resultSet.getString("descripcion"));
+                    articulo.setTipo(resultSet.getString("tipo"));
+
                     factura.agregarArticulo(
-                            new Articulos(
-                                    resultSet.getInt("id_articulo"),
-                                    proveedor,
-                                    resultSet.getString("nombre"),
-                                    resultSet.getBigDecimal("monto_compra"),
-                                    resultSet.getString("descripcion")),
+                            articulo,
                             resultSet.getInt("cantidad"));
                 }
 

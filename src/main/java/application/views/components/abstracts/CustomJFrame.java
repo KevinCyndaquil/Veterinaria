@@ -1,18 +1,17 @@
 package application.views.components.abstracts;
 
-import application.views.utils.FontsLoader;
 import application.views.utils.ResponsiveDimension;
 import lombok.Getter;
 
 import javax.swing.*;
 
 public abstract class CustomJFrame extends JFrame {
-    @Getter
-    private final FontsLoader fontsLoader;
+    //@Getter
+    //private final FontsLoader fontsLoader;
 
     public CustomJFrame(String title) {
         super(title);
-        fontsLoader = new FontsLoader();
+        //fontsLoader = new FontsLoader();
         setLayout(null);
         getContentPane().setPreferredSize(ResponsiveDimension.getNextResolution().getSize());
         initComponents();

@@ -21,7 +21,7 @@ public class Button extends CustomJButton {
     public Button(String text) {
         super();
         setText(text);
-        setFont(getFontsLoader().load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 21f));
+        setFont(Fonts.load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 21f));
         setSize(180, 50);
 
         setUI(new BasicButtonUI());

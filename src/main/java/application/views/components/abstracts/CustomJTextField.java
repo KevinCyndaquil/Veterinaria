@@ -1,7 +1,6 @@
 package application.views.components.abstracts;
 
 import application.views.components.interfaces.IPositionableComponent;
-import application.views.utils.FontsLoader;
 import application.views.utils.Positions;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -9,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 public abstract class CustomJTextField extends JTextField implements IPositionableComponent {
-    @Getter
-    private final FontsLoader fontsLoader;
+    //@Getter
+    //private final FontsLoader fontsLoader;
 
     public CustomJTextField() {
         super();
-        fontsLoader = new FontsLoader();
+        //fontsLoader = new FontsLoader();
     }
     @Override
     public void setLocation(@NotNull JComponent fatherJComponent, Positions position){

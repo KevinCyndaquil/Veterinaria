@@ -30,17 +30,17 @@ public abstract class Facturas implements IGestorArticulos <Articulos> {
 
     public Facturas(Integer id_factura, Date fecha_generacion) {
         this.id_factura = id_factura;
-        this.monto_total = new BigDecimal(0);
+        this.monto_total = null;
         this.fecha_generacion = fecha_generacion;
     }
 
     public Facturas(Date fecha_generacion) {
-        this.monto_total = new BigDecimal(0);
+        this.monto_total = null;
         this.fecha_generacion = fecha_generacion;
     }
 
     public Facturas(Integer id_factura) {
         this.id_factura = id_factura;
-        this.monto_total = new BigDecimal(0);
+        this.monto_total = null;
     }
 }

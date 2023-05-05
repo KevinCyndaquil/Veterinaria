@@ -36,7 +36,7 @@ public class Login extends CustomJFrame {
         mainPanel.add(imgProfile);
 
         TextDisplay userJL = new TextDisplay("Member Login");
-        userJL.setFont(getFontsLoader().load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 36f));
+        userJL.setFont(Fonts.load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 36f));
         userJL.setSize(313, 60);
         mainPanel.add(userJL);
 

@@ -31,7 +31,7 @@ public class MainView extends CustomJFrame {
         mainPanel.add(banner);
 
         TextDisplay welcomeJL = new TextDisplay("Bienvenido");
-        welcomeJL.setFont(getFontsLoader().load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 36f));
+        welcomeJL.setFont(Fonts.load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 36f));
         welcomeJL.setSize(313, 60);
         mainPanel.add(welcomeJL);
 
