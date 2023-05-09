@@ -126,6 +126,11 @@ public class Tickets implements IGestorPagos, IGestorArticulos <ArticulosVenta>,
     }
 
     @Override
+    public boolean eliminarArticulos() {
+        return false;
+    }
+
+    @Override
     public boolean modificarCantidad(ArticulosVenta articulo, Integer cantidad) {
         if (articulo == null || cantidad == null || cantidad <= 0) return false;
 

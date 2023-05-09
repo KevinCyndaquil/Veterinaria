@@ -68,14 +68,21 @@ public class FacturaChooser extends ViewerController<FacturaChooserView> impleme
         view.btnConsultar.addActionListener(e -> {
             DefaultTableModel model = (DefaultTableModel) view.tblFacturas.getModel();
 
-            Proveedores proveedor = (Proveedores) model.getValueAt(
-                    view.tblFacturas.getSelectedRow(),
-                    1);
+            FacturasProveedor factura = new FacturasProveedor((Integer) model
+                    .getValueAt(view.tblFacturas.getSelectedRow(), 0));
 
-            new DetalleFactura(
-                    new Date(view.dateChooser.getDate().getTime()),
-                    proveedor
-            );
+            try {
+                factura = (new FacturaProveedorRep(new Postgres()))
+                        .findByIdWithAllArticles(factura);
+            } catch (SQLException ex) {
+                MessageDialog.queryErrorMessage(
+                        view,
+                        "Ocurrió un error con la lectura de la factura %s, llame a su programador más experimentado".formatted(
+                                factura));
+                throw new RuntimeException(ex);
+            }
+
+            new DetalleFactura(factura);
         });
     }
 

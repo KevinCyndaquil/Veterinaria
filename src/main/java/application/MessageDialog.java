@@ -32,6 +32,15 @@ public class MessageDialog {
                 Icons.get(Icons.SHY_SUCROUSE));
     }
 
+    public static void queryErrorMessage(JFrame view, String message) {
+        JOptionPane.showMessageDialog(
+                view,
+                message,
+                "query error",
+                JOptionPane.ERROR_MESSAGE,
+                Icons.get(Icons.SHY_SUCROUSE));
+    }
+
     public static void uncertainMessage(JFrame view, String message) {
         JOptionPane.showMessageDialog(
                 view,
@@ -49,4 +58,6 @@ public class MessageDialog {
                 JOptionPane.INFORMATION_MESSAGE,
                 Icons.get(Icons.HAPPY_SUCROUSE));
     }
+
+
 }

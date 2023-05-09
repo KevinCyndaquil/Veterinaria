@@ -7,7 +7,6 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public class FacturasProveedor extends Facturas implements Entity {
 
     @SqlInstance
     public FacturasProveedor(Proveedores proveedor, Integer id_factura, BigDecimal monto_total, Date fecha_generacion) {
-        super(id_factura, monto_total, fecha_generacion);
+        super(id_factura, BigDecimal.ZERO, fecha_generacion);
         this.proveedor = proveedor;
         this.articulos = new HashMap<>();
     }
@@ -76,6 +75,13 @@ public class FacturasProveedor extends Facturas implements Entity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean eliminarArticulos() {
+        setMonto_total(BigDecimal.ZERO);
+        articulos.clear();
+        return true;
     }
 
     @Override

@@ -6,6 +6,7 @@ public interface IGestorArticulos <A> {
     boolean agregarArticulo(A articulo, Integer cantidad);
     boolean agregarArticulos(Map<A,Integer> articulos);
     boolean eliminarArticulo(A articulo);
+    boolean eliminarArticulos();
     boolean modificarCantidad(A articulo, Integer cantidad);
     Integer consultarArticulo(A articulo);
     void consultarArticulos();

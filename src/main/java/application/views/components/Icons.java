@@ -21,8 +21,12 @@ public enum Icons {
     STAR_EYES_GANYU(Objects.requireNonNull(Icons.class.getClassLoader().getResource(
             "images/icons/ganyu01.png"))),
     DOGGY(Objects.requireNonNull(Icons.class.getClassLoader().getResource(
-            "images/icons/perrito_lengua.jpg")));
-    private URL path;
+            "images/icons/perrito_lengua.jpg"))),
+    HUTAO_ADORABLE(Objects.requireNonNull(Icons.class.getClassLoader().getResource(
+            "images/icons/Hu_tao_adorable.png"))),
+    AMBER_OUTTA_MY_WAY(Objects.requireNonNull(Icons.class.getClassLoader().getResource(
+            "images/icons/Amber_Outta_my_way.png")));
+    private final URL path;
 
     Icons(@NotNull URL path) {
         this.path = path;

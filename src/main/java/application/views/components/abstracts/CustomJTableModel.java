@@ -1,5 +1,6 @@
 package application.views.components.abstracts;
 
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.event.TableModelEvent;
@@ -17,6 +18,7 @@ import java.util.Map;
  */
 public abstract class CustomJTableModel <Item> implements TableModel {
     protected final LinkedList<TableModelListener> subscribers;
+    @Getter
     protected final Map<Item, Integer> items;
 
     public CustomJTableModel() {

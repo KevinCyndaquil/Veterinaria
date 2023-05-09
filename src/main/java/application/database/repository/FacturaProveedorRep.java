@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class FacturaProveedorRep extends Repository<FacturasProveedor> {
@@ -37,23 +38,21 @@ public class FacturaProveedorRep extends Repository<FacturasProveedor> {
         return factura;
     }
 
-    public FacturasProveedor findFacturaWithArticles(@NotNull Date fecha, @NotNull Proveedores proveedor) throws SQLException, IndexOutOfBoundsException{
-        FacturasProveedor f = new FacturasProveedor(fecha, proveedor);
-        var facturas = super.find(f);
-        FacturasProveedor factura = (FacturasProveedor) facturas.get(0);
+    public FacturasProveedor findByIdWithAllArticles(@NotNull FacturasProveedor facturaConId) throws SQLException, IndexOutOfBoundsException{
+        /*FacturasProveedor f = new FacturasProveedor(fe);*/
+        var factura = (FacturasProveedor) super.findById(facturaConId);
 
-        proveedor = factura.getProveedor();
+        Proveedores proveedor = factura.getProveedor();
         //System.out.println(proveedor.id_proveedor());
 
         try (Connection connection = conn.get();
              CallableStatement call = connection.prepareCall(
-                     "{? = CALL obtarticulos_factura(?, ?)}")) {
+                     "{? = CALL obtarticulos_factura(?)}")) {
 
             connection.setAutoCommit(false);
 
             call.registerOutParameter(1, Types.REF_CURSOR);
-            call.setDate(2, fecha);
-            call.setInt(3, proveedor.id_proveedor());
+            call.setInt(2, factura.getId_factura());
 
             call.execute();
 
@@ -98,13 +97,20 @@ public class FacturaProveedorRep extends Repository<FacturasProveedor> {
 
     @Override
     public Object save(@NotNull FacturasProveedor factura) throws SQLException {
-
         super.save(factura);
+        updateDetalle(factura);
+
+        return factura.getId_factura();
+    }
+
+    public Boolean updateDetalle(@NotNull FacturasProveedor factura) throws SQLException {
+        AtomicReference<Boolean> res = new AtomicReference<>(true);
+
+        System.out.println("id_factura: " + factura.getId_factura());
 
         try (Connection connection = conn.get();
              CallableStatement call = connection.prepareCall(
-                     "CALL agrdetalle_factura(?, ?)")) {
-
+                     "CALL agrDetalle_factura(?, ?)")) {
             factura.getArticulos().forEach((a, can) -> {
                 try {
                     Array array = connection.createArrayOf("VARCHAR", new Object[]{
@@ -113,43 +119,14 @@ public class FacturaProveedorRep extends Repository<FacturasProveedor> {
                             factura.getId_factura()
                     });
 
+                    System.out.println(array);
+
                     call.setArray(1, array);
                     call.registerOutParameter(2, Types.INTEGER);
                     call.execute();
 
                     System.out.println(call.getInt(2));
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-
-            return factura.getId_factura();
-        }
-
-    }
-
-    @Override
-    public Boolean updateById(@NotNull FacturasProveedor factura) throws SQLException {
-        AtomicReference<Boolean> res = new AtomicReference<>(super.updateById(factura));
-
-        try (Connection connection = conn.get();
-             CallableStatement call = connection.prepareCall(
-                     "CALL actdetalle_factura(?, ?)")) {
-            factura.getArticulos().forEach((a, can) -> {
-                try {
-                    Array array = connection.createArrayOf("VARCHAR", new Object[]{
-                            can,
-                            a.getId_articulo(),
-                            factura.getId_factura(),
-                            factura.consultarArticulo(a)
-                    });
-
-                    call.setArray(1, array);
-                    call.registerOutParameter(2, Types.BOOLEAN);
-                    call.execute();
-
-                    System.out.println(call.getInt(2));
-                    res.set(call.getBoolean(2));
+                    res.set(true);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

@@ -1,0 +1,3 @@
+id_persona,fecha_ini,jor_ini,jor_fin,salario_bruto,salario_neto,puesto
+1,2022-10-28,16:00:00,21:00:00,10000,7800,veterinario
+2,2022-10-29,09:00:00,14:00:00,9500,6230,mostrador

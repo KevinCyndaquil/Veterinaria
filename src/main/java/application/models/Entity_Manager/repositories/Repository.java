@@ -289,7 +289,7 @@ public class Repository<M extends Entity> implements
             attributes.putAll(model.key(SqlKey.FOREIGN_KEY));
 
 
-        String query = "DELETE FROM %s WHERE %s RETURNING TRUE".formatted(
+        String query = "DELETE FROM %s %s RETURNING TRUE".formatted(
                 model.entityName(),
                 toSqlSequence(attributes, OR_WHERE));
 
@@ -301,7 +301,7 @@ public class Repository<M extends Entity> implements
     @Override
     public Boolean deleteById(@NotNull M model) throws SQLException {
 
-        String query = "DELETE FROM %s WHERE %s RETURNING TRUE".formatted(
+        String query = "DELETE FROM %s %s RETURNING TRUE".formatted(
                 model.entityName(),
                 toSqlSequence(model.key(SqlKey.PRIMARY_KEY), OR_WHERE));
 
@@ -313,7 +313,7 @@ public class Repository<M extends Entity> implements
     @Override
     public Boolean hideById(@NotNull M model) throws SQLException {
 
-        String query = "UPDATE %s SET active = NOT active WHERE %s RETURNING active".formatted(
+        String query = "UPDATE %s SET active = NOT active %s RETURNING active".formatted(
                 model.entityName(),
                 toSqlSequence(model.key(SqlKey.PRIMARY_KEY), AND_WHERE));
 
@@ -328,7 +328,7 @@ public class Repository<M extends Entity> implements
         Map<String, Object> attributes = new HashMap<>(model.attributes());
         attributes.putAll(model.key(SqlKey.FOREIGN_KEY));
 
-        String query = "UPDATE %s SET %s WHERE %s RETURNING TRUE".formatted(
+        String query = "UPDATE %s SET %s %s RETURNING TRUE".formatted(
                 model.entityName(),
                 toSqlSequence(attributes, COMMA),
                 toSqlSequence(model.key(SqlKey.PRIMARY_KEY), AND_WHERE));
