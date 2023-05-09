@@ -1,14 +1,17 @@
 package application.models.finanzas;
 
-import java.util.Map;
+import application.models.entidades.ConCantidad;
+import application.models.entidades.ConMonto;
 
-public interface IGestorArticulos <A> {
-    boolean agregarArticulo(A articulo, Integer cantidad);
-    boolean agregarArticulos(Map<A,Integer> articulos);
-    boolean eliminarArticulo(A articulo);
+import java.util.Collection;
+
+public interface IGestorArticulos {
+    boolean agregarArticulo(ConMonto articulo, Integer cantidad);
+    boolean agregarArticulos(Collection<ConCantidad> articulos);
+    boolean eliminarArticulo(ConMonto articulo);
     boolean eliminarArticulos();
-    boolean modificarCantidad(A articulo, Integer cantidad);
-    Integer consultarArticulo(A articulo);
+    boolean modificarCantidad(ConMonto articulo, Integer cantidad);
+    Integer consultarArticulo(ConMonto articulo);
     void consultarArticulos();
 
 }

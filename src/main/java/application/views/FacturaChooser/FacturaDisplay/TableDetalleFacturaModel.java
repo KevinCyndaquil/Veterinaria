@@ -106,8 +106,8 @@ public class TableDetalleFacturaModel extends CustomJTableModel<Articulos> {
         return switch (columnIndex) {
             case 0 -> articulo.getNombre();
             case 1 -> detalle_factura.getValue();
-            case 2 -> articulo.getMonto_compra();
-            case 3 -> Double.parseDouble((new DecimalFormat("#.##")).format(articulo.getMonto_compra().doubleValue() * detalle_factura.getValue()));
+            case 2 -> articulo.monto();
+            case 3 -> Double.parseDouble((new DecimalFormat("#.##")).format(articulo.monto().doubleValue() * detalle_factura.getValue()));
             case 4 -> tipo.toUpperCase();
             default -> null;
         };

@@ -2,7 +2,7 @@ package application.database.repository;
 
 import application.models.Entity_Manager.repositories.GetConn;
 import application.models.Entity_Manager.repositories.Repository;
-import application.models.finanzas.Pagos;
+import application.models.detalles.Pagos;
 import org.jetbrains.annotations.NotNull;
 
 public class PagosRep extends Repository<Pagos> {

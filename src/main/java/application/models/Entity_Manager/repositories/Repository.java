@@ -156,7 +156,7 @@ public class Repository<M extends Entity> implements
                 model.entityName(),
                 Repository.toSqlSequence(attributes, OR_WHERE));
 
-        System.out.println("Consulta: " + query);
+        System.out.println("Consulta FIND: " + query);
 
         List<Object> list = new ArrayList<>();
 
@@ -185,7 +185,7 @@ public class Repository<M extends Entity> implements
                 model.entityName(),
                 Repository.toSqlSequence(model.key(SqlKey.PRIMARY_KEY), AND_WHERE));
 
-        System.out.println("Consulta: " + query);
+        System.out.println("Consulta FINDBYID: " + query);
 
         try (Connection connection = conn.get();
              Statement statement = connection.createStatement();
@@ -196,11 +196,12 @@ public class Repository<M extends Entity> implements
 
                 for (Object column : M.columns(model.getClass())) {
                     var obj = Repository.toObject(column, resultSet);
-                    System.out.println(obj + "C" + obj.getClass());
+                    //System.out.println(obj + "C" + obj.getClass());
                     values.add(obj);
                 }
 
-                System.out.println("Estos son los valores a instanciar" + values);
+                //System.out.println("\n**Estos son los valores a instanciar en toObject:");
+                //values.forEach(v -> System.out.println(v + ":" + v.getClass().getTypeName()));
                 return M.newInstance(model.getClass(), values.toArray());
             }
         }
@@ -245,7 +246,7 @@ public class Repository<M extends Entity> implements
         String entity = "%s(%s)".formatted(model.entityName(), attributes);
         String query = "INSERT INTO %s VALUES(%s) %s".formatted(entity, values, keyName);
 
-        System.out.println("Consulta: " + query);
+        System.out.println("Consulta SAVE: " + query);
 
 
         try (Connection connection = conn.get();
@@ -293,7 +294,7 @@ public class Repository<M extends Entity> implements
                 model.entityName(),
                 toSqlSequence(attributes, OR_WHERE));
 
-        System.out.println("Consulta: " + query);
+        System.out.println("Consulta DELETE: " + query);
 
         return executeUpdate(query);
     }
@@ -305,7 +306,7 @@ public class Repository<M extends Entity> implements
                 model.entityName(),
                 toSqlSequence(model.key(SqlKey.PRIMARY_KEY), OR_WHERE));
 
-        System.out.println("Consulta: " + query);
+        System.out.println("Consulta DELETEBYID: " + query);
 
         return executeUpdate(query);
     }
@@ -317,7 +318,7 @@ public class Repository<M extends Entity> implements
                 model.entityName(),
                 toSqlSequence(model.key(SqlKey.PRIMARY_KEY), AND_WHERE));
 
-        System.out.println("Consulta: " + query);
+        System.out.println("Consulta HIDEBYID: " + query);
 
         return executeUpdate(query);
     }
@@ -333,7 +334,7 @@ public class Repository<M extends Entity> implements
                 toSqlSequence(attributes, COMMA),
                 toSqlSequence(model.key(SqlKey.PRIMARY_KEY), AND_WHERE));
 
-        System.out.println(query);
+        System.out.println("Consulta UPDATE: " + query);
 
         return executeUpdate(query);
     }

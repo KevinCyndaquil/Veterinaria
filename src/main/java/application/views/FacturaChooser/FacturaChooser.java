@@ -118,7 +118,7 @@ public class FacturaChooser extends ViewerController<FacturaChooserView> impleme
                 model.addRow(new Object[]{
                         factura.getId_factura(),
                         factura.getProveedor(),
-                        factura.getMonto_total()
+                        factura.monto()
                 });
             });
         } catch (SQLException e) {

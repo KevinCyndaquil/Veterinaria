@@ -3,14 +3,11 @@ package application.views.FacturaChooser.FacturaDisplay;
 import application.MessageDialog;
 import application.database.Postgres;
 import application.database.repository.FacturaProveedorRep;
-import application.models.Entity_Manager.repositories.Save;
-import application.models.Entity_Manager.repositories.Update;
 import application.models.entidades.Proveedores;
 import application.models.finanzas.FacturasProveedor;
 import application.views.components.interfaces.TableController;
 import application.views.components.interfaces.ViewerController;
 import lombok.Setter;
-import org.postgresql.util.PSQLException;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.Date;
@@ -41,7 +38,7 @@ public class DetalleFactura extends ViewerController <DetalleFacturaView> implem
         ((DefaultTableModel) view.tblDetalleFacturas.getModel()).setRowCount(0);
         TableDetalleFacturaModel model = new TableDetalleFacturaModel();
 
-        model.addItems(factura.getArticulos());
+        //model.addItems(factura.getDetalle());
         view.tblDetalleFacturas.setModel(model);
     }
 
@@ -57,7 +54,7 @@ public class DetalleFactura extends ViewerController <DetalleFacturaView> implem
         TableDetalleFacturaModel model = (TableDetalleFacturaModel) view.tblDetalleFacturas.getModel();
 
         try {
-            factura.eliminarArticulos();
+            //factura.eliminarArticulos();
 
             model.getItems().forEach((a, c) -> {
                 if (c > 0)
@@ -66,7 +63,7 @@ public class DetalleFactura extends ViewerController <DetalleFacturaView> implem
                 System.out.println(a);
             });
 
-            System.out.println(factura.getArticulos());
+            System.out.println(factura.getDetalle());
 
             FacturaProveedorRep update = new FacturaProveedorRep(new Postgres());
 
@@ -74,7 +71,7 @@ public class DetalleFactura extends ViewerController <DetalleFacturaView> implem
 
             MessageDialog.querySuccessMessage(
                     view,
-                    "Articulos %s actualizados correctamente".formatted(factura.getArticulos()));
+                    "Articulos %s actualizados correctamente".formatted(factura.getDetalle()));
 
         } catch (SQLException e) {
             MessageDialog.queryErrorMessage(

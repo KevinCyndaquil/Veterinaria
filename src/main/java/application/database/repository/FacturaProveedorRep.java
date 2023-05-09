@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class FacturaProveedorRep extends Repository<FacturasProveedor> {
@@ -105,13 +104,13 @@ public class FacturaProveedorRep extends Repository<FacturasProveedor> {
 
     public Boolean updateDetalle(@NotNull FacturasProveedor factura) throws SQLException {
         AtomicReference<Boolean> res = new AtomicReference<>(true);
-
+        /*
         System.out.println("id_factura: " + factura.getId_factura());
 
         try (Connection connection = conn.get();
              CallableStatement call = connection.prepareCall(
                      "CALL agrDetalle_factura(?, ?)")) {
-            factura.getArticulos().forEach((a, can) -> {
+            factura.getDetalle().forEach((a, can) -> {
                 try {
                     Array array = connection.createArrayOf("VARCHAR", new Object[]{
                             can,
@@ -132,6 +131,8 @@ public class FacturaProveedorRep extends Repository<FacturasProveedor> {
                 }
             });
         }
+
+         */
 
         return res.get();
     }

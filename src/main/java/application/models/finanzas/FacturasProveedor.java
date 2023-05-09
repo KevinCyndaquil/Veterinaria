@@ -2,13 +2,17 @@ package application.models.finanzas;
 
 import application.models.Entity_Manager.abstract_manager.Entity;
 import application.models.Entity_Manager.annotations.*;
+import application.models.detalles.DetalleFacturas;
+import application.models.entidades.ConCantidad;
+import application.models.entidades.ConMonto;
 import application.models.entidades.Proveedores;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @SqlEntity("facturas_proveedor")
 public class FacturasProveedor extends Facturas implements Entity {
@@ -20,89 +24,107 @@ public class FacturasProveedor extends Facturas implements Entity {
 
     //first: Articulo, second: cantidad
     @Getter
-    private final Map<Articulos, Integer> articulos;
+    private final List<DetalleFacturas> detalle;
 
     @SqlInstance
     public FacturasProveedor(Proveedores proveedor, Integer id_factura, BigDecimal monto_total, Date fecha_generacion) {
-        super(id_factura, BigDecimal.ZERO, fecha_generacion);
+        super(id_factura, monto_total, fecha_generacion);
         this.proveedor = proveedor;
-        this.articulos = new HashMap<>();
+        this.detalle = new ArrayList<>();
     }
 
     public FacturasProveedor(Integer id_factura, Date fecha_generacion, Proveedores proveedor) {
         super(id_factura, fecha_generacion);
         this.proveedor = proveedor;
-        this.articulos = new HashMap<>();
+        this.detalle = new ArrayList<>();
     }
 
     public FacturasProveedor(Date fecha_generacion, Proveedores proveedor) {
         super(fecha_generacion);
         this.proveedor = proveedor;
-        this.articulos = new HashMap<>();
+        this.detalle = new ArrayList<>();
     }
 
     public FacturasProveedor(Integer id_factura) {
         super(id_factura);
-        this.articulos = new HashMap<>();
+        this.detalle = new ArrayList<>();
     }
 
     @Override
-    public boolean agregarArticulo(Articulos articulo, Integer cantidad) {
+    public boolean agregarArticulo(ConMonto articulo, Integer cantidad) {
+        if (articulo == null)
+            return false;
 
-        if (articulo == null || cantidad == null || cantidad < 0) return false;
+        DetalleFacturas df = DetalleFacturas.valueOf(articulo, cantidad);
+        df.setId_factura(getId_factura());
 
-        if (articulos.containsKey(articulo)) {
-            articulos.put(articulo, articulos.get(articulo) + cantidad);
-        } else {
-            articulos.put(articulo, cantidad);
-        }
-        setMonto_total(getMonto_total().add(articulo.getMonto_compra().multiply(BigDecimal.valueOf(cantidad))));
+        detalle.add(df);
         return true;
     }
 
     @Override
-    public boolean agregarArticulos(Map<Articulos, Integer> articulos) {
-        if (articulos == null || articulos.isEmpty()) return false;
-        articulos.forEach(this::agregarArticulo);
+    public boolean agregarArticulos(Collection<ConCantidad> articulos) {
+        if (articulos == null)
+            return false;
+
+        articulos.forEach(a -> detalle.add((DetalleFacturas) a));
         return true;
     }
 
     @Override
-    public boolean eliminarArticulo(Articulos articulo) {
-        if (articulo == null) return false;
-        if (articulos.containsKey(articulo)) {
-            articulos.remove(articulo);
-            return true;
+    public boolean eliminarArticulo(ConMonto articulo) {
+        if (articulo == null)
+            return false;
+
+        if (detalle.contains(DetalleFacturas.valueOf(articulo, 0))) {
+            detalle.forEach(d -> {
+                if (d.getArticulo().equals(articulo))
+                    detalle.remove(d);
+            });
         }
-        return false;
+
+        return true;
     }
 
     @Override
     public boolean eliminarArticulos() {
-        setMonto_total(BigDecimal.ZERO);
-        articulos.clear();
+        detalle.clear();
+
         return true;
     }
 
     @Override
-    public boolean modificarCantidad(Articulos articulo, Integer cantidad) {
-
+    public boolean modificarCantidad(ConMonto articulo, Integer cantidad) {
         if (articulo == null || cantidad == null || cantidad <= 0) return false;
-        if (articulos.containsKey(articulo)) {
-            articulos.replace(articulo, cantidad);
-            return true;
-        }else return false;
+
+        detalle.forEach(d -> {
+            if (d.getArticulo().equals(articulo))
+                d.cantidad(cantidad);
+        });
+        this.monto(this.monto().add(
+                articulo.monto().multiply(
+                        BigDecimal.valueOf(cantidad))).floatValue());
+        return true;
     }
 
     @Override
-    public Integer consultarArticulo(Articulos articulo) {
-        if (articulo == null) return null;
-        return articulos.get(articulo);
+    public Integer consultarArticulo(ConMonto articulo) {
+        if (articulo == null)
+            return null;
+
+        for (DetalleFacturas d : detalle) {
+            if (d.getArticulo().equals(articulo))
+                return detalle.indexOf(d);
+        }
+
+        return 0;
     }
 
     @Override
     public void consultarArticulos() {
-        articulos.forEach((articulo, cantidad) -> System.out.println(articulo.getNombre() + " - " + cantidad));
+        detalle.forEach((d) -> System.out.println("Articulo: " + d.getArticulo() +
+                "\nCantidad: " + d.cantidad() +
+                "\nMonto: $" + d.monto()));
     }
 
     @Override

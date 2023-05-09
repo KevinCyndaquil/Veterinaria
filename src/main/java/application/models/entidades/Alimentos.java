@@ -43,14 +43,3 @@ public class Alimentos implements Entity {
         this.gramaje = gramaje;
     }
 }
-/*
-public class Alimentos extends ArticulosGramaje {
-    @SqlInstance
-    public Alimentos(Integer id_articulo, Proveedores proveedor, String nombre, BigDecimal monto_compra, String descripcion, BigDecimal gramaje) {
-        super(id_articulo, proveedor, nombre, monto_compra, descripcion, gramaje);
-    }
-
-    public Alimentos(Proveedores proveedor, String nombre, BigDecimal monto_compra, String descripcion, BigDecimal gramaje) {
-        super(proveedor, nombre, monto_compra, descripcion, gramaje);
-    }
-}*/

@@ -56,13 +56,13 @@ BEGIN
         RAISE EXCEPTION 'ERROR: factura % no encontrada, operación invalida', vId_factura;
     END IF;
 
-    -- verificamos si el articulo ya está dentro del detalle, también obtenemos la cantidad
+    -- verificamos si el conMonto ya está dentro del detalle, también obtenemos la cantidad
     SELECT INTO pCns, vCanAnterior cns_detalle_factura, cantidad
     FROM detalle_factura
     WHERE id_factura = vId_factura
       AND id_articulo = vId_articulo;
 
-    -- comprobamos si ya existe el articulo en el detalle
+    -- comprobamos si ya existe el conMonto en el detalle
     IF pCns IS NOT NULL THEN
         -- la actualizamos si existe
         UPDATE detalle_factura
@@ -74,7 +74,7 @@ BEGIN
         -- aquí obtenemos la cantidad actualizada, positiva si aumento, negativa si disminuyo
         vCantidad = vCantidad - vCanAnterior;
 
-        vMessage := 'UPDATE -> articulo ' || vId_articulo || ' en la factura ' || vId_factura || ' actualizada correctamente';
+        vMessage := 'UPDATE -> conMonto ' || vId_articulo || ' en la factura ' || vId_factura || ' actualizada correctamente';
     ELSE
         -- de lo contrario lo insertamos
         INSERT INTO detalle_factura
@@ -88,7 +88,7 @@ BEGIN
                vId_articulo)
         RETURNING cns_detalle_factura INTO pCns;
 
-        vMessage := 'INSERT -> articulo ' || vId_articulo || ' en la factura ' || vId_factura || ' insertado correctamente';
+        vMessage := 'INSERT -> conMonto ' || vId_articulo || ' en la factura ' || vId_factura || ' insertado correctamente';
     END IF;
 
 
@@ -284,7 +284,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 /**
-    añade un articulo al ticket de la venta
+    añade un conMonto al ticket de la venta
  */
 
 DROP PROCEDURE IF EXISTS agrArticulo_ticket;
@@ -324,7 +324,7 @@ BEGIN
     PERFORM *
     FROM tickets
     WHERE id_ticket = vId_ticket FOR UPDATE;
-    -- bloqueamos el articulo (por el stock)
+    -- bloqueamos el conMonto (por el stock)
     PERFORM *
     FROM articulos_venta
     WHERE id_articulo = vId_articulo FOR UPDATE;
@@ -336,7 +336,7 @@ BEGIN
       AND id_articulo = vId_articulo;
 
 
-    -- comprobamos si el articulo ya está en la factura
+    -- comprobamos si el conMonto ya está en la factura
     IF pCns IS NOT NULL THEN
         -- actualizamos el detalle
         UPDATE detalle_ticket
@@ -348,7 +348,7 @@ BEGIN
         -- actualizamos la cantidad
         vCantidad := vCanAnterior - vCantidad;
 
-        vMessage := 'UPDATE -> articulo ' || vId_articulo || ' actualizado en la compra % ' || vId_ticket || ' correctamente';
+        vMessage := 'UPDATE -> conMonto ' || vId_articulo || ' actualizado en la compra % ' || vId_ticket || ' correctamente';
     ELSE
         -- insertamos
         INSERT INTO detalle_ticket
@@ -362,7 +362,7 @@ BEGIN
               vId_articulo)
         RETURNING cns_detalle_ticket INTO pCns;
 
-        vMessage := 'INSERT -> articulo ' || vId_articulo || ' añadido a la compra % ' || vId_ticket || ' correctamente';
+        vMessage := 'INSERT -> conMonto ' || vId_articulo || ' añadido a la compra % ' || vId_ticket || ' correctamente';
     END IF;
 
 
@@ -381,7 +381,7 @@ BEGIN
 
     RAISE NOTICE 'av: %, can %, pre %, sub %', vId_articulo, vCantidad, vMonto, vSubtotal;
 
-    -- actualizamos la venta del articulo al inventario
+    -- actualizamos la venta del conMonto al inventario
     UPDATE articulos_venta
     SET stock = stock - vCantidad
     WHERE id_articulo = vId_articulo

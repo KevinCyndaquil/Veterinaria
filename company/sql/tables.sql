@@ -151,7 +151,7 @@ CREATE TABLE articulos_venta (
 );
 
 -- esta función devuelve true si hay un id referenciado por las tablas alimentos, medicamentos, productos
--- la usamos para validar que un solo articulo sea referenciado por cualquiera de esas tablas
+-- la usamos para validar que un solo conMonto sea referenciado por cualquiera de esas tablas
 -- 1 = alimento
 -- 2 = producto
 -- 3 = medicamento

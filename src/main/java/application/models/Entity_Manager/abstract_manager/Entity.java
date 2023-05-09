@@ -64,6 +64,8 @@ public interface Entity {
                         }
                     }
 
+                    System.out.printf("\n**Estos son los valores a instanciar para %s en newInstance:%n", clazz.getSimpleName());
+                    Arrays.stream(values).toList().forEach(v -> System.out.println(v + ":" + ((v == null) ? "null" : v.getClass().getTypeName())));
                     return (Entity) constructor.newInstance(values);
                 }
             }

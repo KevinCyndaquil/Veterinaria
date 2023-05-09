@@ -1,12 +1,13 @@
 -- PROCEDIMIENTOS ALMACENADOS VETERINARIA VIDA
 
--- realiza el proceso de insertar un articulo a la factura, considerando lo siguiente:
+-- realiza el proceso de insertar un conMonto a la factura, considerando lo siguiente:
 -- 1. se debe insertar o actualizar el subtotal al monto total de la factura.
--- 2. una vez ingresa el articulo a la factura, hay que ponerlo en venta-
+-- 2. una vez ingresa el conMonto a la factura, hay que ponerlo en venta-
 -- 3. se debe insertar o actualizar el stock de los articulos en venta.
 
 CREATE OR REPLACE FUNCTION procesoDetalle_factura() RETURNS trigger AS $body$
 DECLARE
+    vId_proveedor integer;
     vMonto decimal(10, 2);
     vCantidad integer;
     vTipo varchar;
@@ -18,12 +19,23 @@ BEGIN
         new.cns_detalle_factura;
 
     -- obtenemos el precio del producto
-    SELECT INTO vMonto monto_compra
+    SELECT INTO vMonto, vId_proveedor monto_compra, id_proveedor
     FROM articulos
     WHERE id_articulo = new.id_articulo;
     IF NOT FOUND THEN
-        RAISE EXCEPTION 'ERROR: articuloVenta de id % no valido', new.id_articulo;
+        RAISE EXCEPTION 'ERROR: articulo de id % no valido', new.id_articulo;
     END IF;
+
+    IF (SELECT id_proveedor
+        FROM facturas_proveedor
+        WHERE id_factura = new.id_factura) != vId_proveedor THEN
+
+        RAISE EXCEPTION 'ERROR; articulo % de proveedor % no valido para la factura %',
+            new.id_articulo,
+            vId_proveedor,
+            new.id_factura;
+    END IF;
+
 
     -- seleccionamos la factura a actualizar y la bloqueamos
     PERFORM *
@@ -106,7 +118,7 @@ BEGIN
         END IF;
     END IF;
 
-    RAISE NOTICE 'articulo %, añadidos % a la factura % exitosamente',
+    RAISE NOTICE 'conMonto %, añadidos % a la factura % exitosamente',
         new.id_articulo,
         new.cantidad,
         new.id_factura;
@@ -117,10 +129,10 @@ $body$ LANGUAGE plpgsql;
 
 
 
--- agrega un articulo a un ticket de una compra, hay que considerar lo siguiente:
+-- agrega un conMonto a un ticket de una compra, hay que considerar lo siguiente:
 -- 1. el subtotal del detalle debe verse reflejado en el monto del ticket.
--- 2. hay que considerar el stock para poder vender un articulo.
--- 3. hay que restar la venta al stock del articulo.
+-- 2. hay que considerar el stock para poder vender un conMonto.
+-- 3. hay que restar la venta al stock del conMonto.
 
 CREATE OR REPLACE FUNCTION procesoDetalle_ticket() RETURNS trigger AS $body$
 DECLARE
@@ -146,7 +158,7 @@ BEGIN
       AND stock > 0;
     -- verificamos el stock
     IF NOT FOUND THEN
-        RAISE EXCEPTION 'articulo % sin existencias, no se puede realizar la venta', new.id_articulo;
+        RAISE EXCEPTION 'conMonto % sin existencias, no se puede realizar la venta', new.id_articulo;
     END IF;
 
     -- obtenemos el subtotal
@@ -178,7 +190,7 @@ BEGIN
     SET stock = stock - vCantidad
     WHERE id_articulo = new.id_articulo;
 
-    RAISE NOTICE 'articulo %, añadidos % al ticket % correctamente',
+    RAISE NOTICE 'conMonto %, añadidos % al ticket % correctamente',
         new.id_articulo,
         new.cantidad,
         new.id_ticket;
@@ -197,7 +209,6 @@ $body$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION procesoPagos() RETURNS trigger AS $body$
 DECLARE
     vComision decimal(10, 2);
-    vSubtotal decimal(10, 2);
     vMonto_total decimal(10, 2);
     vPago_total decimal(10, 2);
 BEGIN

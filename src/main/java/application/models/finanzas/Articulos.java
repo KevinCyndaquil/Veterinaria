@@ -5,17 +5,19 @@ import application.models.Entity_Manager.annotations.SqlAttribute;
 import application.models.Entity_Manager.annotations.SqlEntity;
 import application.models.Entity_Manager.annotations.SqlInstance;
 import application.models.Entity_Manager.annotations.SqlKey;
+import application.models.entidades.ConMonto;
 import application.models.entidades.Proveedores;
 import lombok.Getter;
 import lombok.Setter;
-import org.checkerframework.checker.units.qual.A;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
 
 @SqlEntity(value = "articulos", type = SqlEntity.GENERALIZED_CLASS)
-public class Articulos implements Entity {
+public class Articulos implements
+        Entity,
+        ConMonto {
     public static final String ALIMENTO = "alimento";
     public static final String MEDICAMENTO = "medicamento";
     public static final String PRODUCTO = "producto";
@@ -30,7 +32,6 @@ public class Articulos implements Entity {
     @Getter @Setter
     @SqlAttribute
     private String nombre;
-    @Getter @Setter
     @SqlAttribute
     private BigDecimal monto_compra;
     @Getter @Setter
@@ -57,6 +58,7 @@ public class Articulos implements Entity {
 
     public Articulos(Integer id_articulo) {
         this.id_articulo = id_articulo;
+        this.monto_compra = BigDecimal.ZERO;
     }
 
     @Override
@@ -74,6 +76,16 @@ public class Articulos implements Entity {
 
     @Override
     public String toString() {
-        return nombre + ", " + monto_compra + ", " + descripcion + ": " + proveedor.nombre();
+        return id_articulo + ", " + nombre + ", " + monto_compra + ", " + descripcion + ": " + proveedor;
+    }
+
+    @Override
+    public void monto(Float monto) {
+        monto_compra = new BigDecimal(monto);
+    }
+
+    @Override
+    public BigDecimal monto() {
+        return monto_compra;
     }
 }

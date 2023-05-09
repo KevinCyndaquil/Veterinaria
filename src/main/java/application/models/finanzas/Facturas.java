@@ -3,6 +3,7 @@ package application.models.finanzas;
 import application.models.Entity_Manager.annotations.SqlAttribute;
 import application.models.Entity_Manager.annotations.SqlInstance;
 import application.models.Entity_Manager.annotations.SqlKey;
+import application.models.entidades.ConMonto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,14 +11,14 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 
-@Setter
-@Getter
-public abstract class Facturas implements IGestorArticulos <Articulos> {
+public abstract class Facturas implements IGestorArticulos, ConMonto {
+    @Setter @Getter
     @SqlAttribute
     @SqlKey
     private Integer id_factura;
     @SqlAttribute
     private BigDecimal monto_total;
+    @Setter @Getter
     @SqlAttribute("fecha_factura")
     private Date fecha_generacion;
 
@@ -42,5 +43,15 @@ public abstract class Facturas implements IGestorArticulos <Articulos> {
     public Facturas(Integer id_factura) {
         this.id_factura = id_factura;
         this.monto_total = null;
+    }
+
+    @Override
+    public void monto(Float monto) {
+        this.monto_total = new BigDecimal(monto);
+    }
+
+    @Override
+    public BigDecimal monto() {
+        return monto_total;
     }
 }
