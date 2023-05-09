@@ -315,10 +315,12 @@ $body$ LANGUAGE plpgsql;
 
 INSERT INTO detalle_factura VALUES (1, 0, 10, 0, 1);
 INSERT INTO detalle_factura VALUES (1, 0, 5, 0, 2);
+INSERT INTO detalle_factura VALUES (1, 0, 2, 0, 3);
 DELETE FROM detalle_ticket WHERE id_ticket = 1;
 UPDATE tickets SET monto_total = 0, pago_total = 0, estatus = 'pendiente' WHERE id_ticket = 1;
 
 INSERT INTO detalle_ticket VALUES (1, 0, 10, 0, 1);
 INSERT INTO detalle_ticket VALUES (1, 0, 1, 0, 2);
+INSERT INTO detalle_ticket VALUES (1, 0, 1, 0, 3);
 
 INSERT INTO citas VALUES (DEFAULT,now()::date,'14:00:00'::time,'',15000,1,1,NULL,DEFAULT);
