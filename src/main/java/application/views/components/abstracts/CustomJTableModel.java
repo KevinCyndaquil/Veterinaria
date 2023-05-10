@@ -6,10 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Implemente un modelo para tablas que se puede implementar según las necesidades de la tabla,
@@ -19,11 +16,11 @@ import java.util.Map;
 public abstract class CustomJTableModel <Item> implements TableModel {
     protected final LinkedList<TableModelListener> subscribers;
     @Getter
-    protected final Map<Item, Integer> items;
+    protected final List<Item> items;
 
     public CustomJTableModel() {
         subscribers = new LinkedList<>();
-        items = new HashMap<>();
+        items = new ArrayList<>();
     }
 
     @Override
@@ -44,13 +41,45 @@ public abstract class CustomJTableModel <Item> implements TableModel {
                 getRowCount() - 1,
                 getRowCount() - 1,
                 TableModelEvent.ALL_COLUMNS,
+                TableModelEvent.DELETE);
+
+        subscribers.forEach(s -> s.tableChanged(event));
+    }
+
+    public void addItem(@NotNull Item item) {
+        items.add(item);
+
+        TableModelEvent event = new TableModelEvent(
+                this,
+                getRowCount() - 1,
+                getRowCount() - 1,
+                TableModelEvent.ALL_COLUMNS,
                 TableModelEvent.INSERT);
 
         subscribers.forEach(s -> s.tableChanged(event));
     }
 
-    public abstract void addItem(@NotNull Map.Entry<Item, Integer> item);
-    public abstract void addItems(@NotNull Map<Item, Integer> list);
-    public abstract Map.Entry<Item, Integer> getItem(int rowIndex);
-    public abstract void removeItem(@NotNull Map.Entry<Item, Integer> item);
+    @Override
+    public int getRowCount() {
+        return items.size();
+    }
+
+    public void addItems(@NotNull List<Item> list) {
+        list.forEach(this::addItem);
+    }
+    public Item getItem(int rowIndex) {
+        return items.get(rowIndex);
+    }
+    public void removeItem(@NotNull Item item) {
+        items.remove(item);
+
+        TableModelEvent event = new TableModelEvent(
+                this,
+                getRowCount() - 1,
+                getRowCount() - 1,
+                TableModelEvent.ALL_COLUMNS,
+                TableModelEvent.INSERT);
+
+        subscribers.forEach(s -> s.tableChanged(event));
+    }
 }

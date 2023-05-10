@@ -41,10 +41,10 @@ public class CellDetalleFacturaCellRenderer extends DefaultTableCellRenderer {
             this.setHorizontalAlignment(CENTER);
 
         if (selected)
-            this.setBackground(new Color(201, 183, 183));
+            this.setBackground(new Color(183, 201, 200));
 
         if (focused)
-            this.setBackground(new Color(126, 110, 93));
+            this.setBackground(new Color(47, 51, 80));
 
         this.setText(value.toString());
 

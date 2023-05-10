@@ -1,15 +1,12 @@
 package application.views.FacturaChooser.FacturaDisplay;
 
-import application.models.finanzas.Articulos;
+import application.models.detalles.DetalleFactura;
 import application.views.components.abstracts.CustomJTableModel;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.event.TableModelEvent;
-import java.text.DecimalFormat;
-import java.util.Map;
 
-public class TableDetalleFacturaModel extends CustomJTableModel<Articulos> {
+public class TableDetalleFacturaModel extends CustomJTableModel<DetalleFactura> {
     public static String[] titles = new String[]{
             "Nombre",
             "Cantidad",
@@ -24,57 +21,6 @@ public class TableDetalleFacturaModel extends CustomJTableModel<Articulos> {
             Double.class,
             String.class
     };
-
-    @Override
-    public void addItem(@NotNull Map.Entry<Articulos, Integer> articulo) {
-        items.put(articulo.getKey(), articulo.getValue());
-
-        TableModelEvent event = new TableModelEvent(
-                this,
-                getRowCount() - 1,
-                getRowCount() - 1,
-                TableModelEvent.ALL_COLUMNS,
-                TableModelEvent.INSERT);
-
-        subscribers.forEach(s -> s.tableChanged(event));
-    }
-
-    @Override
-    public void addItems(@NotNull Map<Articulos, Integer> list) {
-        list.forEach((a, c) -> addItem(Map.entry(a, c)));
-    }
-
-    @Override
-    public Map.Entry<Articulos, Integer> getItem(int rowIndex) {
-        int i = 0;
-
-        for (Map.Entry<Articulos, Integer> entry : items.entrySet()) {
-            if (i == rowIndex)
-                return entry;
-            i++;
-        }
-
-        return null;
-    }
-
-    @Override
-    public void removeItem(@NotNull Map.Entry<Articulos, Integer> articulo) {
-        items.remove(articulo.getKey());
-
-        TableModelEvent event = new TableModelEvent(
-                this,
-                getRowCount() - 1,
-                getRowCount() - 1,
-                TableModelEvent.ALL_COLUMNS,
-                TableModelEvent.INSERT);
-
-        subscribers.forEach(s -> s.tableChanged(event));
-    }
-
-    @Override
-    public int getRowCount() {
-        return items.size();
-    }
 
     @Override
     public int getColumnCount() {
@@ -99,29 +45,28 @@ public class TableDetalleFacturaModel extends CustomJTableModel<Articulos> {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        var detalle_factura = getItem(rowIndex);
-        Articulos articulo = detalle_factura.getKey();
-        String tipo = articulo.getTipo();
+        DetalleFactura detalleFactura = getItem(rowIndex);
 
         return switch (columnIndex) {
-            case 0 -> articulo.getNombre();
-            case 1 -> detalle_factura.getValue();
-            case 2 -> articulo.monto();
-            case 3 -> Double.parseDouble((new DecimalFormat("#.##")).format(articulo.monto().doubleValue() * detalle_factura.getValue()));
-            case 4 -> tipo.toUpperCase();
+            case 0 -> detalleFactura.getArticulo().getNombre();
+            case 1 -> detalleFactura.cantidad();
+            case 2 -> detalleFactura.getArticulo().monto();
+            case 3 -> detalleFactura.monto();
+            case 4 -> detalleFactura.getArticulo().getTipo();
             default -> null;
         };
     }
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        var detalle_factura = getItem(rowIndex);
-        Articulos articulo = detalle_factura.getKey();
+        DetalleFactura detalleFactura = getItem(rowIndex);
 
         try {
             switch (columnIndex) {
-                case 0 -> articulo.setNombre((String) aValue);
-                case 1 -> detalle_factura.setValue((Integer) aValue);
+                case 0 -> detalleFactura.getArticulo().setNombre((String) aValue);
+                case 1 -> {
+                    detalleFactura.cantidad((Integer) aValue);
+                }
                 default -> System.out.println("campo no editable");
             }
         } catch (ClassCastException ex1) {

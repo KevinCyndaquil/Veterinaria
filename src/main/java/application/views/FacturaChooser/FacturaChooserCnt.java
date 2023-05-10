@@ -2,13 +2,13 @@ package application.views.FacturaChooser;
 
 import application.MessageDialog;
 import application.database.Postgres;
-import application.database.repository.FacturaProveedorRep;
+import application.database.repository.FacturaRepository;
 import application.models.Entity_Manager.repositories.Find;
 import application.models.Entity_Manager.repositories.Repository;
 import application.models.Entity_Manager.repositories.Save;
 import application.models.entidades.Proveedores;
 import application.models.finanzas.FacturasProveedor;
-import application.views.FacturaChooser.FacturaDisplay.DetalleFactura;
+import application.views.FacturaChooser.FacturaDisplay.DetalleFacturaCnt;
 import application.views.components.interfaces.ComboBoxController;
 import application.views.components.interfaces.TableController;
 import application.views.components.interfaces.ViewerController;
@@ -18,11 +18,11 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class FacturaChooser extends ViewerController<FacturaChooserView> implements
+public class FacturaChooserCnt extends ViewerController<FacturaChooserView> implements
         ComboBoxController,
         TableController {
 
-    public FacturaChooser() {
+    public FacturaChooserCnt() {
         super(new FacturaChooserView());
         refreshComboBoxes();
         refreshTables();
@@ -34,9 +34,17 @@ public class FacturaChooser extends ViewerController<FacturaChooserView> impleme
 
         //botones
         view.btnInsertar.addActionListener(e -> {
-            Integer id_factura = (view.fldId_factura.getText().equals("")) ?
-                    null :
-                    Integer.parseInt(view.fldId_factura.getText());
+            String folio = view.fldId_factura.getText();
+            Integer id_factura;
+
+            try {
+                id_factura = (folio.equals("")) ? null : Integer.parseInt(folio);
+            } catch (NumberFormatException ex) {
+                MessageDialog.stupidMessage(
+                        view,
+                        "El folio de la factura debe ser un número");
+                return;
+            }
 
             FacturasProveedor factura = new FacturasProveedor(
                     id_factura,
@@ -68,12 +76,22 @@ public class FacturaChooser extends ViewerController<FacturaChooserView> impleme
         view.btnConsultar.addActionListener(e -> {
             DefaultTableModel model = (DefaultTableModel) view.tblFacturas.getModel();
 
-            FacturasProveedor factura = new FacturasProveedor((Integer) model
-                    .getValueAt(view.tblFacturas.getSelectedRow(), 0));
+            int selectedRow = view.tblFacturas.getSelectedRow();
 
+            if (selectedRow == -1) {
+                MessageDialog.uncertainMessage(
+                        view,
+                        "Selecciona una factura para poder consultar");
+                return;
+            }
+
+            int id_factura = (Integer) model
+                    .getValueAt(selectedRow, 0);
+            FacturasProveedor factura = new FacturasProveedor(id_factura);
+
+            FacturaRepository facRep = new FacturaRepository(new Postgres());
             try {
-                factura = (new FacturaProveedorRep(new Postgres()))
-                        .findByIdWithAllArticles(factura);
+                factura = facRep.findByIdAsTable(factura);
             } catch (SQLException ex) {
                 MessageDialog.queryErrorMessage(
                         view,
@@ -82,7 +100,7 @@ public class FacturaChooser extends ViewerController<FacturaChooserView> impleme
                 throw new RuntimeException(ex);
             }
 
-            new DetalleFactura(factura);
+            new DetalleFacturaCnt(factura);
         });
     }
 
@@ -105,7 +123,7 @@ public class FacturaChooser extends ViewerController<FacturaChooserView> impleme
 
     @Override
     public void refreshTables() {
-        Find<FacturasProveedor> findF = new FacturaProveedorRep(new Postgres());
+        Find<FacturasProveedor> findF = new FacturaRepository(new Postgres());
 
         Date fecha = new Date(view.dateChooser.getDate().getTime());
         DefaultTableModel model = (DefaultTableModel) view.tblFacturas.getModel();
@@ -130,6 +148,6 @@ public class FacturaChooser extends ViewerController<FacturaChooserView> impleme
     }
 
     public static void main(String[] args) {
-        new FacturaChooser();
+        new FacturaChooserCnt();
     }
 }

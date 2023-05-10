@@ -6,7 +6,6 @@ import application.models.Entity_Manager.annotations.SqlEntity;
 import application.models.Entity_Manager.annotations.SqlInstance;
 import application.models.Entity_Manager.annotations.SqlKey;
 import application.models.finanzas.Articulos;
-import application.models.finanzas.ArticulosGramaje;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -9,7 +9,7 @@ public class HeaderDetalleFacturaCellRenderer implements TableCellRenderer {
     private final Color textColor;
 
     public HeaderDetalleFacturaCellRenderer() {
-        headColor = new Color(117, 38, 4);
+        headColor = null;
         textColor = new Color(255, 255, 255);
     }
     @Override

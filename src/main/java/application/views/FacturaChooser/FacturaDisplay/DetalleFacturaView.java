@@ -34,10 +34,7 @@ public class DetalleFacturaView extends CustomJFrame {
         title.setVerticalAlignment(SwingConstants.CENTER);
         panel.add(title);
 
-        //mdlFacturas = new TableDetalleFacturaModel();
         tblDetalleFacturas = new JTable(new DefaultTableModel());
-        //le asignamos el estilo a las cabezas
-        formatoTabla();
 
         sclFacturas = new JScrollPane(tblDetalleFacturas);
         sclFacturas.setColumnHeaderView(tblDetalleFacturas.getTableHeader());
@@ -62,23 +59,9 @@ public class DetalleFacturaView extends CustomJFrame {
                 sclFacturas.setBounds(0, 90, getWidth(), getHeight() - 110);
                 tblDetalleFacturas.setBounds(0, 90, getWidth(), getHeight() - 110);
 
-                btnActualizar.setBounds(520, 20, 150, 50);
+                btnActualizar.setBounds(getWidth() - 180, 20, 150, 50);
             }
         });
-    }
-
-    public void formatoTabla() {
-        /*if (tblDetalleFacturas == null)
-            return;
-
-        headerDetalleFacturaCellRenderer = new HeaderDetalleFacturaCellRenderer();
-        JTableHeader jTableHeader = tblDetalleFacturas.getTableHeader();
-        jTableHeader.setDefaultRenderer(headerDetalleFacturaCellRenderer);
-        tblDetalleFacturas.setTableHeader(jTableHeader);
-
-        //le asignamos el estilo a todas las celdas
-        tblDetalleFacturas.getColumnModel().getColumns().asIterator()
-                .forEachRemaining(c -> c.setCellRenderer(new CellDetalleFacturaCellRenderer()));*/
     }
 
     //components
@@ -86,8 +69,6 @@ public class DetalleFacturaView extends CustomJFrame {
 
     public TextDisplay title;
 
-    public TableDetalleFacturaModel mdlFacturas;
-    public HeaderDetalleFacturaCellRenderer headerDetalleFacturaCellRenderer;
     public JTable tblDetalleFacturas;
     public JScrollPane sclFacturas;
 

@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @SqlEntity("detalle_ticket")
-public class DetalleTicket extends DetalleSubtotal{
+public class DetalleTicket extends DetalleArticulo {
     @SqlAttribute
     @SqlKey(SqlKey.FOREIGN_KEY)
     private ArticulosVenta articuloVenta;
@@ -51,5 +51,11 @@ public class DetalleTicket extends DetalleSubtotal{
         if (obj instanceof ArticulosVenta a)
             return this.articuloVenta.equals(a);
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "ticket: " + id_ticket +"\narticulo: " + articuloVenta + "\ncantidad: " + cantidad() +
+                "\nmonto: $" + monto();
     }
 }

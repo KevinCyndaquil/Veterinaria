@@ -2,14 +2,16 @@ package application.models.finanzas;
 
 import application.models.detalles.Pagos;
 import application.models.entidades.ConCantidad;
+import application.models.entidades.ConMonto;
 
+import java.util.Collection;
 import java.util.List;
 
-public interface IGestorPagos {
+public interface IGestorPagos <P extends ConMonto> {
 
-    Estatus agregarPago(ConCantidad pago);
-    Estatus agregarPagos(List<ConCantidad> pagos);
-    Estatus eliminarPago(ConCantidad pago);
-    Estatus modificarPago(ConCantidad pago);
+    Estatus agregarPago(P p);
+    Estatus agregarPagos(Collection<P> collection);
+    Estatus eliminarPago(P p);
+    Estatus modificarPago(P p);
 
 }

@@ -1,17 +1,11 @@
 package application;
 
-import application.models.Entity_Manager.repositories.Repository;
-import application.models.Entity_Manager.repositories.Save;
-import application.database.Postgres;
-import application.models.detalles.DetalleFacturas;
-import application.models.entidades.Alimentos;
+import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.detalles.DetalleFactura;
 import application.models.entidades.Proveedores;
 import application.models.finanzas.Articulos;
-import application.models.finanzas.FacturasProveedor;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
@@ -33,7 +27,7 @@ public class Main {
                         10, proveedor, "TECATE AZUL", new BigDecimal(115), "NO SE")
         );
 
-        List<Alimentos> alimentos = List.of(
+        /*List<Alimentos> alimentos = List.of(
                 new Alimentos(
                         articulos.get(0),
                         600f),
@@ -49,20 +43,27 @@ public class Main {
                 Date.valueOf("2023-05-09"),
                 proveedor);
 
-        Save<DetalleFacturas> save = new Repository<>(new Postgres());
+        Save<DetalleFactura> save = new Repository<>(new Postgres());
 
         factura.agregarArticulo(alimentos.get(0).getArticulo(), 2);
         factura.agregarArticulo(alimentos.get(1).getArticulo(), 10);
         factura.agregarArticulo(alimentos.get(2).getArticulo(), 8);
 
-        factura.getDetalle().forEach(System.out::println);
+        factura.getDetalleArticulos().forEach(System.out::println);
 
         try {
-            for (DetalleFacturas d : factura.getDetalle()) {
+            for (DetalleFactura d : factura.getDetalleArticulos()) {
                 System.out.println(save.save(d));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        }*/
+        /*
+        DetalleFactura detalle1 = new DetalleFactura(articulos.get(0), 1, 1, 10);
+        DetalleFactura detalle2 = new DetalleFactura(articulos.get(1), 1, 1, 10);
+
+        System.out.println(detalle1.equals(articulos.get(1)));*/
+
+        System.out.println(Entity.columns(DetalleFactura.class));
     }
 }

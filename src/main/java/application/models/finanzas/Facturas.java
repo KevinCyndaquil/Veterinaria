@@ -3,15 +3,16 @@ package application.models.finanzas;
 import application.models.Entity_Manager.annotations.SqlAttribute;
 import application.models.Entity_Manager.annotations.SqlInstance;
 import application.models.Entity_Manager.annotations.SqlKey;
+import application.models.detalles.DetalleFactura;
 import application.models.entidades.ConMonto;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.LocalDate;
 
-public abstract class Facturas implements IGestorArticulos, ConMonto {
+public abstract class Facturas implements
+        ConMonto {
     @Setter @Getter
     @SqlAttribute
     @SqlKey
@@ -46,8 +47,8 @@ public abstract class Facturas implements IGestorArticulos, ConMonto {
     }
 
     @Override
-    public void monto(Float monto) {
-        this.monto_total = new BigDecimal(monto);
+    public BigDecimal monto(BigDecimal monto) {
+        return monto_total = monto;
     }
 
     @Override

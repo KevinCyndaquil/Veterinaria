@@ -59,5 +59,12 @@ public class MessageDialog {
                 Icons.get(Icons.HAPPY_SUCROUSE));
     }
 
-
+    public static void stupidMessage(JFrame view, String message) {
+        JOptionPane.showMessageDialog(
+                view,
+                message,
+                "are you kidding me?",
+                JOptionPane.INFORMATION_MESSAGE,
+                Icons.get(Icons.AMBER_OUTTA_MY_WAY));
+    }
 }

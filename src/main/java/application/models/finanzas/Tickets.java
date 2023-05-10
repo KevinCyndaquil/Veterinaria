@@ -6,7 +6,6 @@ import application.models.Entity_Manager.annotations.SqlEntity;
 import application.models.Entity_Manager.annotations.SqlKey;
 import application.models.detalles.DetalleTicket;
 import application.models.detalles.Pagos;
-import application.models.entidades.ConCantidad;
 import application.models.entidades.ConMonto;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,8 +20,8 @@ import java.util.*;
 
 @SqlEntity("tickets")
 public class Tickets implements
-        IGestorPagos,
-        IGestorArticulos,
+        IGestorPagos<Pagos>,
+        IGestorArticulos<DetalleTicket>,
         ConMonto,
         Entity {
 
@@ -32,6 +31,8 @@ public class Tickets implements
     private int id_ticket;
     @SqlAttribute
     private BigDecimal monto_total;
+    @SqlAttribute("pago_total")
+    private BigDecimal pagoTotal;
     @Getter @Setter
     @SqlAttribute("fecha_cobro")
     private LocalDate fecha;
@@ -42,7 +43,7 @@ public class Tickets implements
     @SqlAttribute("estatus")
     private Estatus estatusTicket;
 
-    private final List<DetalleTicket> detalle;
+    private final List<DetalleTicket> detalleArticulos;
     private final List<Pagos> pagos;
 
 
@@ -52,7 +53,10 @@ public class Tickets implements
         this.hora = hora;
         this.estatusTicket = estatusTicket;
 
-        detalle = new ArrayList<>();
+        pagoTotal = BigDecimal.ZERO;
+        monto_total = BigDecimal.ZERO;
+
+        detalleArticulos = new ArrayList<>();
         pagos = new ArrayList<>();
     }
 
@@ -61,7 +65,10 @@ public class Tickets implements
         this.hora = hora;
         this.estatusTicket = Estatus.PENDIENTE;
 
-        detalle = new ArrayList<>();
+        pagoTotal = BigDecimal.ZERO;
+        monto_total = BigDecimal.ZERO;
+
+        detalleArticulos = new ArrayList<>();
         pagos = new ArrayList<>();
     }
 
@@ -74,121 +81,110 @@ public class Tickets implements
     }
 
     @Override
-    public boolean agregarArticulo(ConMonto articulo, Integer cantidad) {
-        if (articulo == null || cantidad <= 0) return false;
-
-        detalle.add(DetalleTicket.valueOf(articulo, cantidad));
-        return true;
-    }
-
-    @Override
-    public boolean agregarArticulos(Collection<ConCantidad> articulos) {
-        if (articulos == null)
-            return false;
-
-        articulos.forEach(a -> detalle.add((DetalleTicket) a));
-        return true;
-    }
-
-    @Override
-    public boolean eliminarArticulo(ConMonto articulo) {
-        if (articulo == null) return false;
-
-        if (detalle.contains(DetalleTicket.valueOf(articulo, 0))) {
-            detalle.forEach(d -> {
-                if (d.getArticuloVenta().equals(articulo))
-                    detalle.remove(d);
-            });
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean eliminarArticulos() {
-        detalle.clear();
-
-        return true;
-    }
-
-    @Override
-    public boolean modificarCantidad(ConMonto articulo, Integer cantidad) {
-        if (articulo == null || cantidad == null || cantidad <= 0) return false;
-
-        //detalle.stream().map(DetalleTicket::getArticuloVenta).(BigDecimal.ZERO, Integer)
-
-        detalle.forEach(d -> {
-            if (d.getArticuloVenta().equals(articulo))
-                d.cantidad(cantidad);
-        });
-        monto(monto().add(
-                articulo.monto().multiply(
-                        BigDecimal.valueOf(cantidad))).floatValue());
-        return true;
-    }
-
-    @Override
-    public Integer consultarArticulo(ConMonto articulo) {
-        if (articulo == null)
-            return null;
-
-        for (DetalleTicket d : detalle) {
-            if (d.getArticuloVenta().equals(articulo))
-                return detalle.indexOf(d);
-        }
-
-        return 0;
-    }
-
-    @Override
-    public void consultarArticulos() {
-        detalle.forEach((d) -> System.out.println("Articulo de venta: " + d.getArticuloVenta() +
-                "\nCantidad: " + d.cantidad() +
-                "\nMonto: $" + d.monto()));
-    }
-
-    @Override
-    public Estatus agregarPago(ConCantidad pago) {
+    public Estatus agregarPago(Pagos pago) {
         if (pago == null) return estatusTicket;
 
-        pagos.add((Pagos) pago);
+        pagos.add( pago);
+        pagoTotal = pagoTotal.add(pago.monto());
+
         validarStatus();
         return estatusTicket;
     }
 
     @Override
-    public Estatus agregarPagos(@NotNull List<ConCantidad> pagos) {
+    public Estatus agregarPagos(@NotNull Collection<Pagos> pagos) {
         pagos.forEach(this::agregarPago);
 
         return estatusTicket;
     }
 
     @Override
-    public Estatus eliminarPago(ConCantidad pago) {
+    public Estatus eliminarPago(Pagos pago) {
         if (pago == null) return null;
 
-        pagos.remove((Pagos) pago);
+        pagos.remove( pago);
+        pagoTotal = pagoTotal.subtract(pago.monto());
         validarStatus();
         return estatusTicket;
     }
 
     @Override
-    public Estatus modificarPago(ConCantidad pago) {
+    public Estatus modificarPago(Pagos pago) {
         if (pago == null) return estatusTicket;
 
-        pagos.remove((Pagos) pago);
-        pagos.add((Pagos) pago);
+        eliminarPago(pago);
+        agregarPago(pago);
         validarStatus();
         return estatusTicket;
     }
 
     @Override
-    public void monto(Float monto) {
-        this.monto_total = new BigDecimal(monto);
+    public BigDecimal monto(BigDecimal monto) {
+        return monto_total = monto;
     }
 
     @Override
     public BigDecimal monto() {
         return monto_total;
+    }
+
+    @Override
+    public boolean agregarArticulo(DetalleTicket detalleTicket) {
+        if (detalleTicket == null) return false;
+
+        monto(monto().add(detalleTicket.monto()));
+        return detalleArticulos.add(detalleTicket);
+    }
+
+    @Override
+    public boolean agregarArticulos(Collection<DetalleTicket> collection) {
+        if (collection == null) return false;
+        if (collection.isEmpty()) return false;
+
+        collection.forEach(this::agregarArticulo);
+        return true;
+    }
+
+    @Override
+    public boolean eliminarArticulo(DetalleTicket detalleTicket) {
+        if (detalleTicket == null) return false;
+
+        monto(monto().subtract(detalleTicket.monto()));
+        return detalleArticulos.remove(detalleTicket);
+    }
+
+    @Override
+    public boolean eliminarArticulos() {
+        detalleArticulos.forEach(this::eliminarArticulo);
+        return true;
+    }
+
+    @Override
+    public Integer modificarCantidad(DetalleTicket detalleTicket) {
+        if (detalleTicket == null) return null;
+
+        detalleArticulos.forEach(d -> {
+            if (d.equals(detalleTicket))
+                d.cantidad(detalleTicket.cantidad());
+        });
+
+        return detalleTicket.cantidad();
+    }
+
+    @Override
+    public String consultarArticulo(DetalleTicket detalleTicket) {
+        if (detalleTicket == null) return null;
+
+        for (DetalleTicket d : detalleArticulos) {
+            if (d.equals(detalleTicket)) return d.toString();
+        }
+
+        return "0~";
+    }
+
+    @Override
+    public void consultarArticulos() {
+        detalleArticulos.stream()
+                .map(this::consultarArticulo).toList().forEach(System.out::println);
     }
 }

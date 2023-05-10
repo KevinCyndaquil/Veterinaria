@@ -2,26 +2,20 @@ package application.views.FacturaChooser.FacturaDisplay;
 
 import application.MessageDialog;
 import application.database.Postgres;
-import application.database.repository.FacturaProveedorRep;
-import application.models.entidades.Proveedores;
+import application.database.repository.FacturaRepository;
 import application.models.finanzas.FacturasProveedor;
 import application.views.components.interfaces.TableController;
 import application.views.components.interfaces.ViewerController;
-import lombok.Setter;
 
-import javax.swing.table.DefaultTableModel;
-import java.sql.Date;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 import java.sql.SQLException;
 
-public class DetalleFactura extends ViewerController <DetalleFacturaView> implements TableController {
-    @Setter
-    private Date fecha;
-    @Setter
-    private Proveedores proveedor;
+public class DetalleFacturaCnt extends ViewerController <DetalleFacturaView> implements TableController {
     private final FacturasProveedor factura;
 
 
-    public DetalleFactura(FacturasProveedor factura) {
+    public DetalleFacturaCnt(FacturasProveedor factura) {
         super(new DetalleFacturaView());
         this.factura = factura;
 
@@ -35,11 +29,16 @@ public class DetalleFactura extends ViewerController <DetalleFacturaView> implem
 
     @Override
     public void refreshTables() {
-        ((DefaultTableModel) view.tblDetalleFacturas.getModel()).setRowCount(0);
         TableDetalleFacturaModel model = new TableDetalleFacturaModel();
+        JTableHeader tblHeader = view.tblDetalleFacturas.getTableHeader();
+        tblHeader.setDefaultRenderer(new HeaderDetalleFacturaCellRenderer());
 
-        //model.addItems(factura.getDetalle());
+        factura.getDetalleArticulos().forEach(model::addItem);
         view.tblDetalleFacturas.setModel(model);
+        view.tblDetalleFacturas.setTableHeader(tblHeader);
+
+        view.tblDetalleFacturas.getColumnModel().getColumns().asIterator()
+                .forEachRemaining(c -> c.setCellRenderer(new CellDetalleFacturaCellRenderer()));
     }
 
     public void actualizarDetalle() {
@@ -50,29 +49,26 @@ public class DetalleFactura extends ViewerController <DetalleFacturaView> implem
             return;
         }
 
-
         TableDetalleFacturaModel model = (TableDetalleFacturaModel) view.tblDetalleFacturas.getModel();
 
+        factura.eliminarArticulos();
+
+        FacturaRepository facRep = new FacturaRepository(new Postgres());
+
+        model.getItems().forEach(d -> {
+            if (d.cantidad() > 0) {
+                factura.agregarArticulo(d);
+                System.out.println("*********CNS:" + d.getCns());
+            }
+
+        });
+
+        System.out.println(factura.getDetalleArticulos());
         try {
-            //factura.eliminarArticulos();
-
-            model.getItems().forEach((a, c) -> {
-                if (c > 0)
-                    factura.agregarArticulo(a, c);
-
-                System.out.println(a);
-            });
-
-            System.out.println(factura.getDetalle());
-
-            FacturaProveedorRep update = new FacturaProveedorRep(new Postgres());
-
-            update.updateDetalle(factura);
-
-            MessageDialog.querySuccessMessage(
-                    view,
-                    "Articulos %s actualizados correctamente".formatted(factura.getDetalle()));
-
+            if (facRep.updateDetalleArticulos(factura))
+                MessageDialog.querySuccessMessage(
+                        view,
+                        "Articulos %s actualizados correctamente".formatted(factura.getDetalleArticulos()));
         } catch (SQLException e) {
             MessageDialog.queryErrorMessage(
                     view,
@@ -80,9 +76,6 @@ public class DetalleFactura extends ViewerController <DetalleFacturaView> implem
             throw new RuntimeException(e);
         }
 
-        model.getItems().forEach((a, c) -> {
-
-        });
-
+        refreshTables();
     }
 }

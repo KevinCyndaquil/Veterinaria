@@ -1,10 +1,10 @@
 package application.models.detalles;
 
+import application.models.Entity_Manager.abstract_manager.Entity;
 import application.models.Entity_Manager.annotations.SqlAttribute;
 import application.models.Entity_Manager.annotations.SqlEntity;
 import application.models.Entity_Manager.annotations.SqlInstance;
 import application.models.Entity_Manager.annotations.SqlKey;
-import application.models.entidades.ConMonto;
 import application.models.finanzas.Articulos;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @SqlEntity("detalle_factura")
-public class DetalleFacturas extends DetalleSubtotal {
+public class DetalleFactura extends DetalleArticulo<Articulos> implements Entity {
     @SqlAttribute
     @SqlKey(SqlKey.FOREIGN_KEY)
     private Articulos articulo;
@@ -26,33 +26,56 @@ public class DetalleFacturas extends DetalleSubtotal {
     private Integer cns;
 
     @SqlInstance
-    public DetalleFacturas(Articulos articulo, Integer id_factura, Integer cns, Integer cantidad, BigDecimal subtotal) {
+    public DetalleFactura(Articulos articulo,
+                          Integer id_factura,
+                          Integer cns,
+                          Integer cantidad,
+                          BigDecimal subtotal) {
         super(cantidad, subtotal, articulo);
         this.articulo = articulo;
         this.id_factura = id_factura;
         this.cns = cns;
     }
 
-    public DetalleFacturas(Articulos articulo, Integer cantidad) {
+    public DetalleFactura(Articulos articulo, Integer id_factura, Integer cns, Integer cantidad) {
         super(cantidad, articulo);
         this.articulo = articulo;
-        calcular(cantidad);
+        this.id_factura = id_factura;
+        this.cns = cns;
+    }
+
+    public DetalleFactura(Articulos articulo, Integer cantidad) {
+        super(cantidad, articulo);
+        this.articulo = articulo;
+    }
+
+    public DetalleFactura(int id_factura) {
+        super(null, null);
+        this.id_factura = id_factura;
+    }
+
+    public DetalleFactura() {
+        super(null, null);
     }
 
     @Contract("_, _ -> new")
-    public static @NotNull DetalleFacturas valueOf(@NotNull ConMonto conMonto, Integer cantidad) {
-        return new DetalleFacturas(
-                (Articulos) conMonto,
+    public static @NotNull DetalleFactura of(@NotNull Articulos articulo, Integer cantidad) {
+        return new DetalleFactura(
+                articulo,
                 cantidad);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        if (obj instanceof Articulos a)
-            return this.articulo.equals(a);
+        if (obj == null) return false;
+        if (obj instanceof Articulos a) return this.articulo.equals(a);
+        if (obj instanceof DetalleFactura d) return this.articulo.equals(d.articulo);
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return articulo.getId_articulo();
     }
 
     @Override

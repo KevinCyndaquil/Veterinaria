@@ -80,8 +80,8 @@ public class Articulos implements
     }
 
     @Override
-    public void monto(Float monto) {
-        monto_compra = new BigDecimal(monto);
+    public BigDecimal monto(BigDecimal monto) {
+        return monto_compra = monto;
     }
 
     @Override

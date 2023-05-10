@@ -1,8 +1,9 @@
 package application.models.entidades;
 
+import java.math.BigDecimal;
+
 public interface ConCantidad {
-    void cantidad(Integer cantidad);
+    Integer cantidad(int cantidad);
     Integer cantidad();
-    void calcular(Integer cantidad);
-    void descontar(Integer cantidad);
+    BigDecimal calcular();
 }

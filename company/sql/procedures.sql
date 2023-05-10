@@ -1,8 +1,8 @@
 -- PROCEDIMIENTOS ALMACENADOS VETERINARIA VIDA
 
--- realiza el proceso de insertar un conMonto a la factura, considerando lo siguiente:
+-- realiza el proceso de insertar un a a la factura, considerando lo siguiente:
 -- 1. se debe insertar o actualizar el subtotal al monto total de la factura.
--- 2. una vez ingresa el conMonto a la factura, hay que ponerlo en venta-
+-- 2. una vez ingresa el a a la factura, hay que ponerlo en venta-
 -- 3. se debe insertar o actualizar el stock de los articulos en venta.
 
 CREATE OR REPLACE FUNCTION procesoDetalle_factura() RETURNS trigger AS $body$
@@ -118,7 +118,7 @@ BEGIN
         END IF;
     END IF;
 
-    RAISE NOTICE 'conMonto %, añadidos % a la factura % exitosamente',
+    RAISE NOTICE 'a %, añadidos % a la factura % exitosamente',
         new.id_articulo,
         new.cantidad,
         new.id_factura;
@@ -129,10 +129,10 @@ $body$ LANGUAGE plpgsql;
 
 
 
--- agrega un conMonto a un ticket de una compra, hay que considerar lo siguiente:
+-- agrega un a a un ticket de una compra, hay que considerar lo siguiente:
 -- 1. el subtotal del detalle debe verse reflejado en el monto del ticket.
--- 2. hay que considerar el stock para poder vender un conMonto.
--- 3. hay que restar la venta al stock del conMonto.
+-- 2. hay que considerar el stock para poder vender un a.
+-- 3. hay que restar la venta al stock del a.
 
 CREATE OR REPLACE FUNCTION procesoDetalle_ticket() RETURNS trigger AS $body$
 DECLARE
@@ -158,7 +158,7 @@ BEGIN
       AND stock > 0;
     -- verificamos el stock
     IF NOT FOUND THEN
-        RAISE EXCEPTION 'conMonto % sin existencias, no se puede realizar la venta', new.id_articulo;
+        RAISE EXCEPTION 'a % sin existencias, no se puede realizar la venta', new.id_articulo;
     END IF;
 
     -- obtenemos el subtotal
@@ -190,7 +190,7 @@ BEGIN
     SET stock = stock - vCantidad
     WHERE id_articulo = new.id_articulo;
 
-    RAISE NOTICE 'conMonto %, añadidos % al ticket % correctamente',
+    RAISE NOTICE 'a %, añadidos % al ticket % correctamente',
         new.id_articulo,
         new.cantidad,
         new.id_ticket;
