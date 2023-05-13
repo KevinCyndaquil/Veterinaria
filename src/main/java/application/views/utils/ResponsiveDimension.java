@@ -8,20 +8,13 @@ public class ResponsiveDimension {
         return toolkit.getScreenSize();
     }
     //return the resolution preferred for the app depending on the screen size
-    public static Resolutions getNextResolution() {
+    public static Resolutions getNextResolution() throws NullPointerException {
         Dimension screenSize = getScreenSize();
 
         if (screenSize.equals(Resolutions.FULL_HD.getSize())) {
-            return Resolutions.WXGA;
+            return Resolutions.FULL_HD;
         } else if (screenSize.equals(Resolutions.WXGA.getSize())) {
-            return Resolutions.HD;
-        } else if (screenSize.equals(Resolutions.HD.getSize())) {
-            return Resolutions.QHD;
-        } else if (screenSize.equals(Resolutions.QHD.getSize())) {
-            return Resolutions.FWVGA;
-        } else {
-            return Resolutions.FWVGA;
-        }
+            return Resolutions.WXGA;
+        } else return null;
     }
-
 }

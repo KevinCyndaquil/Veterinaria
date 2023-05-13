@@ -1,15 +1,14 @@
 package application.models.Entity_Manager.abstract_manager;
 
 import application.models.Entity_Manager.annotations.*;
+import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.lang.annotation.Annotation;
+
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Proxy;
 import java.util.*;
 
 /**
@@ -44,7 +43,7 @@ public interface Entity {
 
 
     @Contract(pure = true)
-    static @Nullable Entity newInstance(@NotNull Class<?> clazz, Object[] params) {
+    static Entity newInstance(@NonNull Class<?> clazz, Object[] params) {
         try {
             Arrays.stream(clazz.getConstructors()).toList().forEach(cons -> {
 
@@ -77,7 +76,7 @@ public interface Entity {
     }
 
 
-    private static @NotNull Iterable<Field> fields(@NotNull Class<?> clazz) {
+    private static @NonNull Iterable<Field> fields(@NonNull Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
         Class<?> c = clazz;
 
@@ -102,7 +101,7 @@ public interface Entity {
      * be a Class object of that type.
      */
 
-    static @NotNull List<Object> columns(Class<?> clazz) {
+    static @NonNull List<Object> columns(Class<?> clazz) {
         List<Object> columns = new ArrayList<>();
 
         //iteramos todas las columnas
@@ -135,7 +134,7 @@ public interface Entity {
      * @param clazz The clazz to inspect
      * @return a list of string with names of each primary key
      */
-    static @NotNull List<Object> keys(Class<?> clazz) {
+    static @NonNull List<Object> keys(Class<?> clazz) {
         List<Object> primaryKeys = new ArrayList<>();
 
         Entity.fields(clazz).forEach(f -> {
@@ -175,7 +174,7 @@ public interface Entity {
     }
 
 
-    static @NotNull List<Object> nameKeys(Class<?> clazz) {
+    static @NonNull List<Object> nameKeys(Class<?> clazz) {
         List<Object> primaryKeys = new ArrayList<>();
 
         Entity.fields(clazz).forEach(f -> System.out.println(f.getName()));
@@ -216,7 +215,7 @@ public interface Entity {
     }
 
 
-    private Object fieldValue(@NotNull Field field) {
+    private Object fieldValue(@NonNull Field field) {
         Object value = null;
 
         try {

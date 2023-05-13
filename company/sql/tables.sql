@@ -16,10 +16,11 @@ CREATE TABLE animales (
         CHECK ( nombre ~ '^[A-Z]+$' ),
     active boolean DEFAULT TRUE
 );
-COPY animales(nombre)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/animales.csv'
+/*
+\copy animales(nombre)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/animales.csv'
     DELIMITER ',' CSV HEADER;
-
+ */
 
 CREATE TABLE razas (
     id_raza serial NOT NULL PRIMARY KEY,
@@ -32,9 +33,12 @@ CREATE TABLE razas (
     id_animal integer NOT NULL REFERENCES animales,
     active boolean DEFAULT TRUE
 );
-COPY razas(nombre, total_adopcion, id_animal)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/razas.csv'
+/*
+\copy razas(nombre, total_adopcion, id_animal)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/razas.csv'
     DELIMITER ',' CSV HEADER;
+
+ */
 
 -- Esta es una super tabla, hay generalización
 CREATE TABLE personas (
@@ -60,9 +64,11 @@ CREATE TABLE personas (
         CHECK ( no_cuenta ~ '^\d{4,4} \d{4,4} \d{4,4} \d{4,4}$' ),
     active boolean DEFAULT TRUE
 );
-COPY personas(rfc, nombre, apellido_p, apellido_m, no_cuenta)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/personas.csv'
+/*
+\copy personas(rfc, nombre, apellido_p, apellido_m, no_cuenta)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/personas.csv'
     DELIMITER ',' CSV HEADER;
+ */
 
 -- tabla débil
 CREATE TABLE empleados (
@@ -81,9 +87,11 @@ CREATE TABLE empleados (
     CONSTRAINT puesto_invalido
         CHECK ( puesto IN ('mostrador','veterinario', 'limpieza', 'gerente') )
 );
-COPY empleados(id_persona, fecha_ini, jor_ini, jor_fin, salario_bruto, salario_neto, puesto)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/empleados.csv'
+/*
+\copy empleados(id_persona, fecha_ini, jor_ini, jor_fin, salario_bruto, salario_neto, puesto)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/empleados.csv'
     DELIMITER ',' CSV HEADER;
+ */
 
 CREATE TABLE mascotas (
     id_mascota serial NOT NULL PRIMARY KEY,
@@ -99,9 +107,11 @@ CREATE TABLE mascotas (
     id_raza integer NOT NULL NOT NULL REFERENCES razas,
     active boolean DEFAULT TRUE
 );
-COPY mascotas(nombre, fecha_nacimiento, sexo, id_persona, id_raza)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/mascotas.csv'
+/*
+\copy mascotas(nombre, fecha_nacimiento, sexo, id_persona, id_raza)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/mascotas.csv'
     DELIMITER ',' CSV HEADER;
+ */
 
 CREATE TABLE proveedores (
     id_proveedor serial PRIMARY KEY,
@@ -115,9 +125,11 @@ CREATE TABLE proveedores (
     descripcion varchar(40),
     active boolean DEFAULT TRUE
 );
-COPY proveedores(nombre, direccion, telefono, descripcion)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/proveedores.csv'
+/*
+\copy proveedores(nombre, direccion, telefono, descripcion)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/proveedores.csv'
     DELIMITER ',' CSV HEADER;
+ */
 
 CREATE TABLE articulos (
     id_articulo serial NOT NULL PRIMARY KEY,
@@ -131,9 +143,12 @@ CREATE TABLE articulos (
     descripcion varchar(100) DEFAULT '',
     active boolean DEFAULT TRUE
 );
-COPY articulos(id_proveedor, nombre, monto_compra, descripcion)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/articulos.csv'
+/*
+\copy articulos(id_proveedor, nombre, monto_compra, descripcion)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/articulos.csv'
     DELIMITER ',' CSV HEADER;
+
+ */
 
 CREATE TABLE articulos_venta (
     id_articulo integer NOT NULL REFERENCES articulos,
@@ -217,15 +232,18 @@ CREATE TABLE medicamentos (
     via            varchar(13)    NOT NULL,
     CHECK ( via IN ('oral','intravenosa','intramuscular','rectal','ocular','nasal','cutaneo') )
 );
-COPY alimentos(id_articulo, gramaje)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/alimentos.csv'
+/*
+\copy alimentos(id_articulo, gramaje)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/alimentos.csv'
     DELIMITER ',' CSV HEADER;
-COPY productos(id_articulo, tipo)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/productos.csv'
+\copy productos(id_articulo, tipo)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/productos.csv'
     DELIMITER ',' CSV HEADER;
-COPY medicamentos(id_articulo, gramaje, laboratorio, via)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/medicamentos.csv'
+\copy medicamentos(id_articulo, gramaje, laboratorio, via)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/medicamentos.csv'
     DELIMITER ',' CSV HEADER;
+
+ */
 
 CREATE TABLE facturas_proveedor (
     id_factura serial PRIMARY KEY,
@@ -240,9 +258,12 @@ CREATE TABLE facturas_proveedor (
         UNIQUE (fecha_factura, id_proveedor),
     active boolean DEFAULT TRUE
 );
-COPY facturas_proveedor(fecha_factura, id_proveedor)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/facturas_proveedor.csv'
+/*
+\copy facturas_proveedor(fecha_factura, id_proveedor)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/facturas_proveedor.csv'
     DELIMITER ',' CSV HEADER;
+
+ */
 
 CREATE TABLE detalle_factura (
     id_factura integer NOT NULL NOT NULL REFERENCES facturas_proveedor,
@@ -267,9 +288,11 @@ CREATE TABLE formas_pago (
     comision decimal(10, 2) NOT NULL DEFAULT 0,
     active boolean DEFAULT TRUE
 );
-COPY formas_pago(nombre, comision)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/formas_pago.csv'
+/*
+\copy formas_pago(nombre, comision)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/formas_pago.csv'
     DELIMITER ',' CSV HEADER;
+ */
 
 CREATE TABLE tickets (
     id_ticket serial PRIMARY KEY,
@@ -288,9 +311,11 @@ CREATE TABLE tickets (
     estatus varchar DEFAULT 'pendiente' NOT NULL
         CHECK(estatus IN ('pagado','pendiente','cancelado'))
 );
-COPY tickets(fecha_cobro, hora_cobro)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/tickets.csv'
+/*
+\copy tickets(fecha_cobro, hora_cobro)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/tickets.csv'
     DELIMITER ',' CSV HEADER;
+ */
 
 CREATE TABLE detalle_ticket (
     id_ticket integer NOT NULL NOT NULL REFERENCES tickets,
@@ -337,6 +362,9 @@ CREATE TABLE citas (
     CHECK ( estatus IN ('pendiente','realizada','cancelada','no realizada','pospuesta') ),
     active boolean DEFAULT TRUE
 );
-COPY citas(fecha_cita, hora, detalle, id_mascota, id_veterinario, id_ticket)
-    FROM '/mnt/d/github/veterinaria/company/inserciones/citas.csv'
+/*
+\copy citas(fecha_cita, hora, detalle, id_mascota, id_veterinario, id_ticket)
+    FROM '/home/jackinjaxx/Dev/IdeaProjects/Veterinaria/company/inserciones/citas.csv'
     DELIMITER ',' CSV HEADER;
+
+ */

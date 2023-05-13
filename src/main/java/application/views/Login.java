@@ -5,6 +5,7 @@ import application.views.components.Button;
 import application.views.components.abstracts.CustomJFrame;
 import application.views.utils.Fonts;
 import application.views.utils.Positions;
+import application.views.utils.Resolutions;
 import application.views.utils.ResponsiveDimension;
 
 import javax.swing.*;
@@ -21,6 +22,7 @@ public class Login extends CustomJFrame {
 
     @Override
     public void initComponents() {
+
         mainPanel = new JPanel();
         mainPanel.setSize(ResponsiveDimension.getNextResolution().getSize());
         mainPanel.setLocation(0, 0);
@@ -34,7 +36,6 @@ public class Login extends CustomJFrame {
         PerfilMarco imgProfile = new PerfilMarco();
         imgProfile.setOpaque(false);
         mainPanel.add(imgProfile);
-
         TextDisplay userJL = new TextDisplay("Member Login");
         userJL.setFont(Fonts.load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 36f));
         userJL.setSize(313, 60);
@@ -68,6 +69,7 @@ public class Login extends CustomJFrame {
                 userJT.setLocation(mainPanel, Positions.RIGHT, -135, -10);
                 passwordJT.setLocation(mainPanel, Positions.RIGHT, -135, 60);
                 loginJB.setLocation(mainPanel, Positions.RIGHT, -200, 150);
+
             }
         });
     }

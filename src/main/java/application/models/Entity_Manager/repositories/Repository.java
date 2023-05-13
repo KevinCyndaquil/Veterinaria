@@ -3,8 +3,7 @@ package application.models.Entity_Manager.repositories;
 import application.models.Entity_Manager.abstract_manager.Entity;
 import application.models.Entity_Manager.annotations.SqlKey;
 import application.database.Postgres;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import lombok.NonNull;
 import org.postgresql.util.PSQLException;
 
 import java.sql.Connection;
@@ -46,7 +45,7 @@ public class Repository<M extends Entity> implements
      * @return an object, the result of ResultSet.
      * @throws SQLException if there's an error with getting data.
      */
-    static @Nullable Object toObject(Object column, ResultSet resultSet) throws SQLException{
+    static Object toObject(Object column, ResultSet resultSet) throws SQLException{
 
         List<Object> values = new ArrayList<>();
 
@@ -84,7 +83,7 @@ public class Repository<M extends Entity> implements
      * @param WHERE_TYPE if the where clause is a AND (0) clause, OR (1) clause o a COMMA (2) clause.
      * @return a SQL condition if all work, else, return a void string.
      */
-    static @NotNull String toSqlSequence(@NotNull Map<String, Object> attributes, int WHERE_TYPE) {
+    static @NonNull String toSqlSequence(@NonNull Map<String, Object> attributes, int WHERE_TYPE) {
 
         if (attributes.size() == 0)
             return "";
@@ -127,7 +126,7 @@ public class Repository<M extends Entity> implements
      * @return true if the update was successfully, false if not, and null if there was an error.
      * @throws SQLException if there's an error with the query.
      */
-    private @Nullable Boolean executeUpdate(String query) throws SQLException{
+    private Boolean executeUpdate(String query) throws SQLException{
         try (Connection connection = conn.get();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
@@ -179,7 +178,7 @@ public class Repository<M extends Entity> implements
 
 
     @Override
-    public Object findById(@NotNull M model) throws SQLException{
+    public Object findById(@NonNull M model) throws SQLException{
 
         String query = "SELECT * FROM %s %s".formatted(
                 model.entityName(),
@@ -209,7 +208,7 @@ public class Repository<M extends Entity> implements
     }
 
     @Override
-    public Object save(@NotNull M model) throws SQLException {
+    public Object save(@NonNull M model) throws SQLException {
         StringBuilder attributes = new StringBuilder();
         StringBuilder values = new StringBuilder();
         StringBuilder keyName = new StringBuilder("RETURNING ");
@@ -272,7 +271,7 @@ public class Repository<M extends Entity> implements
     }
 
     @Override
-    public Iterable<Object> saveAll(@NotNull Iterable<M> models) throws SQLException {
+    public Iterable<Object> saveAll(@NonNull Iterable<M> models) throws SQLException {
         List<Object> keys = new ArrayList<>();
 
         for (M model : models) {
@@ -283,7 +282,7 @@ public class Repository<M extends Entity> implements
     }
 
     @Override
-    public Boolean delete(@NotNull M model) throws SQLException {
+    public Boolean delete(@NonNull M model) throws SQLException {
 
         Map<String, Object> attributes = new HashMap<>(model.attributes());
             attributes.putAll(model.key(SqlKey.PRIMARY_KEY));
@@ -300,7 +299,7 @@ public class Repository<M extends Entity> implements
     }
 
     @Override
-    public Boolean deleteById(@NotNull M model) throws SQLException {
+    public Boolean deleteById(@NonNull M model) throws SQLException {
 
         String query = "DELETE FROM %s %s RETURNING TRUE".formatted(
                 model.entityName(),
@@ -312,7 +311,7 @@ public class Repository<M extends Entity> implements
     }
 
     @Override
-    public Boolean hideById(@NotNull M model) throws SQLException {
+    public Boolean hideById(@NonNull M model) throws SQLException {
 
         String query = "UPDATE %s SET active = NOT active %s RETURNING active".formatted(
                 model.entityName(),
@@ -324,7 +323,7 @@ public class Repository<M extends Entity> implements
     }
 
     @Override
-    public Boolean updateById(@NotNull M model) throws SQLException {
+    public Boolean updateById(@NonNull M model) throws SQLException {
 
         Map<String, Object> attributes = new HashMap<>(model.attributes());
         attributes.putAll(model.key(SqlKey.FOREIGN_KEY));

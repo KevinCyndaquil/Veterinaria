@@ -48,7 +48,7 @@ public class Postgres extends ConnectDB {
     public void connectTo() {
         try {
             Class.forName("org.postgresql.Driver");
-            connection = (connection == null) ? DriverManager.getConnection(url, (user == null) ? "postgres" : user, (password == null) ? "qw6xdg7sB!" : password) : connection;
+            connection = (connection == null) ? DriverManager.getConnection(url, (user == null) ? "jackinjaxx" : user, (password == null) ? "0804" : password) : connection;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Driver de postgresql no instalado.");
         } catch (SQLException e) {
@@ -79,7 +79,7 @@ public class Postgres extends ConnectDB {
     public Connection get() {
         try {
             Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection(url, (user == null) ? "postgres" : user, (password == null) ? "qw6xdg7sB!" : password);
+            connection = DriverManager.getConnection(url, (user == null) ? "jackinjaxx" : user, (password == null) ? "0804" : password);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Driver de postgresql no instalado.");
         } catch (SQLException e) {

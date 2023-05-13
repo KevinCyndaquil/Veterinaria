@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Arrays;
 
 public class MainView extends CustomJFrame {
     private JPanel mainPanel;
@@ -34,6 +35,11 @@ public class MainView extends CustomJFrame {
         welcomeJL.setFont(Fonts.load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 36f));
         welcomeJL.setSize(313, 60);
         mainPanel.add(welcomeJL);
+
+        String ola[] = {"2","332","3232"};
+
+
+
 
         JLabel loadingJL = new JLabel();
         loadingJL.setIcon(new ImageIcon("src/main/resources/images/loading.gif"));
