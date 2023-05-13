@@ -1,3 +1,4 @@
+
 package application.views.utils;
 import java.awt.*;
 
@@ -8,7 +9,7 @@ public class ResponsiveDimension {
         return toolkit.getScreenSize();
     }
     //return the resolution preferred for the app depending on the screen size
-    public static Resolutions getNextResolution() throws NullPointerException {
+    public static Resolutions getNextResolution(){
         Dimension screenSize = getScreenSize();
 
         if (screenSize.equals(Resolutions.FULL_HD.getSize())) {

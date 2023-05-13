@@ -5,7 +5,6 @@ import application.views.components.Button;
 import application.views.components.abstracts.CustomJFrame;
 import application.views.utils.Fonts;
 import application.views.utils.Positions;
-import application.views.utils.Resolutions;
 import application.views.utils.ResponsiveDimension;
 
 import javax.swing.*;

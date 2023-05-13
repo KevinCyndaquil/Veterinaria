@@ -1,5 +1,9 @@
 package application.views.components.abstracts;
 
+
+
+
+
 import application.views.utils.ResponsiveDimension;
 
 import javax.swing.*;

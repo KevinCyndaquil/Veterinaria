@@ -1,5 +1,6 @@
 package application.views;
 
+
 import application.views.components.Button;
 import application.views.components.InputText;
 import application.views.components.SectionRound;
@@ -19,7 +20,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
 
 public class CompraView extends CustomJFrame {
     private JPanel mainPanel;
