@@ -2,18 +2,16 @@ package application.views.components.abstracts;
 
 import application.views.components.interfaces.IPositionableComponent;
 import application.views.utils.Positions;
-import lombok.Getter;
 import org.jdesktop.swingx.JXButton;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
 public abstract class CustomJButton extends JXButton implements IPositionableComponent{
-    //@Getter
-    //private final FontsLoader fontsLoader;
+
 
     protected CustomJButton() {
-        //fontsLoader = new FontsLoader();
+        super();
     }
 
     @Override

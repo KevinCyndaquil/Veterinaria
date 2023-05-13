@@ -1,21 +1,25 @@
 package application.views.components.abstracts;
 
 import application.views.utils.ResponsiveDimension;
-import lombok.Getter;
 
 import javax.swing.*;
 
 public abstract class CustomJFrame extends JFrame {
-    //@Getter
-    //private final FontsLoader fontsLoader;
 
     public CustomJFrame(String title) {
         super(title);
-        //fontsLoader = new FontsLoader();
         setLayout(null);
-        getContentPane().setPreferredSize(ResponsiveDimension.getNextResolution().getSize());
+        try {
+            //getContentPane().setPreferredSize(ResponsiveDimension.getNextResolution().getSize());
+            setPreferredSize(ResponsiveDimension.getNextResolution().getSize());
+        }catch (NullPointerException e){
+            JOptionPane.showMessageDialog(this,"Su resolucion no esta permitida para el aplicativo");
+            System.exit(1);
+        }
+
         initComponents();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
         pack();
         setLocationRelativeTo(null);
     }

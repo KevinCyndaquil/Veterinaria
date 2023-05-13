@@ -2,18 +2,16 @@ package application.views.components.abstracts;
 
 import application.views.components.interfaces.IPositionableComponent;
 import application.views.utils.Positions;
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.awt.*;
 
 public abstract class CustomJTextField extends JTextField implements IPositionableComponent {
-    //@Getter
-    //private final FontsLoader fontsLoader;
 
     public CustomJTextField() {
         super();
-        //fontsLoader = new FontsLoader();
+        setBackground(Color.white);
     }
     @Override
     public void setLocation(@NotNull JComponent fatherJComponent, Positions position){
@@ -44,4 +42,6 @@ public abstract class CustomJTextField extends JTextField implements IPositionab
                     super.setLocation(fatherJComponent.getWidth() / 2 - getWidth() / 2 +x, fatherJComponent.getHeight() - getHeight() + y);
         }
     }
+
+
 }

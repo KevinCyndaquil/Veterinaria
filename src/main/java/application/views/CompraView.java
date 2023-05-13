@@ -58,7 +58,6 @@ public class CompraView extends CustomJFrame {
             e.printStackTrace();
         }
 
-        //Fonts.load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 36f)
         TextDisplay tTypesInvoice = new TextDisplay("Types Invoice");
         tTypesInvoice.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 16f));
         tTypesInvoice.setSize(tTypesInvoice.getPreferredSize());

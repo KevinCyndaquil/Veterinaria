@@ -36,6 +36,7 @@ public class Login extends CustomJFrame {
         PerfilMarco imgProfile = new PerfilMarco();
         imgProfile.setOpaque(false);
         mainPanel.add(imgProfile);
+
         TextDisplay userJL = new TextDisplay("Member Login");
         userJL.setFont(Fonts.load(Fonts.MONSERRAT).deriveFont(Font.BOLD, 36f));
         userJL.setSize(313, 60);
