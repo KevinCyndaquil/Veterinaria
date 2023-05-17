@@ -2,8 +2,12 @@ package application;
 
 import application.controllers.C_Login;
 import application.controllers.C_MainView;
+import application.database.Postgres;
 import application.models.Entity_Manager.abstract_manager.Entity;
+import application.models.Entity_Manager.repositories.Find;
+import application.models.Entity_Manager.repositories.Repository;
 import application.models.detalles.DetalleFactura;
+import application.models.entidades.Mascotas;
 import application.models.entidades.Proveedores;
 import application.models.finanzas.Articulos;
 import application.views.MainView;
@@ -11,11 +15,31 @@ import mdlaf.MaterialLookAndFeel;
 
 import javax.swing.*;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
+
+        Mascotas mascota = new Mascotas(
+                null,
+                "MININO",
+                null,
+                null,
+                null,
+                null
+        );
+
+        Find<Mascotas> find = new Repository<>(new Postgres());
+        try {
+            Mascotas mascota1 =(Mascotas) find.find(mascota).get(0);
+            System.out.println(mascota1.propietario().getNombre());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
         //hola wuichito
         Proveedores proveedor = new Proveedores(
                 7,
@@ -72,7 +96,7 @@ public class Main {
 
         System.out.println(detalle1.equals(articulos.get(1)));*/
 
-        java.awt.EventQueue.invokeLater(() -> {
+        /*java.awt.EventQueue.invokeLater(() -> {
             System.setProperty("awt.useSystemAAFontSettings", "lcd"); // use font antialiasing
             System.setProperty("swing.aatext", "true");
             // resto del código que utiliza AWT o Swing
@@ -84,7 +108,8 @@ public class Main {
             }
             C_MainView c_mainView = new C_MainView();
             c_mainView.showView();
-
         });
+
+         */
     }
 }

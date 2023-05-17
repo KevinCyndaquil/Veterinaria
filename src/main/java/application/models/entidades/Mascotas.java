@@ -21,17 +21,18 @@ public record Mascotas (
         String sexo,
         @SqlAttribute
         @SqlKey(SqlKey.FOREIGN_KEY)
-        Animales animal,
+        Personas propietario,
         @SqlAttribute
         @SqlKey(SqlKey.FOREIGN_KEY)
-        Personas propietario) implements Entity {
+        Razas raza
+        ) implements Entity {
 
     @SqlInstance
     public Mascotas {
     }
 
-    public Mascotas(String nombre, LocalDate fecha_nacimiento, String sexo, Animales animal, Personas propietario) {
-        this(null, nombre, fecha_nacimiento, sexo, animal, propietario);
+    public Mascotas(String nombre, LocalDate fecha_nacimiento, String sexo, Personas propietario, Razas raza) {
+        this(null, nombre, fecha_nacimiento, sexo, propietario, raza);
     }
 }
 

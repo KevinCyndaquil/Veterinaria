@@ -6,41 +6,41 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
 public class BarLeft extends SectionRound{
-    public Button button1;
-    public Button button2;
-    public Button button3;
-    public Button button4;
+    public Button btncompras;
+    public Button btncitas;
+    public Button btnreportes;
+    public Button btnadmins;
     public BarLeft() {
         setSize(466, 1033);
         setBackground(Color.decode("#A0CDC8"));
 
-        button1 = new Button("");
-        button1.setArcSize(225);
-        button1.setSize(225, 225);
-        button1.setIcon(new ImageIcon("src/main/resources/images/btn1.png"));
-        button1.setLocation(121, 13);
-        add(button1);
+        btncompras = new Button("");
+        btncompras.setArcSize(225);
+        btncompras.setSize(225, 225);
+        btncompras.setIcon(new ImageIcon("src/main/resources/images/btn1.png"));
+        btncompras.setLocation(121, 13);
+        add(btncompras);
 
-        button2 = new Button("");
-        button2.setArcSize(225);
-        button2.setSize(225, 225);
-        button2.setIcon(new ImageIcon("src/main/resources/images/btn2.png"));
-        button2.setLocation(121, 258);
-        add(button2);
+        btncitas = new Button("");
+        btncitas.setArcSize(225);
+        btncitas.setSize(225, 225);
+        btncitas.setIcon(new ImageIcon("src/main/resources/images/btn2.png"));
+        btncitas.setLocation(121, 258);
+        add(btncitas);
 
-        button3 = new Button("");
-        button3.setArcSize(225);
-        button3.setSize(225, 225);
-        button3.setIcon(new ImageIcon("src/main/resources/images/btn3.png"));
-        button3.setLocation(121, 506);
-        add(button3);
+        btnreportes = new Button("");
+        btnreportes.setArcSize(225);
+        btnreportes.setSize(225, 225);
+        btnreportes.setIcon(new ImageIcon("src/main/resources/images/btn3.png"));
+        btnreportes.setLocation(121, 506);
+        add(btnreportes);
 
-        button4 = new Button("");
-        button4.setArcSize(225);
-        button4.setSize(225, 225);
-        button4.setIcon(new ImageIcon("src/main/resources/images/btn4.png"));
-        button4.setLocation(121, 776);
-        add(button4);
+        btnadmins = new Button("");
+        btnadmins.setArcSize(225);
+        btnadmins.setSize(225, 225);
+        btnadmins.setIcon(new ImageIcon("src/main/resources/images/btn4.png"));
+        btnadmins.setLocation(121, 776);
+        add(btnadmins);
 
 
         JLabel tcompras = new JLabel(new ImageIcon("src/main/resources/images/Compras.png"));
