@@ -6,7 +6,7 @@ import application.models.Entity_Manager.repositories.Find;
 import application.models.Entity_Manager.repositories.Repository;
 import application.models.entidades.Mascotas;
 import application.models.entidades.Personas;
-import application.views.ChooserMascotaCnt;
+import application.controllers.C_ChooserMascota;
 import application.views.components.interfaces.ComboBoxController;
 import application.views.components.interfaces.TableController;
 import application.views.components.interfaces.ViewerController;
@@ -49,10 +49,10 @@ public class HistorialMascotaCnt extends ViewerController<HistorialMascotaView> 
                 nombre_mascota,
                 null,
                 null,
-                null,
-                propietario);
+                propietario,
+                null);
 
-        ChooserMascotaCnt chooser = new ChooserMascotaCnt(
+        C_ChooserMascota chooser = new C_ChooserMascota(
                 (DefaultTableModel) view.tblHistorial.getModel());
 
         try {

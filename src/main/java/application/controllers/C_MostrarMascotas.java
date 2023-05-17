@@ -26,7 +26,6 @@ public class C_MostrarMascotas extends C_Generic<MostrarMascotas> implements Act
     }
 
     public void datosTabla(String name){
-        /*
         Find<Mascotas> find = new Repository<>(new Postgres());
         Mascotas mascota = new Mascotas(name, null, null, null, null);
         try {
@@ -35,8 +34,6 @@ public class C_MostrarMascotas extends C_Generic<MostrarMascotas> implements Act
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-         */
     }
 
     @Override

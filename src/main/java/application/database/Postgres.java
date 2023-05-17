@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 public class Postgres extends ConnectDB {
     public Postgres() {
-        super("jdbc:postgresql://localhost:5432/veterinaria");
+        super("jdbc:postgresql://localhost:5433/veterinaria");
     }
 
     /**
@@ -48,7 +48,7 @@ public class Postgres extends ConnectDB {
     public void connectTo() {
         try {
             Class.forName("org.postgresql.Driver");
-            connection = (connection == null) ? DriverManager.getConnection(url, (user == null) ? "jackinjaxx" : user, (password == null) ? "0804" : password) : connection;
+            connection = (connection == null) ? DriverManager.getConnection(url, (user == null) ? "kevincyndaquil" : user, (password == null) ? "qw6xdg7sB!" : password) : connection;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Driver de postgresql no instalado.");
         } catch (SQLException e) {
@@ -80,7 +80,7 @@ public class Postgres extends ConnectDB {
     public Connection get() {
         try {
             Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection(url, (user == null) ? "jackinjaxx" : user, (password == null) ? "0804" : password);
+            connection = DriverManager.getConnection(url, (user == null) ? "kevincyndaquil" : user, (password == null) ? "qw6xdg7sB!" : password);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Driver de postgresql no instalado.");
         } catch (SQLException e) {

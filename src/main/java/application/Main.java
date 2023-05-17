@@ -22,6 +22,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+        /*
         Mascotas mascota = new Mascotas(
                 null,
                 "MININO",
@@ -55,9 +56,9 @@ public class Main {
                         9, proveedor, "TECATE ROJA", new BigDecimal(120), "PARA HOMBRES"),
                 new Articulos(
                         10, proveedor, "TECATE AZUL", new BigDecimal(115), "NO SE")
-        );
+        );*/
 
-        System.out.println(Entity.columns(DetalleFactura.class));
+        //System.out.println(Entity.columns(DetalleFactura.class));
 
         /*List<Alimentos> alimentos = List.of(
                 new Alimentos(
@@ -96,7 +97,7 @@ public class Main {
 
         System.out.println(detalle1.equals(articulos.get(1)));*/
 
-        /*java.awt.EventQueue.invokeLater(() -> {
+        java.awt.EventQueue.invokeLater(() -> {
             System.setProperty("awt.useSystemAAFontSettings", "lcd"); // use font antialiasing
             System.setProperty("swing.aatext", "true");
             // resto del código que utiliza AWT o Swing
@@ -109,7 +110,5 @@ public class Main {
             C_MainView c_mainView = new C_MainView();
             c_mainView.showView();
         });
-
-         */
     }
 }

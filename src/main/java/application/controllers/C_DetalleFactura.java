@@ -1,10 +1,14 @@
-package application.views.FacturaChooser.FacturaDisplay;
+package application.controllers;
 
 import application.MessageDialog;
 import application.database.Postgres;
 import application.database.repository.FacturaRepository;
 import application.models.detalles.DetalleFactura;
 import application.models.finanzas.FacturasProveedor;
+import application.views.FacturaChooser.FacturaDisplay.CellDetalleFacturaCellRenderer;
+import application.views.FacturaChooser.FacturaDisplay.DetalleFacturaView;
+import application.views.FacturaChooser.FacturaDisplay.HeaderDetalleFacturaCellRenderer;
+import application.views.FacturaChooser.FacturaDisplay.TableDetalleFacturaModel;
 import application.views.components.interfaces.TableController;
 import application.views.components.interfaces.ViewerController;
 
@@ -14,11 +18,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class DetalleFacturaCnt extends ViewerController <DetalleFacturaView> implements TableController {
+public class C_DetalleFactura extends ViewerController <DetalleFacturaView> implements TableController {
     private final FacturasProveedor factura;
 
 
-    public DetalleFacturaCnt(FacturasProveedor factura) {
+    public C_DetalleFactura(FacturasProveedor factura) {
         super(new DetalleFacturaView());
         this.factura = factura;
 

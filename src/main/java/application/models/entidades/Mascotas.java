@@ -6,7 +6,7 @@ import application.models.Entity_Manager.annotations.SqlEntity;
 import application.models.Entity_Manager.annotations.SqlInstance;
 import application.models.Entity_Manager.annotations.SqlKey;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 @SqlEntity("mascotas")
 public record Mascotas (
@@ -16,7 +16,7 @@ public record Mascotas (
         @SqlAttribute
         String nombre,
         @SqlAttribute
-        LocalDate fecha_nacimiento,
+        Date fecha_nacimiento,
         @SqlAttribute
         String sexo,
         @SqlAttribute
@@ -31,7 +31,7 @@ public record Mascotas (
     public Mascotas {
     }
 
-    public Mascotas(String nombre, LocalDate fecha_nacimiento, String sexo, Personas propietario, Razas raza) {
+    public Mascotas(String nombre, Date fecha_nacimiento, String sexo, Personas propietario, Razas raza) {
         this(null, nombre, fecha_nacimiento, sexo, propietario, raza);
     }
 }

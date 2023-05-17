@@ -1,9 +1,10 @@
-package application.views;
+package application.controllers;
 
 import application.MessageDialog;
 import application.database.Postgres;
 import application.database.repository.CitaRepository;
 import application.models.entidades.Mascotas;
+import application.views.ChooserMascotaView;
 import application.views.components.interfaces.ViewerController;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,10 +13,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 
-public class ChooserMascotaCnt extends ViewerController<ChooserMascotaView> {
+public class C_ChooserMascota extends ViewerController<ChooserMascotaView> {
     private final DefaultTableModel modelToSend;
 
-    public ChooserMascotaCnt(DefaultTableModel modelToSend) {
+    public C_ChooserMascota(DefaultTableModel modelToSend) {
         super(new ChooserMascotaView());
         this.modelToSend = modelToSend;
     }

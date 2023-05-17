@@ -1,4 +1,4 @@
-package application.views.FacturaChooser;
+package application.controllers;
 
 import application.MessageDialog;
 import application.database.Postgres;
@@ -8,7 +8,7 @@ import application.models.Entity_Manager.repositories.Repository;
 import application.models.Entity_Manager.repositories.Save;
 import application.models.entidades.Proveedores;
 import application.models.finanzas.FacturasProveedor;
-import application.views.FacturaChooser.FacturaDisplay.DetalleFacturaCnt;
+import application.views.FacturaChooser.FacturaChooserView;
 import application.views.components.interfaces.ComboBoxController;
 import application.views.components.interfaces.TableController;
 import application.views.components.interfaces.ViewerController;
@@ -18,11 +18,11 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class FacturaChooserCnt extends ViewerController<FacturaChooserView> implements
+public class C_FacturaChooser extends ViewerController<FacturaChooserView> implements
         ComboBoxController,
         TableController {
 
-    public FacturaChooserCnt() {
+    public C_FacturaChooser() {
         super(new FacturaChooserView());
         refreshComboBoxes();
         refreshTables();
@@ -109,7 +109,7 @@ public class FacturaChooserCnt extends ViewerController<FacturaChooserView> impl
             throw new RuntimeException(ex);
         }
 
-        new DetalleFacturaCnt(factura);
+        new C_DetalleFactura(factura);
     }
 
     @Override
@@ -155,6 +155,6 @@ public class FacturaChooserCnt extends ViewerController<FacturaChooserView> impl
     }
 
     public static void main(String[] args) {
-        new FacturaChooserCnt();
+        new C_FacturaChooser();
     }
 }
