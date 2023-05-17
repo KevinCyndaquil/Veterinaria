@@ -67,4 +67,16 @@ public class MessageDialog {
                 JOptionPane.INFORMATION_MESSAGE,
                 Icons.get(Icons.AMBER_OUTTA_MY_WAY));
     }
+
+    public static boolean yesNoQuestionMessage(JFrame view, String message) {
+        return JOptionPane.showOptionDialog(
+                view,
+                message,
+                "choose question",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                Icons.get(Icons.HU_TAO_FRIGHTEN),
+                new Object[]{"yes", "no"},
+                0) == 0;
+    }
 }

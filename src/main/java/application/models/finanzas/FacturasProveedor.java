@@ -53,6 +53,7 @@ public class FacturasProveedor extends Facturas implements
     @Override
     public boolean agregarArticulo(DetalleFactura detalleFactura) {
         if (detalleFactura == null) return false;
+        if (detalleFactura.monto() == null) detalleFactura.monto(BigDecimal.ZERO);
 
         monto(monto().add(detalleFactura.monto()));
         return detalleArticulos.add(detalleFactura);

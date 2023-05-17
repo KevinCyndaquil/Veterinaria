@@ -25,7 +25,11 @@ public enum Icons {
     HUTAO_ADORABLE(Objects.requireNonNull(Icons.class.getClassLoader().getResource(
             "images/icons/Hu_tao_adorable.png"))),
     AMBER_OUTTA_MY_WAY(Objects.requireNonNull(Icons.class.getClassLoader().getResource(
-            "images/icons/Amber_Outta_my_way.png")));
+            "images/icons/Amber_Outta_my_way.png"))),
+    HU_TAO(Objects.requireNonNull(Icons.class.getClassLoader().getResource(
+            "images/icons/Hu_Tao.png"))),
+    HU_TAO_FRIGHTEN(Objects.requireNonNull(Icons.class.getClassLoader().getResource(
+            "images/icons/Hu_Tao_Frighten.png")));
     private final URL path;
 
     Icons(@NotNull URL path) {

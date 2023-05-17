@@ -28,7 +28,6 @@ public abstract class DetalleArticulo<A extends ConMonto> implements
     }
     public DetalleArticulo(Integer cantidad, A a) {
         this.cantidad = cantidad;
-        this.subtotal = BigDecimal.ZERO;
         this.a = a;
 
         calcular();
@@ -59,7 +58,9 @@ public abstract class DetalleArticulo<A extends ConMonto> implements
 
     @Override
     public BigDecimal calcular() {
-        if (this.monto() == null || a == null) return this.monto(BigDecimal.ZERO);
+        if (this.monto() == null) this.monto(BigDecimal.ZERO);
+        if (a == null) return this.monto(BigDecimal.ZERO);
+        if (a.monto() == null) a.monto(BigDecimal.ZERO);
 
         return this.monto(a.monto().multiply(BigDecimal.valueOf(cantidad)));
     }

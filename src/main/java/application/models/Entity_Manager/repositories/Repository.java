@@ -10,10 +10,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Repository<M extends Entity> implements
         Find<M>,
@@ -207,6 +204,13 @@ public class Repository<M extends Entity> implements
         return null;
     }
 
+    /**
+     *
+     * @param model the object with the values to be created.
+     * @return objects list with all primary keys created by insert query, if the query went wrong, then,
+     * the list is going to be empty.
+     * @throws SQLException if there's a sql error.
+     */
     @Override
     public Object save(@NonNull M model) throws SQLException {
         StringBuilder attributes = new StringBuilder();

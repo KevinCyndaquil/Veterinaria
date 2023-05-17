@@ -48,4 +48,13 @@ public class Personas implements Entity {
         this.apellido_m = apellido_m;
         this.no_cuenta = no_cuenta;
     }
+
+    public Personas(Integer id_persona) {
+        this.id_persona = id_persona;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }

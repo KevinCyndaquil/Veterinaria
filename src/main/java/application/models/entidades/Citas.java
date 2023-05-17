@@ -7,6 +7,7 @@ import application.models.Entity_Manager.annotations.SqlInstance;
 import application.models.Entity_Manager.annotations.SqlKey;
 import application.models.finanzas.Tickets;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -21,6 +22,8 @@ public record Citas (
         LocalTime hora,
         @SqlAttribute
         String detalle,
+        @SqlAttribute
+        BigDecimal monto_cita,
         @SqlAttribute
         @SqlKey(SqlKey.FOREIGN_KEY)
         Mascotas mascota,
@@ -40,16 +43,16 @@ public record Citas (
         }
     }
 
-    public Citas(LocalDate fecha_cita, LocalTime hora, String detalle, Mascotas mascota, Empleados veterinario, Tickets ticket, EstatusCita estatus) throws IllegalArgumentException{
-        this(null, fecha_cita, hora, detalle, mascota, veterinario, ticket, estatus);
+    public Citas(LocalDate fecha_cita, LocalTime hora, String detalle, BigDecimal monto_cita, Mascotas mascota, Empleados veterinario, Tickets ticket, EstatusCita estatus) throws IllegalArgumentException{
+        this(null, fecha_cita, hora, detalle, monto_cita, mascota, veterinario, ticket, estatus);
 
         if(!veterinario.getPuesto().name().equals("veterinario")) {
             throw new IllegalArgumentException("El empleado no es un veterinario");
         }
     }
 
-    public Citas(LocalDate fecha_cita, LocalTime hora, String detalle, Mascotas mascota, Empleados veterinario, EstatusCita estatus) throws IllegalArgumentException{
-        this(null, fecha_cita, hora, detalle, mascota, veterinario, null, estatus);
+    public Citas(LocalDate fecha_cita, LocalTime hora, String detalle, BigDecimal monto_cita, Mascotas mascota, Empleados veterinario, EstatusCita estatus) throws IllegalArgumentException{
+        this(null, fecha_cita, hora, detalle, monto_cita, mascota, veterinario, null, estatus);
 
         if(!veterinario.getPuesto().name().equals("veterinario")) {
             throw new IllegalArgumentException("El empleado no es un veterinario");

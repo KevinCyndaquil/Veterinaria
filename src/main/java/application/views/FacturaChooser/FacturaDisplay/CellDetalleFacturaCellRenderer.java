@@ -14,39 +14,44 @@ public class CellDetalleFacturaCellRenderer extends DefaultTableCellRenderer {
         else
             this.setBackground(new Color(232, 218, 207));
 
-        switch (value.getClass().getSimpleName()) {
-            case "Integer", "BigDecimal", "Float", "Double" -> {
+        try {
+            switch (value.getClass().getSimpleName()) {
+                case "Integer", "BigDecimal", "Float", "Double" -> {
+                    this.setHorizontalAlignment(CENTER);
+                    this.setForeground((focused) ? Color.MAGENTA : new Color(44, 143, 2));
+                    this.setFont(new Font("Verdana", Font.BOLD, 14));
+                }
+                case "String" -> {
+                    this.setForeground((focused) ? Color.WHITE : new Color(91, 88, 87));
+                    this.setFont(new Font(Font.SERIF, Font.BOLD, 14));
+                }
+                case "Boolean" -> {
+                    this.setHorizontalAlignment(CENTER);
+                    this.setForeground((!selected) ? Color.BLUE : (focused) ? Color.YELLOW : Color.BLUE);
+                    this.setFont(new Font(Font.MONOSPACED, Font.BOLD, 14));
+                }
+                case "Date" -> {
+                    this.setHorizontalAlignment(CENTER);
+                    this.setForeground((!selected) ? new Color(54, 190, 0) : Color.MAGENTA);
+                    this.setFont(new Font("Verdana", Font.BOLD, 16));
+                }
+                default -> this.setHorizontalAlignment(RIGHT);
+            }
+
+            if (column == 5)
                 this.setHorizontalAlignment(CENTER);
-                this.setForeground((focused) ? Color.MAGENTA : new Color(44, 143, 2));
-                this.setFont(new Font("Verdana", Font.BOLD, 14));
-            }
-            case "String" -> {
-                this.setForeground((focused) ? Color.WHITE : new Color(91, 88, 87));
-                this.setFont(new Font(Font.SERIF, Font.BOLD, 14));
-            }
-            case "Boolean" -> {
-                this.setHorizontalAlignment(CENTER);
-                this.setForeground((!selected) ? Color.BLUE : (focused) ? Color.YELLOW : Color.BLUE);
-                this.setFont(new Font(Font.MONOSPACED, Font.BOLD, 14));
-            }
-            case "Date" -> {
-                this.setHorizontalAlignment(CENTER);
-                this.setForeground((!selected) ? new Color(54, 190, 0) : Color.MAGENTA);
-                this.setFont(new Font("Verdana", Font.BOLD, 16));
-            }
-            default -> this.setHorizontalAlignment(RIGHT);
+
+            if (selected)
+                this.setBackground(new Color(183, 201, 200));
+
+            if (focused)
+                this.setBackground(new Color(47, 51, 80));
+
+            this.setText(value.toString());
+
+        } catch (NullPointerException ex) {
+            System.out.println("valor nulo en la cabecera de la tabla de detalle_factura");
         }
-
-        if (column == 5)
-            this.setHorizontalAlignment(CENTER);
-
-        if (selected)
-            this.setBackground(new Color(183, 201, 200));
-
-        if (focused)
-            this.setBackground(new Color(47, 51, 80));
-
-        this.setText(value.toString());
 
         return this;
     }
