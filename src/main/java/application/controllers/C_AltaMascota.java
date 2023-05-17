@@ -2,10 +2,20 @@ package application.controllers;
 
 import application.MessageDialog;
 import application.controllers.abstracts.C_Generic;
+import application.database.Postgres;
+import application.models.Entity_Manager.repositories.Find;
+import application.models.Entity_Manager.repositories.GetConn;
+import application.models.Entity_Manager.repositories.Repository;
+import application.models.Entity_Manager.repositories.Save;
+import application.models.entidades.Mascotas;
+import application.models.entidades.Personas;
+import application.models.entidades.Razas;
 import application.views.AltaMascota;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.sql.SQLException;
 
 
 public class C_AltaMascota extends C_Generic<AltaMascota>  implements ActionListener {
@@ -23,8 +33,40 @@ public class C_AltaMascota extends C_Generic<AltaMascota>  implements ActionList
         view.jButton2.addActionListener(this);
     }
 
-    public Integer altaMascota(){
-        return 0;
+    public Mascotas altaMascota(){
+        Save<Mascotas> save = new Repository<>(new Postgres());
+
+        Find<Personas> findPersona = new Repository<>(new Postgres());
+        Personas personas;
+        try {
+            personas = (Personas) findPersona.findById(new Personas(id_propietario));
+        } catch (SQLException e) {
+            return null;
+        }
+
+        Find<Razas> findRazas = new Repository<>(new Postgres());
+        Razas raza;
+
+        try {
+            raza = (Razas) findRazas.findById(new Razas(id_raza));
+        } catch (SQLException e) {
+            return null;
+        }
+
+
+        Mascotas mascota = new Mascotas(view.jTextField2.getText(),
+                Date.valueOf(view.jTextField1.getText()),
+                view.jTextField3.getText(),
+                personas,
+                raza
+                );
+
+        try {
+            mascota.setId_mascota((Integer) save.save(mascota));
+            return mascota;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
 
@@ -43,9 +85,9 @@ public class C_AltaMascota extends C_Generic<AltaMascota>  implements ActionList
         }
 
         if(e.getSource().equals(view.jButton3)){
-            Integer idMascota = altaMascota();
-            if(altaMascota() != -1){
-                C_AltaCita.idMascota = idMascota;
+            Mascotas m = altaMascota();
+            if(m != null){
+                C_AltaCita.mascota = m;
                 MessageDialog.successMessage(view, "Mascota registrada con exito");
                 view.dispose();
             }else{

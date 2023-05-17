@@ -38,7 +38,7 @@ public class C_Menu extends C_Generic<Menu> {
                 if(c_menuCitas == null) {
                     c_menuCitas = new C_MenuCitas();
                 }
-                view = null;
+                view.dispose();
                 c_menuCitas.showView();
             }
         });

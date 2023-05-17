@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 public class Postgres extends ConnectDB {
     public Postgres() {
-        super("jdbc:postgresql://localhost:5433/veterinaria");
+        super("jdbc:postgresql://localhost:5432/veterinaria");
     }
 
     /**

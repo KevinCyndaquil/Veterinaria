@@ -25,17 +25,17 @@ public class C_ChooserMascota extends ViewerController<ChooserMascotaView> {
         DefaultTableModel model = (DefaultTableModel) view.tblMascotas.getModel();
         model.addRow(new Object[]{
                 mascota,
-                mascota.fecha_nacimiento(),
-                mascota.sexo(),
-                mascota.propietario(),
-                mascota.raza()
+                mascota.getFecha_nacimiento(),
+                mascota.getSexo(),
+                mascota.getPropietario(),
+                mascota.getRaza()
         });
     }
 
     public void enviar() {
         CitaRepository citaRepository = new CitaRepository(new Postgres());
         DefaultTableModel model = (DefaultTableModel) view.tblMascotas.getModel();
-        int id_mascota = ((Mascotas) model.getValueAt(view.tblMascotas.getSelectedRow(), 0)).id_mascota();
+        int id_mascota = ((Mascotas) model.getValueAt(view.tblMascotas.getSelectedRow(), 0)).getId_mascota();
 
         modelToSend.setRowCount(0);
 

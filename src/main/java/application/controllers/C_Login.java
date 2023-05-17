@@ -33,8 +33,9 @@ public class C_Login extends C_Generic<Login> implements ActionListener {
                 postgres.setUser(user, password);
                 postgres.connectTo();
                 MessageDialog.successMessage(view, "Conectado con exito");
-                view = null;
+
                 C_Menu c_menu = new C_Menu();
+                view.dispose();
                 c_menu.showView();
             }catch (Exception ex){
                 MessageDialog.errorMessage(view, "Error");

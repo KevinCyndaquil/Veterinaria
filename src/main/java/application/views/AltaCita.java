@@ -24,6 +24,7 @@ public class AltaCita extends CustomJFrame {
     public Button btnpagar;
     public Button btnqrynombre;
     public InputText inombremascota;
+    public InputText inombreveterinario;
     public AltaCita() {
         super("Alta Cita");
     }
@@ -104,7 +105,8 @@ public class AltaCita extends CustomJFrame {
         tnombreveterinario.setSize(tnombreveterinario.getPreferredSize());
         section2.add(tnombreveterinario);
 
-        InputText inombreveterinario = new InputText("Nombre");
+
+        inombreveterinario = new InputText("Nombre");
         inombreveterinario.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
         inombreveterinario.setSize(300, 62);
         section2.add(inombreveterinario);

@@ -24,14 +24,14 @@ public class C_MenuCitas extends C_Generic<MenuCitas> implements ActionListener 
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == view.btnRegresar){
             C_Menu c_menu = new C_Menu();
-            view = null;
+            view.dispose();
             c_menu.showView();
 
         }
 
         if(e.getSource() == view.btnaltacitas){
             C_AltaCita c_altaCita = new C_AltaCita();
-            view = null;
+            view.dispose();
             c_altaCita.showView();
         }
 

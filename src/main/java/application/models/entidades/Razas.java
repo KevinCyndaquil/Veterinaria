@@ -27,4 +27,8 @@ public record Razas (
     public Razas(String nombre_raza, Integer total_adopcion, Animales animal) {
         this(null, nombre_raza, total_adopcion, animal);
     }
+
+    public Razas(Integer idRaza) {
+        this(idRaza, null, null, null);
+    }
 }
