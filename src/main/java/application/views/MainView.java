@@ -57,13 +57,4 @@ public class MainView extends CustomJFrame {
     }
 
 
-    public static void main(String[] args) {
-
-        java.awt.EventQueue.invokeLater(() -> {
-            System.setProperty("awt.useSystemAAFontSettings", "lcd"); // use font antialiasing
-            System.setProperty("swing.aatext", "true");
-            // resto del código que utiliza AWT o Swing
-            new MainView().setVisible(true);
-        });
-    }
 }

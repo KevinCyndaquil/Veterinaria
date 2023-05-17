@@ -1,5 +1,6 @@
 package application.views.components;
 
+import lombok.Getter;
 import lombok.Setter;
 
 import javax.swing.*;
@@ -7,12 +8,13 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
 public class SectionRound extends JPanel {
-    @Setter
+    @Setter @Getter
     private int radius = 40;
 
     public SectionRound(){
         setLayout(null);
         setBackground(new Color(0,0,0,0));
+        setOpaque(false);
     }
 
     @Override

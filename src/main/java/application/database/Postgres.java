@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 public class Postgres extends ConnectDB {
     public Postgres() {
-        super("jdbc:postgresql://localhost:5433/veterinaria");
+        super("jdbc:postgresql://localhost:5432/veterinaria");
     }
 
     /**
@@ -58,10 +58,11 @@ public class Postgres extends ConnectDB {
 
     public static void main(String[] args) {
         try (Postgres postgres = new Postgres()) {
+            postgres.setUser("admin", "0804");
             postgres.connectTo();
             System.out.println("Connection with postgresql successfully");
         } catch (Exception ex) {
-            System.out.println("Connection with postgresql was wrong");
+            System.out.println("Error: " + ex.getMessage());
         }
     }
 

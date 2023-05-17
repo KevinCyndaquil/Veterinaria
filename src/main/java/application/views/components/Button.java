@@ -51,7 +51,7 @@ public class Button extends CustomJButton {
 
         ButtonModel buttonModel = getModel();
         if (hasFocus()) {
-            g2.setColor(getBackground());
+            g2.setColor(Color.decode("#F8F2E7"));
         } else if (buttonModel.isRollover()) {
             g2.setColor(hoverBackgroundColor);
         } else {

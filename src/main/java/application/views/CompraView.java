@@ -1,10 +1,8 @@
 package application.views;
 
 
+import application.views.components.*;
 import application.views.components.Button;
-import application.views.components.InputText;
-import application.views.components.SectionRound;
-import application.views.components.TextDisplay;
 import application.views.components.abstracts.CustomJFrame;
 import application.views.utils.Fonts;
 import application.views.utils.Positions;
@@ -37,7 +35,7 @@ public class CompraView extends CustomJFrame {
         mainPanel.setBackground(Color.white);
         add(mainPanel);
 
-        SectionRound barLeft = new SectionRound();
+        BarLeft barLeft = new BarLeft();
         barLeft.setLocation(10, 10);
         //barLeft.setOpaque(false);
         mainPanel.add(barLeft);
@@ -52,11 +50,7 @@ public class CompraView extends CustomJFrame {
         //barLeft.setOpaque(false);
         section2.add(section2_1);
 
-        try {
-            UIManager.setLookAndFeel(new MaterialLookAndFeel());
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
+
 
         TextDisplay tTypesInvoice = new TextDisplay("Types Invoice");
         tTypesInvoice.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 16f));
@@ -116,6 +110,7 @@ public class CompraView extends CustomJFrame {
         section2.add(tpresentation);
         InputText presentation = new InputText("----");
         presentation.setSize(190, 60);
+        presentation.setFocusable(false);
         section2.add(presentation);
 
         TextDisplay tprice = new TextDisplay("Price");
@@ -222,8 +217,8 @@ public class CompraView extends CustomJFrame {
                 //if size window is bigger than HD then resize mainPanel to window size
                 mainPanel.setSize(getContentPane().getSize());
                 mainPanel.setBackground(Color.white);
-                barLeft.setSize(466, 1033);
-                barLeft.setBackground(Color.white);
+
+
                 section2.setSize(1391, 305);
                 section2.setBackground(Color.white);
                 section2_1.setSize(340, 120);
@@ -272,6 +267,13 @@ public class CompraView extends CustomJFrame {
             System.setProperty("awt.useSystemAAFontSettings", "lcd"); // use font antialiasing
             System.setProperty("swing.aatext", "true");
             // resto del código que utiliza AWT o Swing
+
+            try {
+                UIManager.setLookAndFeel(new MaterialLookAndFeel());
+            } catch (UnsupportedLookAndFeelException e) {
+                e.printStackTrace();
+            }
+
             new CompraView().setVisible(true);
 
         });

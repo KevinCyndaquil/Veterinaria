@@ -1,14 +1,20 @@
 package application;
 
+import application.controllers.C_Login;
+import application.controllers.C_MainView;
 import application.models.Entity_Manager.abstract_manager.Entity;
 import application.models.detalles.DetalleFactura;
 import application.models.entidades.Proveedores;
 import application.models.finanzas.Articulos;
+import application.views.MainView;
+import mdlaf.MaterialLookAndFeel;
 
+import javax.swing.*;
 import java.math.BigDecimal;
 import java.util.List;
 
 public class Main {
+
     public static void main(String[] args) {
         //hola wuichito
         Proveedores proveedor = new Proveedores(
@@ -26,6 +32,8 @@ public class Main {
                 new Articulos(
                         10, proveedor, "TECATE AZUL", new BigDecimal(115), "NO SE")
         );
+
+        System.out.println(Entity.columns(DetalleFactura.class));
 
         /*List<Alimentos> alimentos = List.of(
                 new Alimentos(
@@ -64,6 +72,19 @@ public class Main {
 
         System.out.println(detalle1.equals(articulos.get(1)));*/
 
-        System.out.println(Entity.columns(DetalleFactura.class));
+        java.awt.EventQueue.invokeLater(() -> {
+            System.setProperty("awt.useSystemAAFontSettings", "lcd"); // use font antialiasing
+            System.setProperty("swing.aatext", "true");
+            // resto del código que utiliza AWT o Swing
+
+            try {
+                UIManager.setLookAndFeel(new MaterialLookAndFeel());
+            } catch (UnsupportedLookAndFeelException e) {
+                e.printStackTrace();
+            }
+            C_MainView c_mainView = new C_MainView();
+            c_mainView.showView();
+
+        });
     }
 }

@@ -13,7 +13,10 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class Login extends CustomJFrame {
+    public InputText userJT;
     private JPanel mainPanel;
+    public InputPassword passwordJT;
+    public Button loginJB;
 
     public Login() {
         super("Login");
@@ -41,13 +44,16 @@ public class Login extends CustomJFrame {
         userJL.setSize(313, 60);
         mainPanel.add(userJL);
 
-        InputText userJT = new InputText("Username");
+
+        userJT = new InputText("Username");
         mainPanel.add(userJT);
 
-        InputPassword passwordJT = new InputPassword("Password");
+
+        passwordJT = new InputPassword("Password");
         mainPanel.add(passwordJT);
 
-        Button loginJB = new Button("Login");
+
+        loginJB = new Button("Login");
         mainPanel.add(loginJB);
 
 
@@ -71,16 +77,6 @@ public class Login extends CustomJFrame {
                 loginJB.setLocation(mainPanel, Positions.RIGHT, -200, 150);
 
             }
-        });
-    }
-
-    public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(() -> {
-            System.setProperty("awt.useSystemAAFontSettings", "lcd"); // use font antialiasing
-            System.setProperty("swing.aatext", "true");
-            // resto del código que utiliza AWT o Swing
-            new Login().setVisible(true);
-
         });
     }
 
