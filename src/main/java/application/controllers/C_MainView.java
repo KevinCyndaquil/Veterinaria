@@ -11,6 +11,8 @@ public class C_MainView extends C_Generic<MainView> {
     private C_Login c_login;
     public C_MainView() {
         super(MainView.class);
+
+        System.out.println(view);
     }
     @Override
     public void showView() {

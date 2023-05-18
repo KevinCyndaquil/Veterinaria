@@ -96,6 +96,9 @@ public class Main {
         DetalleFactura detalle2 = new DetalleFactura(articulos.get(1), 1, 1, 10);
 
         System.out.println(detalle1.equals(articulos.get(1)));*/
+        //MainView view = new MainView();
+
+
 
         java.awt.EventQueue.invokeLater(() -> {
             System.setProperty("awt.useSystemAAFontSettings", "lcd"); // use font antialiasing

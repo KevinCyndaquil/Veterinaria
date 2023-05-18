@@ -1,6 +1,7 @@
 package application.controllers;
 
 import application.MessageDialog;
+import application.controllers.abstracts.C_Alta;
 import application.controllers.abstracts.C_Generic;
 import application.database.Postgres;
 import application.models.Entity_Manager.repositories.Find;
@@ -18,7 +19,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 
 
-public class C_AltaMascota extends C_Generic<AltaMascota>  implements ActionListener {
+public class C_AltaMascota extends C_Alta<AltaMascota, Mascotas> implements ActionListener {
     public static Integer id_propietario;
     public static Integer id_raza;
     public C_AltaMascota() {
@@ -33,7 +34,8 @@ public class C_AltaMascota extends C_Generic<AltaMascota>  implements ActionList
         view.jButton2.addActionListener(this);
     }
 
-    public Mascotas altaMascota(){
+    @Override
+    public Mascotas alta() {
         Save<Mascotas> save = new Repository<>(new Postgres());
 
         Find<Personas> findPersona = new Repository<>(new Postgres());
@@ -59,7 +61,7 @@ public class C_AltaMascota extends C_Generic<AltaMascota>  implements ActionList
                 view.jTextField3.getText(),
                 personas,
                 raza
-                );
+        );
 
         try {
             mascota.setId_mascota((Integer) save.save(mascota));
@@ -68,7 +70,6 @@ public class C_AltaMascota extends C_Generic<AltaMascota>  implements ActionList
             return null;
         }
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -85,7 +86,7 @@ public class C_AltaMascota extends C_Generic<AltaMascota>  implements ActionList
         }
 
         if(e.getSource().equals(view.jButton3)){
-            Mascotas m = altaMascota();
+            Mascotas m = alta();
             if(m != null){
                 C_AltaCita.mascota = m;
                 MessageDialog.successMessage(view, "Mascota registrada con exito");
@@ -97,4 +98,6 @@ public class C_AltaMascota extends C_Generic<AltaMascota>  implements ActionList
 
 
     }
+
+
 }

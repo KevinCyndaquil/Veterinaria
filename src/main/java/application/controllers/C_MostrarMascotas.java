@@ -1,7 +1,7 @@
 package application.controllers;
 
 import application.MessageDialog;
-import application.controllers.abstracts.C_Generic;
+import application.controllers.abstracts.C_Mostrar;
 import application.database.Postgres;
 import application.models.Entity_Manager.repositories.Find;
 import application.models.Entity_Manager.repositories.Repository;
@@ -14,9 +14,9 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
 
-public class C_MostrarMascotas extends C_Generic<MostrarMascotas> implements ActionListener {
-    public C_MostrarMascotas() {
-        super(MostrarMascotas.class);
+public class C_MostrarMascotas extends C_Mostrar<MostrarMascotas, Mascotas> implements ActionListener {
+    public C_MostrarMascotas(Mascotas mascota) {
+        super(MostrarMascotas.class, mascota);
     }
 
     @Override
@@ -26,6 +26,7 @@ public class C_MostrarMascotas extends C_Generic<MostrarMascotas> implements Act
         view.btnRegistrar.addActionListener(this);
     }
 
+    /*
     public void datosTabla(String name){
 
         if(name.isEmpty()){
@@ -47,6 +48,34 @@ public class C_MostrarMascotas extends C_Generic<MostrarMascotas> implements Act
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }*/
+
+    @Override
+    public void mostrar() {
+        Find<Mascotas> findMascota = new Repository<>(new Postgres());
+        List<Object[]> rows;
+
+        try {
+            rows = findMascota.find(m).stream()
+                    .map(Mascotas.class::cast)
+                    .map(m -> new Object[]{
+                            m,
+                            m.getNombre(),
+                            m.getFecha_nacimiento(),
+                            m.getSexo(),
+                            m.getPropietario().getNombre(),
+                            m.getRaza().nombre()})
+                    .toList();
+        } catch (SQLException e) {
+            MessageDialog.queryErrorMessage(
+                    view,
+                    "Ocurrió un error al buscar las coincidencias del objeto %s".formatted(m));
+            throw new RuntimeException(e);
+        }
+
+        DefaultTableModel model = (DefaultTableModel) view.table1.getModel();
+        model.setRowCount(0);
+        rows.forEach(model::addRow);
     }
 
     @Override

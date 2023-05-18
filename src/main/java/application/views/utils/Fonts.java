@@ -2,6 +2,7 @@ package application.views.utils;
 
 import lombok.Getter;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.IOException;
@@ -11,7 +12,8 @@ import java.util.Objects;
 public enum Fonts {
     CHERISH("Cherish", Objects.requireNonNull(Fonts.class.getClassLoader().getResource(
             "fonts/Cherish/Cherish-Regular.ttf"))),
-    ROBOTO("Roboto",Objects.requireNonNull(Fonts.class.getClassLoader().getResource("fonts/Roboto/Roboto-Regular.ttf"))),
+    ROBOTO("Roboto",Objects.requireNonNull(Fonts.class.getClassLoader().getResource(
+            "fonts/Roboto/Roboto-Regular.ttf"))),
     MONSERRAT("Montserrat", Objects.requireNonNull(Fonts.class.getClassLoader().getResource(
             "fonts/Montserrat/Montserrat-VariableFont_wght.ttf"))),
     HEY_COMIC("Hey Comic", Objects.requireNonNull(Fonts.class.getClassLoader().getResource(
@@ -30,7 +32,7 @@ public enum Fonts {
      * @param font una instancia de la enum Fonts.
      * @return un objeto Font.
      */
-    public static Font load(@NonNull Fonts font) {
+    public static @Nullable Font load(@NonNull Fonts font) {
         try {
             return Font.createFont(Font.TRUETYPE_FONT, font.getPath().openStream());
         } catch (FontFormatException | IOException e) {

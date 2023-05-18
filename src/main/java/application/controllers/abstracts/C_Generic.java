@@ -1,18 +1,16 @@
 package application.controllers.abstracts;
 
-import application.views.CompraView;
-import application.views.MainView;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class C_Generic <T extends JFrame>{
 
     protected T view;
 
-    public C_Generic(Class<T> clazz) {
+    public C_Generic(@NotNull Class<T> clazz) {
             //instanciar la vista
             try {
                 view = clazz.getDeclaredConstructor().newInstance();

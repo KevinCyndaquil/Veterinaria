@@ -65,16 +65,24 @@ public class MenuCitas extends CustomJFrame {
 
         this.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
+                System.out.println(getContentPane().getSize());
                 mainPanel.setSize(getContentPane().getSize());
                 mainPanel.setBackground(Color.white);
 
-                section2.setSize(1391, 989);
+                barLeft.setSize(getWidth() / 4, getHeight() - 60);
+
+                section2.setLocation(
+                        barLeft.getX() + barLeft.getWidth() + 10,
+                        20);
+                section2.setSize(
+                        getWidth() - (barLeft.getX() + barLeft.getWidth() + 10) - 30,
+                        getHeight() - (getHeight() / 20) - 50);
                 section2.setBackground(Color.white);
 
-                btnaltacitas.setLocation(section2, Positions.TOP,-300,90);
-                btnReportes.setLocation(section2, Positions.TOP, 300, 90);
-                btnModificaciones.setLocation(section2, Positions.CENTER, 0, -150);
-                btnRegresar.setLocation(section2, Positions.BOTTOM, -530, -40);
+                btnaltacitas.setLocation(section2, Positions.TOP,-200,90);
+                btnReportes.setLocation(section2, Positions.TOP, 200, 90);
+                btnModificaciones.setLocation(section2, Positions.CENTER, 0, 0);
+                btnRegresar.setLocation(section2, Positions.BOTTOM, 0, -100);
             }
         });
     }

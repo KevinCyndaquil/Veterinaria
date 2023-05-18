@@ -1,8 +1,13 @@
 package application.views.components;
 
 
+import application.views.utils.Fonts;
+import application.views.utils.ResponsiveDimension;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.geom.RoundRectangle2D;
 
 public class BarLeft extends SectionRound{
@@ -10,7 +15,18 @@ public class BarLeft extends SectionRound{
     public Button btncitas;
     public Button btnreportes;
     public Button btnadmins;
+
+    public Point compXY;
+    public Point compWH;
+    public Rectangle buttonSpace;
+    public Rectangle labelSpace;
+
     public BarLeft() {
+        Dimension screenDimension = ResponsiveDimension.getNextResolution().getSize();
+
+        buttonSpace = new Rectangle(121, 13, 225, 255);
+        labelSpace = new Rectangle(67, 25, buttonSpace.width, buttonSpace.height);
+
         setSize(466, 1033);
         setBackground(Color.decode("#A0CDC8"));
 
@@ -67,6 +83,32 @@ public class BarLeft extends SectionRound{
         hueso.setSize(hueso.getIcon().getIconWidth(), hueso.getIcon().getIconHeight());
         hueso.setLocation(310, 935);
         add(hueso);
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+
+                System.out.println(getSize());
+
+                compXY = new Point(getWidth() / 20, getHeight() / 20);
+                compWH = new Point(getWidth() - (compXY.x * 2), getHeight() / 3 - (compXY.y * 2));
+
+                System.out.println(compXY);
+                System.out.println(compWH);
+
+                btncompras.setBounds(compXY.x + 100, compXY.y, compWH.x - 100, compWH.y);
+                tcompras.setBounds(compXY.x, btncompras.getY(), 100, compWH.y);
+
+                btnreportes.setBounds(compXY.x + 100, compXY.y * 3 + compWH.y, compWH.x - 100, compWH.y);
+                treportes.setBounds(compXY.x, btnreportes.getY(), 100, btnreportes.getHeight());
+
+                btncitas.setBounds(compXY.x + 100, compXY.y * 5 + compWH.y * 2, compWH.x - 100, compWH.y);
+                tcitas.setBounds(compXY.x, btncitas.getY(), 100, btncitas.getHeight());
+
+                System.out.println(btncompras.getBounds());
+            }
+        });
     }
 
     @Override

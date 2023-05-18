@@ -41,9 +41,15 @@ public class C_AltaCita extends C_Generic<AltaCita> implements ActionListener {
 
         //buscarmascota
         if(e.getSource().equals(view.btnqrynombre)){
-            C_MostrarMascotas c_mostrarMascotas = new C_MostrarMascotas();
+            Mascotas mascota = new Mascotas(
+                    view.inombremascota.getText(),
+                    null,
+                    null,
+                    null,
+                    null);
+            C_MostrarMascotas c_mostrarMascotas = new C_MostrarMascotas(mascota);
             c_mostrarMascotas.showView();
-            c_mostrarMascotas.datosTabla(view.inombremascota.getText());
+            c_mostrarMascotas.mostrar();
         }
 
         //buscarvete
