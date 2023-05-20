@@ -1,8 +1,8 @@
-package application.views.components.interfaces;
+package application.controllers.abstracts;
 
 import javax.swing.*;
 
-public abstract class ViewerController <V extends JFrame> {
+public abstract class ViewerController <V extends JFrame> implements EventsController {
     protected V view;
     public ViewerController(V view) {
         this.view = view;
@@ -18,5 +18,4 @@ public abstract class ViewerController <V extends JFrame> {
         view.setVisible(!view.isVisible());
         return true;
     }
-    public abstract void initEvents();
 }

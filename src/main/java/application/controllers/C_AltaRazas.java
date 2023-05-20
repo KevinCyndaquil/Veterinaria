@@ -36,7 +36,7 @@ public class C_AltaRazas extends C_Generic<AltaRaza> implements ActionListener {
         if(e.getSource().equals(view.jButton3)){
             Integer idRaza = altaRaza();
             if(altaRaza() != -1){
-                C_AltaMascota.id_raza = idRaza;
+                //C_AltaMascota.id_raza = idRaza;
                 MessageDialog.successMessage(view, "Raza registrada con exito");
                 view.dispose();
             }else{

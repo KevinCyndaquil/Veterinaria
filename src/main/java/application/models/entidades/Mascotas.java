@@ -51,7 +51,7 @@ public class Mascotas implements Entity {
 
     @Override
     public String toString() {
-        return id_mascota.toString();
+        return nombre;
     }
 }
 

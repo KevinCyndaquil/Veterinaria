@@ -17,16 +17,16 @@ import java.awt.event.ComponentEvent;
 
 public class AltaCita extends CustomJFrame {
     private JPanel mainPanel;
-    public BarLeft barLeft;
     public Button btnRegresar;
-    public Button btnagendar;
-    public Button btnqryveterinario;
-    public Button btnpagar;
-    public Button btnqrynombre;
-    public InputText inombremascota;
-    public InputText inombreveterinario;
+    public Button btnAgendar;
+    public Button btnQryVeterinario;
+    public Button btnPagar;
+    public Button btnQryNombre;
+    public InputText iNombreMascota;
+    public InputText iNombreVeterinario;
     public AltaCita() {
         super("Alta Cita");
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
     @Override
@@ -38,20 +38,15 @@ public class AltaCita extends CustomJFrame {
         mainPanel.setBackground(Color.white);
         add(mainPanel);
 
-        barLeft = new BarLeft();
-        barLeft.setLocation(10, 10);
-        //barLeft.setOpaque(false);
-        mainPanel.add(barLeft);
-
         SectionRound section2 = new SectionRound();
-        section2.setLocation(500, 50);
+        section2.setLocation(20, 20);
         //barLeft.setOpaque(false);
         mainPanel.add(section2);
 
-        TextDisplay tfecha = new TextDisplay("Fecha de la cita");
-        tfecha.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
-        tfecha.setSize(tfecha.getPreferredSize());
-        section2.add(tfecha);
+        TextDisplay tFecha = new TextDisplay("Fecha de la cita");
+        tFecha.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
+        tFecha.setSize(tFecha.getPreferredSize());
+        section2.add(tFecha);
 
         JXDatePicker picker = new JXDatePicker();
         picker.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
@@ -61,79 +56,80 @@ public class AltaCita extends CustomJFrame {
         picker.getComponent(0).setBackground(Color.white);
         section2.add(picker);
 
-        TextDisplay thora = new TextDisplay("Hora de la cita");
-        thora.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
-        thora.setSize(thora.getPreferredSize());
-        section2.add(thora);
+        TextDisplay tHora = new TextDisplay("Hora de la cita");
+        tHora.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
+        tHora.setSize(tHora.getPreferredSize());
+        section2.add(tHora);
 
-        InputText ihora = new InputText("hh:mm");
-        ihora.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
-        ihora.setSize(300, 62);
-        section2.add(ihora);
+        InputText iHora = new InputText("hh:mm");
+        iHora.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
+        iHora.setSize(300, 62);
+        section2.add(iHora);
 
-        TextDisplay tinformacion = new TextDisplay("Informacion adicional");
-        tinformacion.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
-        tinformacion.setSize(tinformacion.getPreferredSize());
-        section2.add(tinformacion);
+        TextDisplay tInformacion = new TextDisplay("Información adicional");
+        tInformacion.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
+        tInformacion.setSize(tInformacion.getPreferredSize());
+        section2.add(tInformacion);
 
-        JTextArea iinformacion = new JTextArea();
-        iinformacion.setBackground(Color.white);
-        iinformacion.setBorder(BorderFactory.createLineBorder(Color.black));
-        iinformacion.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
-        iinformacion.setSize(420, 149);
-        section2.add(iinformacion);
+        JTextArea iInformacion = new JTextArea();
+        iInformacion.setBackground(Color.white);
+        iInformacion.setBorder(BorderFactory.createLineBorder(Color.black));
+        iInformacion.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
+        iInformacion.setSize(420, 149);
+        section2.add(iInformacion);
 
-        TextDisplay tnombremascota = new TextDisplay("Nombre de la mascota");
-        tnombremascota.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
-        tnombremascota.setSize(tnombremascota.getPreferredSize());
-        section2.add(tnombremascota);
-
-
-        inombremascota = new InputText("Nombre");
-        inombremascota.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
-        inombremascota.setSize(300, 62);
-        section2.add(inombremascota);
+        TextDisplay tNombreMascota = new TextDisplay("Nombre de la mascota");
+        tNombreMascota.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
+        tNombreMascota.setSize(tNombreMascota.getPreferredSize());
+        section2.add(tNombreMascota);
 
 
-        btnqrynombre = new Button("Buscar");
-        btnqrynombre.setBackground(Color.decode("#F8F2E7"));
-        btnqrynombre.setSize(100, 62);
-        section2.add(btnqrynombre);
-
-        TextDisplay tnombreveterinario = new TextDisplay("Nombre del veterinario");
-        tnombreveterinario.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
-        tnombreveterinario.setSize(tnombreveterinario.getPreferredSize());
-        section2.add(tnombreveterinario);
+        iNombreMascota = new InputText("Nombre");
+        iNombreMascota.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
+        iNombreMascota.setSize(300, 62);
+        section2.add(iNombreMascota);
 
 
-        inombreveterinario = new InputText("Nombre");
-        inombreveterinario.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
-        inombreveterinario.setSize(300, 62);
-        section2.add(inombreveterinario);
+        btnQryNombre = new Button("Buscar");
+        btnQryNombre.setBackground(Color.decode("#F8F2E7"));
+        btnQryNombre.setSize(100, 62);
+        section2.add(btnQryNombre);
 
-        btnqryveterinario = new Button("Buscar");
-        btnqryveterinario.setBackground(Color.decode("#F8F2E7"));
-        btnqryveterinario.setSize(100, 62);
-        section2.add(btnqryveterinario);
+        TextDisplay tNombreVeterinario = new TextDisplay("Nombre del veterinario");
+        tNombreVeterinario.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
+        tNombreVeterinario.setSize(tNombreVeterinario.getPreferredSize());
+        section2.add(tNombreVeterinario);
 
-        TextDisplay tpagar = new TextDisplay("Pagar? (Opcional)");
-        tpagar.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
-        tpagar.setSize(tpagar.getPreferredSize());
-        section2.add(tpagar);
 
-        btnpagar = new Button("Pagar");
-        btnpagar.setBackground(Color.decode("#F8F2E7"));
-        btnpagar.setSize(100, 62);
-        section2.add(btnpagar);
+        iNombreVeterinario = new InputText("Nombre");
+        iNombreVeterinario.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
+        iNombreVeterinario.setSize(300, 62);
+        section2.add(iNombreVeterinario);
 
-        btnagendar = new Button("Agendar");
-        btnagendar.setSize(275, 50);
-        section2.add(btnagendar);
+        btnQryVeterinario = new Button("Buscar");
+        btnQryVeterinario.setBackground(Color.decode("#F8F2E7"));
+        btnQryVeterinario.setSize(100, 62);
+        section2.add(btnQryVeterinario);
+
+        TextDisplay tPagar = new TextDisplay("¿Pagar? (Opcional)");
+        tPagar.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 24f));
+        tPagar.setSize(tPagar.getPreferredSize());
+        section2.add(tPagar);
+
+        btnPagar = new Button("Pagar");
+        btnPagar.setBackground(Color.decode("#F8F2E7"));
+        btnPagar.setSize(100, 62);
+        section2.add(btnPagar);
+
+        btnAgendar = new Button("Agendar");
+        btnAgendar.setSize(275, 50);
+        section2.add(btnAgendar);
 
         btnRegresar = new Button("Regresar");
         btnRegresar.setBackground(Color.decode("#F8F2E7"));
         btnRegresar.setForeground(Color.red);
         btnRegresar.setSize(250, 50);
+
         section2.add(btnRegresar);
 
         this.addComponentListener(new ComponentAdapter() {
@@ -142,34 +138,34 @@ public class AltaCita extends CustomJFrame {
                 mainPanel.setSize(getContentPane().getSize());
                 mainPanel.setBackground(Color.white);
 
-                section2.setSize(1391, 989);
+                section2.setSize(getWidth() - 50, getHeight() - 75);
                 section2.setBackground(Color.white);
 
-                tfecha.setLocation(section2, Positions.TOP,-520,30);
+                tFecha.setLocation(section2, Positions.TOP,-520,30);
                 picker.setLocation(90,70);
 
-                thora.setLocation(section2, Positions.TOP,-530,150);
-                ihora.setLocation(90,190);
+                tHora.setLocation(section2, Positions.TOP,-530,150);
+                iHora.setLocation(90,190);
 
-                tinformacion.setLocation(section2, Positions.TOP,-490,270);
-                iinformacion.setLocation(90,310);
+                tInformacion.setLocation(section2, Positions.TOP,-490,270);
+                iInformacion.setLocation(90,310);
 
-                tnombremascota.setLocation(section2, Positions.TOP,305,30);
-                inombremascota.setLocation(section2, Positions.TOP,330,70);
+                tNombreMascota.setLocation(section2, Positions.TOP,305,30);
+                iNombreMascota.setLocation(section2, Positions.TOP,330,70);
 
-                btnqrynombre.setLocation(1210,70);
+                btnQryNombre.setLocation(1210,70);
 
-                tnombreveterinario.setLocation(section2, Positions.TOP,305,150);
-                inombreveterinario.setLocation(section2, Positions.TOP,330,190);
+                tNombreVeterinario.setLocation(section2, Positions.TOP,305,150);
+                iNombreVeterinario.setLocation(section2, Positions.TOP,330,190);
 
-                btnqryveterinario.setLocation(1210,190);
+                btnQryVeterinario.setLocation(1210,190);
 
-                tpagar.setLocation(section2, Positions.TOP,280,300);
-                btnpagar.setLocation(1210,310);
+                tPagar.setLocation(section2, Positions.TOP,280,300);
+                btnPagar.setLocation(1210,310);
 
-                btnagendar.setLocation(section2,Positions.BOTTOM,0,-300);
+                btnAgendar.setLocation(section2,Positions.BOTTOM,0,-100);
 
-                btnRegresar.setLocation(section2, Positions.BOTTOM, -530, -40);
+                btnRegresar.setLocation(20, section2.getHeight() - btnRegresar.getHeight() - 20);
             }
         });
     }
@@ -180,7 +176,6 @@ public class AltaCita extends CustomJFrame {
             System.setProperty("awt.useSystemAAFontSettings", "lcd"); // use font antialiasing
             System.setProperty("swing.aatext", "true");
             // resto del código que utiliza AWT o Swing
-
             try {
                 UIManager.setLookAndFeel(new MaterialLookAndFeel());
             } catch (UnsupportedLookAndFeelException e) {
@@ -188,7 +183,6 @@ public class AltaCita extends CustomJFrame {
             }
 
             new AltaCita().setVisible(true);
-
         });
     }
 }

@@ -10,7 +10,7 @@ import application.views.FacturaChooser.FacturaDisplay.DetalleFacturaView;
 import application.views.FacturaChooser.FacturaDisplay.HeaderDetalleFacturaCellRenderer;
 import application.views.FacturaChooser.FacturaDisplay.TableDetalleFacturaModel;
 import application.views.components.interfaces.TableController;
-import application.views.components.interfaces.ViewerController;
+import application.controllers.abstracts.ViewerController;
 
 import javax.swing.table.JTableHeader;
 import java.sql.SQLException;

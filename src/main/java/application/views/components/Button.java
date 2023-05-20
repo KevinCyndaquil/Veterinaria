@@ -30,7 +30,7 @@ public class Button extends CustomJButton {
         setBorder(null);
         setRolloverEnabled(true);
 
-        addFocusListener(new FocusListener() {
+        /*addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
                 setBorder(new MatteBorderExt(1, 1, 1, 1, Color.BLACK));
@@ -39,7 +39,7 @@ public class Button extends CustomJButton {
             public void focusLost(FocusEvent e) {
                 setBorder(null);
             }
-        });
+        });*/
 
         addChangeListener(e -> repaint());
     }

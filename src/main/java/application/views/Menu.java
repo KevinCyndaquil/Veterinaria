@@ -14,7 +14,8 @@ import java.awt.event.ComponentEvent;
 
 public class Menu extends CustomJFrame {
     private JPanel mainPanel;
-    private JPanel switchPanel;
+    public JPanel switchPanel;
+    public JLabel fondo;
     public BarLeft barLeft;
 
     public Menu() {
@@ -40,7 +41,7 @@ public class Menu extends CustomJFrame {
         mainPanel.add(barLeft);
 
         ImageIcon imgFondo = new ImageIcon("src/main/resources/images/fondo_menu.png");
-        JLabel fondo = new JLabel(imgFondo);
+        fondo = new JLabel(imgFondo);
         fondo.setSize(fondo.getIcon().getIconWidth(), fondo.getIcon().getIconHeight());
         fondo.setLocation(0, 0);
         switchPanel.add(fondo);
@@ -59,8 +60,8 @@ public class Menu extends CustomJFrame {
                 switchPanel.setBounds(
                         barLeft.getX() + barLeft.getWidth() + 20,
                         barLeft.getY(),
-                        getWidth() - (barLeft.getX() + barLeft.getWidth() + 20),
-                        getHeight() - barLeft.getY());
+                        getWidth() - (barLeft.getX() + barLeft.getWidth() + 50),
+                        getHeight() - barLeft.getY() - 50);
 
                 fondo.setBounds(0, 0, switchPanel.getWidth(), switchPanel.getHeight());
             }

@@ -11,7 +11,7 @@ import application.models.finanzas.FacturasProveedor;
 import application.views.FacturaChooser.FacturaChooserView;
 import application.views.components.interfaces.ComboBoxController;
 import application.views.components.interfaces.TableController;
-import application.views.components.interfaces.ViewerController;
+import application.controllers.abstracts.ViewerController;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.Date;

@@ -13,6 +13,8 @@ public abstract class CustomJFrame extends JFrame {
     public CustomJFrame(String title) {
         super(title);
         setLayout(null);
+        setResizable(false);
+
         try {
             //getContentPane().setPreferredSize(ResponsiveDimension.getNextResolution().getSize());
             setPreferredSize(ResponsiveDimension.getNextResolution().getSize());
@@ -26,6 +28,7 @@ public abstract class CustomJFrame extends JFrame {
 
         pack();
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     public abstract void initComponents();

@@ -1,46 +1,34 @@
 package application.controllers;
 
+import application.MessageDialog;
 import application.controllers.abstracts.C_Generic;
+import application.controllers.abstracts.EventsController;
+import application.controllers.abstracts.PanelController;
 import application.views.MenuCitas;
+import application.views.panels.MenuCitaPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
-public class C_MenuCitas extends C_Generic<MenuCitas> implements ActionListener {
+public class C_MenuCitas extends PanelController<MenuCitaPanel> implements EventsController {
+
     public C_MenuCitas() {
-        super(MenuCitas.class);
+        super(new MenuCitaPanel());
     }
 
     @Override
-    public void showView() {
-        view.setVisible(true);
-        view.btnRegresar.addActionListener(this);
-        view.btnaltacitas.addActionListener(this);
-        view.btnReportes.addActionListener(this);
-        view.btnModificaciones.addActionListener(this);
-    }
+    public void initEvents() {
+        panel.btnRegresar.addActionListener(e -> {
+            MessageDialog.successMessage(null, "Todo bien");
+        });
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == view.btnRegresar){
-            C_Menu c_menu = new C_Menu();
-            view.dispose();
-            c_menu.showView();
+        panel.btnaltacitas.addActionListener(e -> {
+            new C_AltaCita();
+        });
 
-        }
+        panel.btnModificaciones.addActionListener(e -> {});
 
-        if(e.getSource() == view.btnaltacitas){
-            C_AltaCita c_altaCita = new C_AltaCita();
-            view.dispose();
-            c_altaCita.showView();
-        }
-
-        if(e.getSource() == view.btnReportes){
-
-        }
-
-        if(e.getSource() == view.btnModificaciones){
-
-        }
+        panel.btnReportes.addActionListener(e -> {});
     }
 }

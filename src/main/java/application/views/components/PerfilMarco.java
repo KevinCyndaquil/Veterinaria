@@ -7,11 +7,13 @@ import lombok.Getter;
 import javax.swing.*;
 
 public class PerfilMarco extends CustomJPanel {
-    private final JLabel marco;
+    private JLabel marco;
     //this is the image that will be used to set the image of the JLabel the size is: 135x135 max
     @Getter
-    private final JLabel fotoJL;
-    public PerfilMarco() {
+    private JLabel fotoJL;
+
+    @Override
+    public void initComponents() {
         setLayout(null);
 
         marco = new JLabel();

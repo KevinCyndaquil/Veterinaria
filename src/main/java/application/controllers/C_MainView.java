@@ -1,5 +1,6 @@
 package application.controllers;
 
+import application.Main;
 import application.controllers.abstracts.C_Generic;
 import application.views.MainView;
 
@@ -7,14 +8,13 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class C_MainView extends C_Generic<MainView> {
+public class C_MainView {
+    private MainView view;
     private C_Login c_login;
-    public C_MainView() {
-        super(MainView.class);
 
-        System.out.println(view);
+    public C_MainView() {
+        view = new MainView();
     }
-    @Override
     public void showView() {
         view.setVisible(true);
 
@@ -25,11 +25,9 @@ public class C_MainView extends C_Generic<MainView> {
                 c_login = new C_Login();
             }
             view = null;
-            c_login.showView();
+            System.out.println("hola");
         });
         timer.setRepeats(false);
         timer.start();
     }
-
-
 }

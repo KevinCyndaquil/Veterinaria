@@ -7,6 +7,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 public abstract class CustomJPanel extends JPanel implements IPositionableComponent {
+    public CustomJPanel() {
+        initComponents();
+    }
+
     @Override
     public void setLocation(@NotNull JComponent fatherJComponent, Positions position){
 
@@ -36,4 +40,6 @@ public abstract class CustomJPanel extends JPanel implements IPositionableCompon
                     super.setLocation(fatherJComponent.getWidth() / 2 - getWidth() / 2 +x, fatherJComponent.getHeight() - getHeight() + y);
         }
     }
+
+    public abstract void initComponents();
 }

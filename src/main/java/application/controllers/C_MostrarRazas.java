@@ -34,7 +34,7 @@ public class C_MostrarRazas extends C_Generic<MostrarRaza> implements ActionList
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(view.jButton1)){
             int id = Integer.parseInt(view.jTable1.getValueAt(view.jTable1.getSelectedRow(), 0).toString());
-            C_AltaMascota.id_raza = id;
+            //C_AltaMascota.id_raza = id;
             MessageDialog.successMessage(view, "Raza seleccionada: " + id);
             view.dispose();
         }

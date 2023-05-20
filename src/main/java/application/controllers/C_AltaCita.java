@@ -1,72 +1,84 @@
 package application.controllers;
 
-import application.controllers.abstracts.C_Generic;
-import application.database.Postgres;
-import application.models.Entity_Manager.repositories.Find;
-import application.models.Entity_Manager.repositories.Repository;
+import application.MessageDialog;
+import application.controllers.abstracts.C_Alta;
+import application.models.entidades.Citas;
+import application.models.entidades.Empleados;
 import application.models.entidades.Mascotas;
+import application.models.entidades.Personas;
 import application.views.AltaCita;
+import org.jetbrains.annotations.NotNull;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+public class C_AltaCita extends C_Alta<AltaCita, Citas> {
+    private Mascotas mascota;
+    private Empleados veterinario;
 
-public class C_AltaCita extends C_Generic<AltaCita> implements ActionListener {
-    public static Mascotas mascota;
-    public static Integer idVeterinario;
     public C_AltaCita() {
-        super(AltaCita.class);
+        super(new AltaCita());
     }
 
     @Override
-    public void showView() {
-        view.setVisible(true);
-        view.btnRegresar.addActionListener(this);
-        view.btnqrynombre.addActionListener(this);
-        view.btnqryveterinario.addActionListener(this);
-        view.btnagendar.addActionListener(this);
+    public boolean pasar(@NotNull Object obj) {
+        return switch (obj.getClass().getSimpleName()) {
+            case "Mascotas" -> {
+                mascota = (Mascotas) obj;
+                view.iNombreMascota.setText(mascota.toString());
+
+                yield true;
+            }
+            case "Veterinario" -> {
+                veterinario = (Empleados) obj;
+                view.iNombreVeterinario.setText(veterinario.toString());
+
+                yield true;
+            }
+            default -> false;
+        };
     }
 
-    public Integer altaCita(){
-        System.out.println(mascota.getNombre());
-        return 1;
-    }
     @Override
-    public void actionPerformed(ActionEvent e) {
-        //regresar
-        if(e.getSource().equals(view.btnRegresar)){
-            C_MenuCitas c_menuCitas = new C_MenuCitas();
-            view = null;
-            c_menuCitas.showView();
-        }
+    public void initEvents() {
+        view.btnRegresar.addActionListener(e -> {
+            MessageDialog.successMessage(null, "Todo bien");
+        });
 
-        //buscarmascota
-        if(e.getSource().equals(view.btnqrynombre)){
+        view.btnQryNombre.addActionListener(e -> {
+            String name = view.iNombreMascota.getText();
+
             Mascotas mascota = new Mascotas(
-                    view.inombremascota.getText(),
+                    (name.isEmpty()) ? null : name,
                     null,
                     null,
                     null,
                     null);
-            C_MostrarMascotas c_mostrarMascotas = new C_MostrarMascotas(mascota);
-            c_mostrarMascotas.showView();
+            C_MostrarMascotas c_mostrarMascotas = new C_MostrarMascotas(mascota, this);
             c_mostrarMascotas.mostrar();
-        }
+        });
 
-        //buscarvete
-        if(e.getSource().equals(view.btnqryveterinario)){
-            C_MostrarPropietarios c_mostrarpro = new C_MostrarPropietarios();
-            c_mostrarpro.showView();
-            c_mostrarpro.datosTabla(view.inombreveterinario.getText());
-        }
+        view.btnQryVeterinario.addActionListener(e -> {
+            String name = view.iNombreMascota.getText();
 
-        //agendar
-        if(e.getSource().equals(view.btnagendar)){
-            altaCita();
-        }
+            Empleados veterianrio = new Empleados(
+                    null,
+                    (name.isEmpty()) ? null : name,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
+
+            //C_MostrarPropietarios c_mostrarpro = new C_MostrarPropietarios();
+            //c_mostrarpro.datosTabla(view.iNombreVeterinario.getText());
+        });
+
+        view.btnAgendar.addActionListener(e -> alta());
     }
 
-    public static void main(String[] args) {
-        C_AltaCita c_altaCita = new C_AltaCita();
-        c_altaCita.showView();
+    @Override
+    public Citas alta() {
+        return null;
     }
 }

@@ -9,7 +9,7 @@ import application.models.entidades.Personas;
 import application.controllers.C_ChooserMascota;
 import application.views.components.interfaces.ComboBoxController;
 import application.views.components.interfaces.TableController;
-import application.views.components.interfaces.ViewerController;
+import application.controllers.abstracts.ViewerController;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;

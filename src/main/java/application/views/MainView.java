@@ -51,7 +51,6 @@ public class MainView extends CustomJFrame {
                 banner.setLocation(mainPanel, Positions.CENTER, 0, -120);
                 welcomeJL.setLocation(mainPanel, Positions.CENTER, 0, 200);
                 loadingJL.setLocation(mainPanel.getWidth() / 2 - loadingJL.getWidth() / 2, mainPanel.getHeight() / 2 - loadingJL.getHeight() / 2 + 280);
-
             }
         });
     }

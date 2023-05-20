@@ -5,7 +5,7 @@ import application.database.Postgres;
 import application.database.repository.CitaRepository;
 import application.models.entidades.Mascotas;
 import application.views.ChooserMascotaView;
-import application.views.components.interfaces.ViewerController;
+import application.controllers.abstracts.ViewerController;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.table.DefaultTableModel;

@@ -27,7 +27,7 @@ public class C_AltaPropietarios extends C_Generic<AltaPropietario> implements Ac
         if(e.getSource().equals(view.jButton3)){
             Integer idPropietario = altaPropietario();
             if(altaPropietario() != -1){
-                C_AltaMascota.id_propietario = idPropietario;
+                //C_AltaMascota.id_propietario = idPropietario;
                 MessageDialog.successMessage(view, "Propietario registrado con exito");
                 view.dispose();
             }else{
