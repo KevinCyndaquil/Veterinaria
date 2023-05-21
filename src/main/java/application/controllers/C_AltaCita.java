@@ -80,4 +80,9 @@ public class C_AltaCita extends C_AltaPasar<AltaCita, Citas> {
     public Citas alta() {
         return null;
     }
+
+    @Override
+    public boolean actualizar() {
+        return false;
+    }
 }

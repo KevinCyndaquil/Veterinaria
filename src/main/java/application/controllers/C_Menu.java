@@ -10,16 +10,14 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Objects;
 
 public class C_Menu extends ViewerController<Menu> {
-    private final List<PanelController<?>> panels;
+    private List<PanelController<?>> panels;
     private C_Compras c_compras;
 
     public C_Menu() {
         super(new Menu());
-
-        panels = List.of(
-                new C_MenuCitas());
     }
 
     public boolean validarPanel(@NotNull Component component) {
@@ -59,16 +57,13 @@ public class C_Menu extends ViewerController<Menu> {
 
     @Override
     public void initEvents() {
-        view.barLeft.btncompras.addActionListener(e ->  {
-                if(c_compras == null) {
-                    c_compras = new C_Compras();
-                }
-                view = null;
-                c_compras.showView();
-        });
+        panels = List.of(
+                new C_MenuCitas(),
+                new C_Compras());
 
-        view.barLeft.btncitas
-                .addActionListener(e -> switchPanel(panels.get(0).initPanel()));
+        view.barLeft.btncompras.addActionListener(e -> switchPanel((new C_Compras()).initPanel()));
+
+        view.barLeft.btncitas.addActionListener(e -> switchPanel(Objects.requireNonNull(panels.get(0).initPanel())));
 
         view.barLeft.btnreportes.addMouseListener(new MouseAdapter() {
             @Override

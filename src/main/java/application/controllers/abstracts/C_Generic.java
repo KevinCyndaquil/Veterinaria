@@ -1,6 +1,6 @@
 package application.controllers.abstracts;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 import javax.swing.*;
 
@@ -10,7 +10,7 @@ public abstract class C_Generic <T extends JFrame>{
 
     protected T view;
 
-    public C_Generic(@NotNull Class<T> clazz) {
+    public C_Generic(@NonNull Class<T> clazz) {
             //instanciar la vista
             try {
                 view = clazz.getDeclaredConstructor().newInstance();

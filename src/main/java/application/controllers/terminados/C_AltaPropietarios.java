@@ -39,6 +39,11 @@ public class C_AltaPropietarios extends C_Alta<AltaPropietario, Personas> {
     }
 
     @Override
+    public boolean actualizar() {
+        return false;
+    }
+
+    @Override
     public void initEvents() {
         view.bRegistrar.addActionListener(e -> {
             Personas p = alta();

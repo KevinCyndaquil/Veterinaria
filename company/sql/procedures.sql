@@ -18,7 +18,7 @@ BEGIN
         new.id_factura,
         new.cns_detalle_factura;
 
-    -- obtenemos el precio del producto
+    -- obtenemos el iPrecio del producto
     SELECT INTO vMonto, vId_proveedor monto_compra, id_proveedor
     FROM articulos
     WHERE id_articulo = new.id_articulo;
@@ -71,7 +71,7 @@ BEGIN
 
     RAISE NOTICE 'subtotal: %', new.subtotal;
 
-    -- añadimos el precio del articuloVenta a la factura
+    -- añadimos el iPrecio del articuloVenta a la factura
     UPDATE facturas_proveedor
     SET monto_total = monto_total + (vCantidad * vMonto)
     WHERE id_factura = new.id_factura;

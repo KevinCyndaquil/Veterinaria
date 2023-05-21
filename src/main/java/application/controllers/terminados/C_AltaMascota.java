@@ -9,17 +9,25 @@ import application.models.entidades.Mascotas;
 import application.models.entidades.Personas;
 import application.models.entidades.Razas;
 import application.views.alta.AltaMascota;
+import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Date;
 import java.sql.SQLException;
 
 public class C_AltaMascota extends C_AltaPasar<AltaMascota, Mascotas> {
-    public static Personas propietario;
-    public static Razas raza;
+    public Mascotas mascota;
+    public Personas propietario;
+    public Razas raza;
 
     public C_AltaMascota() {
         super(new AltaMascota());
+    }
+
+    public C_AltaMascota(@NonNull Mascotas mascota) {
+        super(new AltaMascota());
+
+        this.mascota = mascota;
     }
 
     @Override
@@ -70,6 +78,11 @@ public class C_AltaMascota extends C_AltaPasar<AltaMascota, Mascotas> {
                             .formatted(mascota));
             return null;
         }
+    }
+
+    @Override
+    public boolean actualizar() {
+        return false;
     }
 
     @Override

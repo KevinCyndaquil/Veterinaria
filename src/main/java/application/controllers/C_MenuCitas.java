@@ -1,7 +1,6 @@
 package application.controllers;
 
 import application.MessageDialog;
-import application.controllers.C_AltaCita;
 import application.controllers.abstracts.EventsController;
 import application.controllers.abstracts.PanelController;
 import application.controllers.terminados.C_HistorialMascota;

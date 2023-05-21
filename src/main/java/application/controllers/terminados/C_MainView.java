@@ -14,7 +14,6 @@ public class C_MainView {
     public void showView() {
         view.setVisible(true);
 
-
         Timer timer = new Timer(700, e -> {
             view.setVisible(false);
             if(c_login == null) {

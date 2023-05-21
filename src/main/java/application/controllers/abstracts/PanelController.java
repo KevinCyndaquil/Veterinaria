@@ -1,6 +1,5 @@
 package application.controllers.abstracts;
 
-import application.models.entidades.Alimentos;
 
 import javax.swing.*;
 

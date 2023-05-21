@@ -61,7 +61,7 @@ public class CompraView extends CustomJFrame {
         jCTypesInvoice.addItem("Ticket");
         jCTypesInvoice.addItem("Factura");
         jCTypesInvoice.setSize(270, 40);
-        jCTypesInvoice.setUI(new MaterialComboBoxUI());
+        //jCTypesInvoice.setUI(new MaterialComboBoxUI());
         section2_1.add(jCTypesInvoice);
 
 

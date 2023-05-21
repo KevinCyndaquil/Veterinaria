@@ -57,6 +57,11 @@ public class C_AltaRaza extends C_AltaPasar<AltaRaza, Razas> {
     }
 
     @Override
+    public boolean actualizar() {
+        return false;
+    }
+
+    @Override
     public boolean pasar(@NotNull Object objToPass) {
         if (!objToPass.getClass().equals(Animales.class)) return false;
 

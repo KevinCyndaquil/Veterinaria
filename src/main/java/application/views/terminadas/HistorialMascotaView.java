@@ -1,4 +1,4 @@
-package application.views.HistorialMascota;
+package application.views.terminadas;
 
 import application.models.entidades.Personas;
 import application.views.components.InputText;

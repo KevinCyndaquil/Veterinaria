@@ -38,7 +38,7 @@ BEGIN
         vId_articulo,
         vId_factura;
 
-    -- obtenemos el precio del producto
+    -- obtenemos el iPrecio del producto
     SELECT INTO vMonto monto_compra
     FROM articulos
     WHERE id_articulo = vId_articulo;
@@ -92,7 +92,7 @@ BEGIN
     END IF;
 
 
-    -- añadimos el precio del articuloVenta a la factura
+    -- añadimos el iPrecio del articuloVenta a la factura
     UPDATE facturas_proveedor
     SET monto_total = monto_total + (vCantidad * vMonto)
     WHERE id_factura = vId_factura;
@@ -310,7 +310,7 @@ BEGIN
     vCantidad := reg[3]::integer;
 
 
-    -- obtenemos el precio del articuloVenta
+    -- obtenemos el iPrecio del articuloVenta
     SELECT INTO vMonto monto
     FROM articulos_venta
     WHERE id_articulo = vId_articulo;

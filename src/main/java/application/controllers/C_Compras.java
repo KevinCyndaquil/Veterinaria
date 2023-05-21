@@ -1,15 +1,20 @@
 package application.controllers;
 
+import application.controllers.abstracts.C_Alta;
 import application.controllers.abstracts.C_Generic;
+import application.controllers.abstracts.PanelController;
+import application.controllers.abstracts.ViewerController;
+import application.models.finanzas.Tickets;
 import application.views.CompraView;
+import application.views.panels.AltaCompra;
 
-public class C_Compras extends C_Generic<CompraView> {
+public class C_Compras extends PanelController<AltaCompra> {
     public C_Compras() {
-        super(CompraView.class);
+        super(new AltaCompra());
     }
 
     @Override
-    public void showView() {
-        view.setVisible(true);
+    public void initEvents() {
+
     }
 }

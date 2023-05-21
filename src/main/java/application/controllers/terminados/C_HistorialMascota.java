@@ -6,7 +6,7 @@ import application.models.Entity_Manager.repositories.Find;
 import application.models.Entity_Manager.repositories.Repository;
 import application.models.entidades.Mascotas;
 import application.models.entidades.Personas;
-import application.views.HistorialMascota.HistorialMascotaView;
+import application.views.terminadas.HistorialMascotaView;
 import application.views.components.interfaces.ComboBoxController;
 import application.views.components.interfaces.TableController;
 import application.controllers.abstracts.ViewerController;

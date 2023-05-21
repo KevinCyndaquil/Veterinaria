@@ -11,4 +11,5 @@ public abstract class C_Alta <F extends JFrame, M extends Entity> extends Viewer
     }
 
     public abstract M alta();
+    public abstract boolean actualizar();
 }

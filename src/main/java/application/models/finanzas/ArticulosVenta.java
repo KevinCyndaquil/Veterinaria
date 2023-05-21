@@ -15,7 +15,7 @@ import java.util.Objects;
 
 /**
  * @author KevinCyndaquil
- * Es un artículo dentro de la veterinaria, un objeto que contiene un nombre, un precio y una descripción
+ * Es un artículo dentro de la veterinaria, un objeto que contiene un nombre, un iPrecio y una descripción
  * al usuario, que puede ser vendido, administrado o contado.
  */
 
