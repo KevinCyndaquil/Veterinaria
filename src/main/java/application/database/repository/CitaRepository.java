@@ -42,6 +42,7 @@ public class CitaRepository extends Repository<Citas> {
 
             }
             connection.setAutoCommit(true);
+            System.out.println(data);
             return data;
         }
     }

@@ -1,8 +1,9 @@
-package application.controllers;
+package application.controllers.terminados;
 
 import application.MessageDialog;
+import application.controllers.C_Menu;
 import application.database.Postgres;
-import application.views.Login;
+import application.views.terminadas.Login;
 import application.controllers.abstracts.ViewerController;
 
 public class C_Login extends ViewerController<Login> {

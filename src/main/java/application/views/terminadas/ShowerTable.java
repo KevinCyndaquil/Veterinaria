@@ -1,11 +1,17 @@
-package application.views.components;
+package application.views.terminadas;
 
+import application.views.components.Button;
 import application.views.components.abstracts.CustomJFrame;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+/**
+ * This view shows a table with two options:
+ * a button to register a new entry.
+ * a button to select a row.
+ */
 public class ShowerTable extends CustomJFrame {
     public Object[] columns;
 
@@ -35,13 +41,16 @@ public class ShowerTable extends CustomJFrame {
         System.out.println(table.getPreferredSize());
 
         setSize(table.getWidth() + 40, 500);
+        setMinimumSize(new Dimension(450, 500));
 
         JScrollPane scl = new JScrollPane(table);
         scl.setBounds(table.getBounds());
         scl.setViewportView(table);
         add(scl);
 
-        btnSeleccionar = new Button("Seleccionar");
+
+
+        btnSeleccionar = new application.views.components.Button("Seleccionar");
         btnSeleccionar.setBounds(20, getHeight() - 100, 200, 50);
         btnSeleccionar.setBackground(Color.decode("#F8F2E7"));
         add(btnSeleccionar);
@@ -50,10 +59,12 @@ public class ShowerTable extends CustomJFrame {
         btnRegistrar.setBounds(getWidth() - 240, getHeight() - 100, 200, 50);
         btnRegistrar.setBackground(Color.decode("#F8F2E7"));
         add(btnRegistrar);
+
+
     }
 
     public JTable table;
 
-    public Button btnRegistrar;
+    public application.views.components.Button btnRegistrar;
     public Button btnSeleccionar;
 }

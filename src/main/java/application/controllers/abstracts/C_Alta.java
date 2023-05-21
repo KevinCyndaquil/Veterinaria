@@ -1,16 +1,14 @@
 package application.controllers.abstracts;
 
 import application.models.Entity_Manager.abstract_manager.Entity;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public abstract class C_Alta<T extends JFrame, M extends Entity> extends ViewerController<T>{
+public abstract class C_Alta <F extends JFrame, M extends Entity> extends ViewerController<F> {
 
-    public C_Alta(T view) {
+    public C_Alta(F view) {
         super(view);
     }
 
-    public abstract boolean pasar(@NotNull Object obj);
     public abstract M alta();
 }

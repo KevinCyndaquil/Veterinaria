@@ -1,15 +1,15 @@
 package application.controllers;
 
 import application.MessageDialog;
-import application.controllers.abstracts.C_Alta;
+import application.controllers.abstracts.C_AltaPasar;
+import application.controllers.terminados.C_MostrarMascotas;
 import application.models.entidades.Citas;
 import application.models.entidades.Empleados;
 import application.models.entidades.Mascotas;
-import application.models.entidades.Personas;
-import application.views.AltaCita;
+import application.views.terminadas.AltaCita;
 import org.jetbrains.annotations.NotNull;
 
-public class C_AltaCita extends C_Alta<AltaCita, Citas> {
+public class C_AltaCita extends C_AltaPasar<AltaCita, Citas> {
     private Mascotas mascota;
     private Empleados veterinario;
 
@@ -22,13 +22,13 @@ public class C_AltaCita extends C_Alta<AltaCita, Citas> {
         return switch (obj.getClass().getSimpleName()) {
             case "Mascotas" -> {
                 mascota = (Mascotas) obj;
-                view.iNombreMascota.setText(mascota.toString());
+                view.iNombreMascota.setText(mascota + ", " + mascota.getPropietario() + " [✓]");
 
                 yield true;
             }
             case "Veterinario" -> {
                 veterinario = (Empleados) obj;
-                view.iNombreVeterinario.setText(veterinario.toString());
+                view.iNombreVeterinario.setText(veterinario + " [✓]");
 
                 yield true;
             }
@@ -70,8 +70,7 @@ public class C_AltaCita extends C_Alta<AltaCita, Citas> {
                     null,
                     null);
 
-            //C_MostrarPropietarios c_mostrarpro = new C_MostrarPropietarios();
-            //c_mostrarpro.datosTabla(view.iNombreVeterinario.getText());
+            //aqui tiene que llamar a mostrar veterinarios
         });
 
         view.btnAgendar.addActionListener(e -> alta());

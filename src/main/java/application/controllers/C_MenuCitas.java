@@ -1,15 +1,11 @@
 package application.controllers;
 
 import application.MessageDialog;
-import application.controllers.abstracts.C_Generic;
+import application.controllers.C_AltaCita;
 import application.controllers.abstracts.EventsController;
 import application.controllers.abstracts.PanelController;
-import application.views.MenuCitas;
+import application.controllers.terminados.C_HistorialMascota;
 import application.views.panels.MenuCitaPanel;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
 
 public class C_MenuCitas extends PanelController<MenuCitaPanel> implements EventsController {
 
@@ -29,6 +25,8 @@ public class C_MenuCitas extends PanelController<MenuCitaPanel> implements Event
 
         panel.btnModificaciones.addActionListener(e -> {});
 
-        panel.btnReportes.addActionListener(e -> {});
+        panel.btnReportes.addActionListener(e -> {
+            new C_HistorialMascota();
+        });
     }
 }

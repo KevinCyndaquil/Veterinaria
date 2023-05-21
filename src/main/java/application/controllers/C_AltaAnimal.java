@@ -2,7 +2,7 @@ package application.controllers;
 
 import application.MessageDialog;
 import application.controllers.abstracts.C_Generic;
-import application.views.AltaAnimal;
+import application.views.terminadas.AltaAnimal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,7 +27,7 @@ public class C_AltaAnimal extends C_Generic<AltaAnimal> implements ActionListene
         if(e.getSource().equals(view.jButton3)){
             Integer idAnimal = altaAnimal();
             if(altaAnimal() != -1){
-                C_AltaRazas.id_animal = idAnimal;
+                //C_AltaRaza.id_animal = idAnimal;
                 MessageDialog.successMessage(view, "Animal registrado con exito");
                 view.dispose();
             }else{

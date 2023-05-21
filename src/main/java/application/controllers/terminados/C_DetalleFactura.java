@@ -1,4 +1,4 @@
-package application.controllers;
+package application.controllers.terminados;
 
 import application.MessageDialog;
 import application.database.Postgres;

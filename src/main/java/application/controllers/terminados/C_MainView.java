@@ -1,12 +1,8 @@
-package application.controllers;
+package application.controllers.terminados;
 
-import application.Main;
-import application.controllers.abstracts.C_Generic;
-import application.views.MainView;
+import application.views.terminadas.MainView;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class C_MainView {
     private MainView view;

@@ -1,9 +1,7 @@
-package application.views;
+package application.views.terminadas;
 
 import application.views.components.BarLeft;
-import application.views.components.SectionRound;
 import application.views.components.abstracts.CustomJFrame;
-import application.views.utils.Positions;
 import application.views.utils.ResponsiveDimension;
 import mdlaf.MaterialLookAndFeel;
 

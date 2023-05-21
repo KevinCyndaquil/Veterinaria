@@ -485,7 +485,7 @@ BEGIN
                                         ON a.id_articulo = av.id_articulo
                              INNER JOIN razas r ON
                             ma.id_raza = r.id_raza
-                    WHERE ma.id_mascota = p.id_articulo
+                    WHERE ma.id_mascota = pId_mascota
                     GROUP BY mascota,
                              articulo,
                              costo,

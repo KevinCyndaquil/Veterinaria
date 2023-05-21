@@ -1,32 +1,30 @@
-package application.controllers;
+package application.controllers.terminados;
 
 import application.MessageDialog;
-import application.controllers.abstracts.C_Alta;
-import application.controllers.abstracts.C_Mostrar;
+import application.controllers.abstracts.C_AltaPasar;
+import application.controllers.abstracts.C_MostrarParaAlta;
+import application.controllers.terminados.C_AltaMascota;
 import application.database.Postgres;
 import application.models.Entity_Manager.repositories.Find;
 import application.models.Entity_Manager.repositories.Repository;
 import application.models.entidades.Mascotas;
-import application.views.components.ShowerTable;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.List;
 
-public class C_MostrarMascotas extends C_Mostrar<ShowerTable, Mascotas>{
-    private final C_Alta<?, ?> alta;
+public class C_MostrarMascotas extends C_MostrarParaAlta<Mascotas> {
 
-    public C_MostrarMascotas(Mascotas mascotas, C_Alta<?, ?> alta) {
-        super(new ShowerTable(new Object[]{
+    public C_MostrarMascotas(Mascotas mascotas, C_AltaPasar<?, ?> alta) {
+        super(new Object[]{
                 "ID",
                 "Nombre",
                 "Fecha Nacimiento",
                 "Sexo",
                 "Dueño",
                 "Raza"
-        }), mascotas);
-
-        this.alta = alta;
+        }, mascotas, alta);
     }
 
     @Override
@@ -58,20 +56,35 @@ public class C_MostrarMascotas extends C_Mostrar<ShowerTable, Mascotas>{
     }
 
     @Override
-    public void initEvents() {
-        view.btnSeleccionar.addActionListener(e -> {
-            int selectedRow = view.table.getSelectedRow();
-            Mascotas mascota = (Mascotas) view.table.getValueAt(selectedRow, 1);
+    public void obtener(ActionEvent event) {
+        int selectedRow = view.table.getSelectedRow();
 
-            alta.pasar(mascota);
+        if (selectedRow == -1) {
+            MessageDialog.stupidMessage(
+                    view,
+                    "Selecciona primero una mascota por favor"
+            );
+            return;
+        }
+
+        Mascotas mascota = (Mascotas) view.table.getValueAt(selectedRow, 1);
+
+        if (alta.pasar(mascota)) {
+            MessageDialog.successMessage(
+                    view,
+                    "Mascota seleccionada %s correctamente"
+                            .formatted(mascota));
             view.dispose();
+        } else {
+            MessageDialog.errorMessage(
+                    view,
+                    "Ocurrió un error al pasar la mascota"
+            );
+        }
+    }
 
-            MessageDialog.successMessage(view, "Mascota seleccionada: " + mascota);
-        });
-
-        view.btnRegistrar.addActionListener(e -> {
-            new C_AltaMascota();
-            //view.dispose();
-        });
+    @Override
+    public void lanzarAlta(ActionEvent event) {
+        new C_AltaMascota();
     }
 }

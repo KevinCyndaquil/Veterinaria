@@ -2,15 +2,13 @@ package application.controllers;
 
 import application.MessageDialog;
 import application.controllers.abstracts.PanelController;
-import application.views.Menu;
+import application.views.terminadas.Menu;
 import application.controllers.abstracts.ViewerController;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 public class C_Menu extends ViewerController<Menu> {

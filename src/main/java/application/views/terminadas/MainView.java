@@ -1,4 +1,4 @@
-package application.views;
+package application.views.terminadas;
 
 
 import application.views.components.Banner;

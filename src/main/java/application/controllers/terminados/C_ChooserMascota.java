@@ -1,10 +1,10 @@
-package application.controllers;
+package application.controllers.terminados;
 
 import application.MessageDialog;
 import application.database.Postgres;
 import application.database.repository.CitaRepository;
 import application.models.entidades.Mascotas;
-import application.views.ChooserMascotaView;
+import application.views.terminadas.ChooserMascotaView;
 import application.controllers.abstracts.ViewerController;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,6 +37,8 @@ public class C_ChooserMascota extends ViewerController<ChooserMascotaView> {
         DefaultTableModel model = (DefaultTableModel) view.tblMascotas.getModel();
         int id_mascota = ((Mascotas) model.getValueAt(view.tblMascotas.getSelectedRow(), 0)).getId_mascota();
 
+        System.out.println(id_mascota);
+
         modelToSend.setRowCount(0);
 
         try {
@@ -67,6 +69,7 @@ public class C_ChooserMascota extends ViewerController<ChooserMascotaView> {
                     }
                     enviar();
                     view.setVisible(false);
+                    view.dispose();
                 }
             }
         });

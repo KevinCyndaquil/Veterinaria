@@ -1,4 +1,4 @@
-package application.views.HistorialMascota;
+package application.controllers.terminados;
 
 import application.MessageDialog;
 import application.database.Postgres;
@@ -6,7 +6,7 @@ import application.models.Entity_Manager.repositories.Find;
 import application.models.Entity_Manager.repositories.Repository;
 import application.models.entidades.Mascotas;
 import application.models.entidades.Personas;
-import application.controllers.C_ChooserMascota;
+import application.views.HistorialMascota.HistorialMascotaView;
 import application.views.components.interfaces.ComboBoxController;
 import application.views.components.interfaces.TableController;
 import application.controllers.abstracts.ViewerController;
@@ -14,10 +14,10 @@ import application.controllers.abstracts.ViewerController;
 import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
 
-public class HistorialMascotaCnt extends ViewerController<HistorialMascotaView> implements
+public class C_HistorialMascota extends ViewerController<HistorialMascotaView> implements
         ComboBoxController,
         TableController {
-    public HistorialMascotaCnt() {
+    public C_HistorialMascota() {
         super(new HistorialMascotaView());
 
         refreshComboBoxes();
@@ -91,7 +91,7 @@ public class HistorialMascotaCnt extends ViewerController<HistorialMascotaView> 
     }
 
     public static void main(String[] args) {
-        new HistorialMascotaCnt();
+        new C_HistorialMascota();
     }
 
 

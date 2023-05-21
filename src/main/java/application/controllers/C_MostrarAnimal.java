@@ -34,7 +34,7 @@ public class C_MostrarAnimal extends C_Generic<MostrarAnimal> implements ActionL
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(view.jButton1)){
             int id = Integer.parseInt(view.jTable1.getValueAt(view.jTable1.getSelectedRow(), 0).toString());
-            C_AltaRazas.id_animal = id;
+            //C_AltaRaza.id_animal = id;
             MessageDialog.successMessage(view, "Animal seleccionado: " + id);
             view.dispose();
         }

@@ -8,18 +8,17 @@ import application.views.utils.ResponsiveDimension;
 
 import javax.swing.*;
 
-public abstract class CustomJFrame extends JFrame {
+public abstract class CustomJFrame extends AbstractJFrame {
 
     public CustomJFrame(String title) {
         super(title);
-        setLayout(null);
         setResizable(false);
 
         try {
             //getContentPane().setPreferredSize(ResponsiveDimension.getNextResolution().getSize());
             setPreferredSize(ResponsiveDimension.getNextResolution().getSize());
         }catch (NullPointerException e){
-            JOptionPane.showMessageDialog(this,"Su resolucion no esta permitida para el aplicativo");
+            JOptionPane.showMessageDialog(this,"Su resolución no esta permitida para el aplicativo");
             System.exit(1);
         }
 
@@ -30,7 +29,4 @@ public abstract class CustomJFrame extends JFrame {
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
-
-    public abstract void initComponents();
-
 }

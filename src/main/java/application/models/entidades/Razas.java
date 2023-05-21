@@ -31,4 +31,9 @@ public record Razas (
     public Razas(Integer idRaza) {
         this(idRaza, null, null, null);
     }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }

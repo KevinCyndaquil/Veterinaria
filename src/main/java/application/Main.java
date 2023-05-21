@@ -1,22 +1,9 @@
 package application;
 
-import application.controllers.C_Login;
-import application.controllers.C_MainView;
-import application.database.Postgres;
-import application.models.Entity_Manager.abstract_manager.Entity;
-import application.models.Entity_Manager.repositories.Find;
-import application.models.Entity_Manager.repositories.Repository;
-import application.models.detalles.DetalleFactura;
-import application.models.entidades.Mascotas;
-import application.models.entidades.Proveedores;
-import application.models.finanzas.Articulos;
-import application.views.MainView;
+import application.controllers.terminados.C_MainView;
 import mdlaf.MaterialLookAndFeel;
 
 import javax.swing.*;
-import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.util.List;
 
 public class Main {
 
