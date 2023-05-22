@@ -3,6 +3,7 @@ package application.models.finanzas;
 import application.models.Entity_Manager.abstract_manager.Entity;
 import application.models.Entity_Manager.annotations.SqlAttribute;
 import application.models.Entity_Manager.annotations.SqlEntity;
+import org.jetbrains.annotations.Nullable;
 
 @SqlEntity(type = SqlEntity.ATTRIBUTES_CLASS)
 public enum Puestos implements Entity {
@@ -20,4 +21,10 @@ public enum Puestos implements Entity {
         this.puesto = puesto; this.salario = salario;
     }
 
+    public static @Nullable Puestos from(String nombre_puesto) {
+        for(Puestos puestos : values()) {
+            if (puestos.puesto.equals(nombre_puesto)) return puestos;
+        }
+        return null;
+    }
 }

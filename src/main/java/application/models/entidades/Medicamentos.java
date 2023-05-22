@@ -55,4 +55,8 @@ public class Medicamentos implements Entity {
         this.laboratorio = laboratorio;
         this.via = via;
     }
+
+    public Medicamentos() {
+
+    }
 }

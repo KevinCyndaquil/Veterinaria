@@ -53,7 +53,7 @@ public class Repository<M extends Entity> implements
 
         //casteamos el objeto a uno de tipo clase
         Class<?> clazz = (Class<?>) column;
-
+        System.out.println("C:" + clazz);
         //iteramos los atributos referenciados por la entidad
         for (Object n : Entity.keys(clazz)) {
             //obtenemos el valor devuelto por la consulta

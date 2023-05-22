@@ -71,6 +71,7 @@ public interface Entity {
             System.out.println("Constructor with Annotation @SqlInstance must be use in " + clazz.getSimpleName());
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
             System.out.println("Class " + clazz.getSimpleName() + " couldn't be instanced: " + e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }

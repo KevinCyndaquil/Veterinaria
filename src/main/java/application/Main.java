@@ -1,13 +1,19 @@
 package application;
 
 import application.controllers.terminados.C_MainView;
+import application.database.Postgres;
+import application.models.Entity_Manager.repositories.Find;
+import application.models.Entity_Manager.repositories.Repository;
+import application.models.entidades.Empleados;
+import application.models.entidades.Medicamentos;
 import mdlaf.MaterialLookAndFeel;
 
 import javax.swing.*;
+import java.sql.SQLException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         /*
         Mascotas mascota = new Mascotas(
@@ -86,7 +92,10 @@ public class Main {
         //MainView view = new MainView();
 
 
+        Find<Empleados> find = new Repository<>(new Postgres());
+        System.out.println(find.find(new Empleados()));
 
+        /*
         java.awt.EventQueue.invokeLater(() -> {
             System.setProperty("awt.useSystemAAFontSettings", "lcd"); // use font antialiasing
             System.setProperty("swing.aatext", "true");
@@ -99,6 +108,6 @@ public class Main {
             }
             C_MainView c_mainView = new C_MainView();
             c_mainView.showView();
-        });
+        });*/
     }
 }

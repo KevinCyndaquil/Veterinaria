@@ -4,46 +4,63 @@ import application.models.Entity_Manager.abstract_manager.Entity;
 import application.models.Entity_Manager.annotations.SqlAttribute;
 import application.models.Entity_Manager.annotations.SqlEntity;
 import application.models.Entity_Manager.annotations.SqlInstance;
+import application.models.Entity_Manager.annotations.SqlKey;
 import application.models.finanzas.Puestos;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.sql.Time;
+import java.util.Date;
 
 
 @Getter
 @Setter
 @SqlEntity("empleados")
-public class Empleados extends Personas implements Entity {
+public class Empleados implements Entity {
     @SqlAttribute
-    private LocalDate fecha_ini;
+    @SqlKey
+    @SqlKey(SqlKey.FOREIGN_KEY)
+    private Personas persona;
     @SqlAttribute
-    private LocalTime jor_ini;
+    private Date fecha_ini;
     @SqlAttribute
-    private LocalTime jor_fin;
+    private Time jor_ini;
+    @SqlAttribute
+    private Time jor_fin;
     @SqlAttribute
     private BigDecimal salario_neto;
     @SqlAttribute
     private Puestos puesto;
 
     @SqlInstance
-    public Empleados(Integer id_persona, String rfc, String nombre, String apellido_p, String apellido_m, String no_cuenta, LocalDate fecha_ini, LocalTime jor_ini, LocalTime jor_fin, BigDecimal salario_neto, Puestos puesto) {
-        super(id_persona, rfc, nombre, apellido_p, apellido_m, no_cuenta);
+    public Empleados(Personas persona, Date fecha_ini, Time jor_ini, Time jor_fin, BigDecimal salario_neto, String nombre_puesto, BigDecimal salario_bruto) {
+        this.persona = persona;
         this.fecha_ini = fecha_ini;
         this.jor_ini = jor_ini;
         this.jor_fin = jor_fin;
         this.salario_neto = salario_neto;
-        this.puesto = puesto;
+        this.puesto = Puestos.from(nombre_puesto);
     }
 
-    public Empleados(String rfc, String nombre, String apellido_p, String apellido_m, String no_cuenta, LocalDate fecha_ini, LocalTime jor_ini, LocalTime jor_fin, BigDecimal salario_neto, Puestos puesto) {
-        super(rfc, nombre, apellido_p, apellido_m, no_cuenta);
+    public Empleados(Integer id_persona, String rfc, String nombre, String apellido_p, String apellido_m, String no_cuenta, Date fecha_ini, Time jor_ini, Time jor_fin, BigDecimal salario_neto, Puestos puesto) {
         this.fecha_ini = fecha_ini;
         this.jor_ini = jor_ini;
         this.jor_fin = jor_fin;
         this.salario_neto = salario_neto;
         this.puesto = puesto;
+        this.persona = new Personas(id_persona, rfc, nombre, apellido_p, apellido_m, no_cuenta);
+    }
+
+    public Empleados(String rfc, String nombre, String apellido_p, String apellido_m, String no_cuenta, Date fecha_ini, Time jor_ini, Time jor_fin, BigDecimal salario_neto, Puestos puesto) {
+        this.fecha_ini = fecha_ini;
+        this.jor_ini = jor_ini;
+        this.jor_fin = jor_fin;
+        this.salario_neto = salario_neto;
+        this.puesto = puesto;
+        this.persona = new Personas(rfc, nombre, apellido_p, apellido_m, no_cuenta);
+    }
+
+    public Empleados() {
     }
 }

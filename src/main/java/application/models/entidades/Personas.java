@@ -49,6 +49,10 @@ public class Personas implements Entity {
         this.no_cuenta = no_cuenta;
     }
 
+    public Personas() {
+
+    }
+
     public Personas(Integer id_persona) {
         this.id_persona = id_persona;
     }
