@@ -1,4 +1,4 @@
-package application.views.FacturaChooser.FacturaDisplay;
+package application.views.components;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;

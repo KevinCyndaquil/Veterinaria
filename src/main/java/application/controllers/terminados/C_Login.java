@@ -6,6 +6,8 @@ import application.database.Postgres;
 import application.views.terminadas.Login;
 import application.controllers.abstracts.ViewerController;
 
+import java.sql.SQLException;
+
 public class C_Login extends ViewerController<Login> {
 
     public C_Login() {
@@ -20,15 +22,18 @@ public class C_Login extends ViewerController<Login> {
 
             postgres.setUser(user, password);
             postgres.connectTo();
-            MessageDialog.successMessage(view, "Conectado con exito");
+            MessageDialog.successMessage(
+                    view,
+                    "Conectado con exito con usuario %s".formatted(user));
 
-            view.dispose();
             new C_Menu();
-        } catch (Exception ex){
-            MessageDialog.errorMessage(view, "Error, usuario o contraseña incorrectos");
+            view.dispose();
+        } catch (RuntimeException | SQLException ex ){
+            MessageDialog.stupidMessage(view, "Error, usuario o contraseña incorrectos");
             view.userJT.setText("");
             view.passwordJT.setText("");
             view.userJT.requestFocus();
+            //ex.printStackTrace();
         }
     }
 

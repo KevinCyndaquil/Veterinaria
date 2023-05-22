@@ -114,3 +114,6 @@ LEFT JOIN productos p
 LEFT JOIN medicamentos m
           ON ap.id_articulo = m.id_articulo
 WHERE ap.id_proveedor = 7;
+
+SELECT *
+FROM articulos_venta;

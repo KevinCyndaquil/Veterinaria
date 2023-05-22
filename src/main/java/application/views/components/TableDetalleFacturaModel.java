@@ -1,4 +1,4 @@
-package application.views.FacturaChooser.FacturaDisplay;
+package application.views.components;
 
 import application.models.detalles.DetalleFactura;
 import application.views.components.abstracts.CustomJTableModel;

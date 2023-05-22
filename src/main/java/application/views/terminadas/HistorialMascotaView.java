@@ -17,6 +17,7 @@ public class HistorialMascotaView extends CustomJFrame {
         super("Historial Mascota");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
+        setBackground(Color.WHITE);
     }
 
     @Override

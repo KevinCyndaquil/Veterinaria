@@ -62,6 +62,8 @@ public abstract class DetalleArticulo<A extends ConMonto> implements
         if (a == null) return this.monto(BigDecimal.ZERO);
         if (a.monto() == null) a.monto(BigDecimal.ZERO);
 
-        return this.monto(a.monto().multiply(BigDecimal.valueOf(cantidad)));
+        this.monto(a.monto().multiply(BigDecimal.valueOf(cantidad)));
+        System.out.println(monto());
+        return monto();
     }
 }

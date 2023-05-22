@@ -31,7 +31,7 @@ public interface Entity {
 
         return switch (value.getClass().getSimpleName()) {
             case "String" -> (value.equals(SqlAttribute.DEFAULT_VALUE)) ? value : "'" + value + "'";
-            case "LocalDate", "LocalTime","Date" -> "'" + value + "'";
+            case "LocalDate", "LocalTime","Date", "Time" -> "'" + value + "'";
             case "Integer", "int", "Float", "float", "Double", "double", "BigDecimal" -> value;
             //case  -> ((BigDecimal) value).doubleValue();
             default -> {

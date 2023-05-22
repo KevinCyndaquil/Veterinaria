@@ -16,6 +16,7 @@ public class DetalleFacturaView extends CustomJFrame {
     public DetalleFacturaView() {
         super("detalle factura");
         setSize(700, 700);
+        setBackground(Color.WHITE);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setLocationRelativeTo(null);
     }

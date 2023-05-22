@@ -5,10 +5,10 @@ import application.database.Postgres;
 import application.database.repository.FacturaRepository;
 import application.models.detalles.DetalleFactura;
 import application.models.finanzas.FacturasProveedor;
-import application.views.FacturaChooser.FacturaDisplay.CellDetalleFacturaCellRenderer;
+import application.views.components.CellDetalleFacturaCellRenderer;
 import application.views.FacturaChooser.FacturaDisplay.DetalleFacturaView;
-import application.views.FacturaChooser.FacturaDisplay.HeaderDetalleFacturaCellRenderer;
-import application.views.FacturaChooser.FacturaDisplay.TableDetalleFacturaModel;
+import application.views.components.HeaderDetalleFacturaCellRenderer;
+import application.views.components.TableDetalleFacturaModel;
 import application.views.components.interfaces.TableController;
 import application.controllers.abstracts.ViewerController;
 

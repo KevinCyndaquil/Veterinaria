@@ -26,9 +26,11 @@ public class ArticulosVenta implements
     @Setter @Getter
     @SqlAttribute
     @SqlKey(SqlKey.FOREIGN_KEY)
+    @SqlKey
     private Articulos articulo;
     @Getter
     private BigDecimal ganancia;
+    @Setter @Getter
     @SqlAttribute("monto")
     private BigDecimal monto_venta;
     @Setter @Getter
@@ -39,9 +41,8 @@ public class ArticulosVenta implements
     private String tipo;
 
     @SqlInstance
-    public ArticulosVenta(Articulos articulo, BigDecimal ganancia, BigDecimal monto_venta, Integer stock, String tipo) {
+    public ArticulosVenta(Articulos articulo, BigDecimal monto_venta, Integer stock, String tipo) {
         this.articulo = articulo;
-        this.ganancia = ganancia;
         this.monto_venta = monto_venta;
         this.stock = stock;
         this.tipo = tipo;
@@ -52,6 +53,14 @@ public class ArticulosVenta implements
         this.monto_venta = monto_venta;
         this.stock = stock;
         this.tipo = tipo;
+    }
+
+    public ArticulosVenta(int idArticulo) {
+        this.articulo = new Articulos(idArticulo);
+    }
+
+    public ArticulosVenta() {
+
     }
 
     public void setGanancia(BigDecimal ganancia) {
@@ -91,5 +100,10 @@ public class ArticulosVenta implements
     @Override
     public int hashCode() {
         return Objects.hash(articulo);
+    }
+
+    @Override
+    public String toString() {
+        return articulo.getNombre();
     }
 }

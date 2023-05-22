@@ -19,6 +19,7 @@ public class FacturaChooserView extends CustomJFrame {
         super("FacturaChooserView");
         setLayout(null);
         setSize(900, 500);
+        setBackground(Color.WHITE);
     }
 
     public void initComponents() {

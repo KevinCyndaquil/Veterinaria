@@ -1,22 +1,15 @@
 package application.views.panels;
 
+import application.views.components.*;
 import application.views.components.Button;
-import application.views.components.InputText;
-import application.views.components.SectionRound;
-import application.views.components.TextDisplay;
 import application.views.components.abstracts.CustomJPanel;
 import application.views.utils.Fonts;
-import com.toedter.calendar.JDateChooser;
-import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.sql.Date;
-import java.time.Instant;
-import java.time.LocalDate;
 
 public class AltaCompra extends CustomJPanel{
     @Override
@@ -28,53 +21,39 @@ public class AltaCompra extends CustomJPanel{
         section2.setLocation(10, 10);
         add(section2);
 
-        section2_1 = new SectionRound();
-        section2_1.setLocation(500, 10);
-
         section3 = new SectionRound();
-        section3.setLocation(10, 380);
-        //barLeft.setOpaque(false);
         add(section3);
 
-        table = new JTable(new DefaultTableModel(new Object[]{
-                "NUM",
-                "Código",
-                "Nombre",
-                "Cantidad",
-                "Precio"
-        }, 0));
+        table = new JTable(new TableDetalleTicketModel());
         table.setSize(970, 643);
         table.setRowHeight(40);
-        table.setBackground(Color.white);
+        table.setBackground(Color.WHITE);
 
         scrollPane = new JScrollPane();
         scrollPane.setBounds(15, 10, 970, 643);
         scrollPane.setViewportView(table);
+        scrollPane.setBackground(table.getBackground());
+
         section3.add(scrollPane);
 
         tTypesInvoice = new TextDisplay("Types Invoice");
         tTypesInvoice.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 16f));
         tTypesInvoice.setSize(tTypesInvoice.getPreferredSize());
-        //section2.add(tTypesInvoice);
 
         jCTypesInvoice = new JComboBox<>();
         jCTypesInvoice.addItem("Ticket");
         jCTypesInvoice.addItem("Factura");
         jCTypesInvoice.setSize(270, 40);
-        //jCTypesInvoice.setUI(new MaterialComboBoxUI());
-        //section2.add(jCTypesInvoice);
 
         tDate = new TextDisplay("Date");
         tDate.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 16f));
         tDate.setSize(tDate.getPreferredSize());
+        tDate.setFocusable(false);
         section2.add(tDate);
 
-        iDate = new JXDatePicker();
+        iDate = new InputText("dd/mm/yy");
         iDate.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 16f));
-        iDate.setDate(new java.util.Date());
-        iDate.setFormats(new java.text.SimpleDateFormat("dd/MM/yyyy"));
         iDate.setSize(150, 30);
-        iDate.getComponent(0).setBackground(Color.white);
         section2.add(iDate);
 
         tBarCode = new TextDisplay("Barcode");
@@ -135,25 +114,38 @@ public class AltaCompra extends CustomJPanel{
         iDescription.setFocusable(false);
         section2.add(iDescription);
 
-        tSubtotal = new TextDisplay("Subtotal: $");
+        tSubtotal = new TextDisplay("Subtotal");
         tSubtotal.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 16f));
-        tSubtotal.setSize(200, 91);
-        tSubtotal.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.black));
+        tSubtotal.setSize(200, 40);
+        tSubtotal.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.black));
         tSubtotal.setHorizontalAlignment(SwingConstants.LEFT);
         section2.add(tSubtotal);
 
-        tIva = new TextDisplay("IVA 16%: $");
+        iSubtotal = new InputText("$");
+        iSubtotal.setFocusable(false);
+        section2.add(iSubtotal);
+
+        tIva = new TextDisplay("IVA 16%");
         tIva.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 16f));
-        tIva.setSize(200, 90);
+        tIva.setSize(200, 40);
         tIva.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.black));
         tIva.setHorizontalAlignment(SwingConstants.LEFT);
         section2.add(tIva);
 
+        iIva = new InputText("$");
+        iIva.setFocusable(false);
+        section2.add(iIva);
+
         tTotal = new TextDisplay("Total: $");
-        tTotal.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 20f));
-        tTotal.setSize(200, 90);
+        tTotal.setFont(Fonts.load(Fonts.ROBOTO).deriveFont(Font.PLAIN, 16f));
+        tTotal.setSize(200, 40);
         tTotal.setHorizontalAlignment(SwingConstants.LEFT);
+        tTotal.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.black));
         section2.add(tTotal);
+
+        iTotal = new InputText("$$$");
+        iTotal.setFocusable(false);
+        section2.add(iTotal);
 
         btnNew = new Button("New");
         btnNew.setSize(130, 49);
@@ -170,13 +162,15 @@ public class AltaCompra extends CustomJPanel{
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                section2.setSize(getWidth() - 20, 305);
+                section2.setSize(getWidth() - 20, 300);
                 section2.setBackground(Color.white);
 
-                section2_1.setSize(340, 120);
-                section2_1.setBackground(Color.white);
-
-                section3.setSize(getWidth() - 20, 663);
+                section3.setLocation(
+                        section2.getX(),
+                        section2.getY() + section2.getHeight() + 20);
+                section3.setSize(
+                        getWidth() - 20,
+                        getHeight() - section3.getY() - 30);
                 section3.setBackground(Color.white);
 
                 Point fSection = new Point(
@@ -186,8 +180,6 @@ public class AltaCompra extends CustomJPanel{
                 Point sSection = new Point(
                         (section2.getWidth() - 250) / 3,
                         fSection.y + 80);
-
-                Point tSection = new Point();
 
                 tDate.setLocation(10, fSection.y);
                 tBarCode.setLocation(fSection.x + 10, fSection.y);
@@ -235,47 +227,40 @@ public class AltaCompra extends CustomJPanel{
                         sSection.y - 20,
                         fSection.y);
 
-                tIva.setLocation(sSection.x * 3 + 50, tAmount.getY() + tAmount.getHeight() + 20);
-                tTotal.setLocation(iDescription.getX(), iDescription.getY() + iDescription.getHeight() + 20);
-                tSubtotal.setLocation(tTotal.getX() + tTotal.getWidth() + 20, tTotal.getY());
+                tIva.setLocation(
+                        section2.getWidth() - tIva.getWidth() - 80,
+                        iPrecio.getY() - 30);
+                tTotal.setLocation(
+                        iDescription.getX(),
+                        section2.getHeight() - tTotal.getHeight() - 80);
+                tSubtotal.setLocation(
+                        tTotal.getX() + tTotal.getWidth() + 30,
+                        tTotal.getY());
 
-                btnAdd.setLocation(iPrecio.getX() - 20, iPrecio.getY() + iPrecio.getHeight() + 20);
+                iIva.setBounds(
+                        tIva.getX(),
+                        tIva.getY() + tIva.getHeight() + 10,
+                        tIva.getWidth(),
+                        30);
+
+                iTotal.setBounds(
+                        tTotal.getX(),
+                        tTotal.getY() + tTotal.getHeight() + 10,
+                        tTotal.getWidth(),
+                        30);
+
+                iSubtotal.setBounds(
+                        tSubtotal.getX(),
+                        tSubtotal.getY() + tSubtotal.getHeight() + 10,
+                        tSubtotal.getWidth(),
+                        30);
+
+                btnAdd.setLocation(iPrecio.getX() - 20, iPrecio.getY() + iPrecio.getHeight() + 60);
                 btnNew.setLocation(btnAdd.getX() + btnAdd.getWidth() + 20, btnAdd.getY());
                 btnPay.setLocation(btnNew.getX() + btnNew.getWidth() + 20, btnNew.getY());
-                //tDate.setLocation(section2, Positions.LEFT, 30, -115);
 
-                //iDate.setLocation();
-                //iDate.setLocation(section2, Positions.LEFT, 30, -70);
-                /*
-                tBarCode.setLocation(section2, Positions.LEFT, 290, -115);
-                iBarCode.setLocation(section2, Positions.LEFT, 290, -70);
-
-                tName.setLocation(section2, Positions.LEFT, 550, -115);
-                iName.setLocation(section2, Positions.LEFT, 550, -70);
-
-                tAmount.setLocation(section2, Positions.LEFT, 810, -115);
-                iAmount.setLocation(section2, Positions.LEFT, 810, -70);
-
-                tPresentation.setLocation(section2, Positions.LEFT, 550, 25);
-                iPresentation.setLocation(section2, Positions.LEFT, 550, 70);
-
-                tPrice.setLocation(section2, Positions.LEFT, 810, 25);
-                iPrecio.setLocation(section2, Positions.LEFT, 810, 70);
-
-                tDescription.setLocation(section2, Positions.LEFT, 30, 25);
-                iDescription.setLocation(section2, Positions.LEFT, 30, 70);
-
-                btnAdd.setLocation(section2, Positions.RIGHT, -210, 70);
-                btnNew.setLocation(section2, Positions.RIGHT, -30, 70);
-
-                //tSubtotal.setLocation(this, Positions.RIGHT, -85, -100);
-                //tIva.setLocation(mainPanel, Positions.RIGHT, -85, -10);
-                //tTotal.setLocation(mainPanel, Positions.RIGHT, -85, 80);
-
-                //btnPay.setLocation(JComponent.class.cast(this), Positions.RIGHT, -80, 180);
-
-                jCTypesInvoice.setLocation(35, 50);
-                tTypesInvoice.setLocation(section2_1, Positions.CENTER, 0, -30);*/
+                table.setBounds(10, 10, section3.getWidth() - 20, section3.getHeight() - 30);
+                scrollPane.setBounds(table.getBounds());
             }
         });
     }
@@ -301,13 +286,16 @@ public class AltaCompra extends CustomJPanel{
     public TextDisplay tTotal;
 
     public JComboBox<String> jCTypesInvoice;
-    public JXDatePicker iDate;
+    public InputText iDate;
     public InputText iBarCode;
     public InputText iName;
     public InputText iAmount;
     public InputText iPresentation;
     public InputText iPrecio;
     public InputText iDescription;
+    public InputText iIva;
+    public InputText iTotal;
+    public InputText iSubtotal;
 
     public Button btnNew;
     public Button btnAdd;

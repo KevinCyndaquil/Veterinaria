@@ -1,5 +1,6 @@
 package application.models.detalles;
 
+import application.models.Entity_Manager.abstract_manager.Entity;
 import application.models.Entity_Manager.annotations.SqlAttribute;
 import application.models.Entity_Manager.annotations.SqlEntity;
 import application.models.Entity_Manager.annotations.SqlInstance;
@@ -16,7 +17,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @SqlEntity("detalle_ticket")
-public class DetalleTicket extends DetalleArticulo {
+public class DetalleTicket extends DetalleArticulo<ArticulosVenta> implements Entity {
     @SqlAttribute
     @SqlKey(SqlKey.FOREIGN_KEY)
     private ArticulosVenta articuloVenta;
@@ -33,7 +34,7 @@ public class DetalleTicket extends DetalleArticulo {
     }
 
     public DetalleTicket(ArticulosVenta articulosVenta, Integer cantidad) {
-        super(cantidad, null, articulosVenta);
+        super(cantidad, articulosVenta);
         this.articuloVenta = articulosVenta;
     }
 
@@ -45,12 +46,23 @@ public class DetalleTicket extends DetalleArticulo {
     }
 
     @Override
+    public Integer cantidad(int cantidad) {
+        if (cantidad > articuloVenta.getStock()) return -1;
+        return super.cantidad(cantidad);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == null)
             return false;
-        if (obj instanceof ArticulosVenta a)
-            return this.articuloVenta.equals(a);
+        if (obj instanceof DetalleTicket d)
+            return this.articuloVenta.equals(d.getArticuloVenta());
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return articuloVenta.getArticulo().getId_articulo();
     }
 
     @Override

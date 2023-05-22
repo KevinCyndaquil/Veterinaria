@@ -4,6 +4,7 @@ import application.views.components.abstracts.CustomJFrame;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -11,7 +12,7 @@ public class ChooserMascotaView extends CustomJFrame {
 
     public ChooserMascotaView() {
         super("tabla mascotas");
-        setDefaultCloseOperation(HIDE_ON_CLOSE);
+        setBackground(Color.WHITE);
         setSize(600, 400);
         setResizable(false);
     }

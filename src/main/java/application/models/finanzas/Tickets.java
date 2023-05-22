@@ -12,6 +12,8 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -25,29 +27,29 @@ public class Tickets implements
         ConMonto,
         Entity {
 
-    @Getter @Setter
+    @Getter
     @SqlAttribute
     @SqlKey
-    private int id_ticket;
+    private Integer id_ticket;
     @SqlAttribute
     private BigDecimal monto_total;
     @SqlAttribute("pago_total")
     private BigDecimal pagoTotal;
     @Getter @Setter
     @SqlAttribute("fecha_cobro")
-    private LocalDate fecha;
+    private Date fecha;
     @Getter @Setter
     @SqlAttribute("hora_cobro")
-    private LocalTime hora;
+    private Time hora;
     @Getter @Setter
     @SqlAttribute("estatus")
     private Estatus estatusTicket;
 
-    private final List<DetalleTicket> detalleArticulos;
+    public final List<DetalleTicket> detalleArticulos;
     private final List<Pagos> pagos;
 
 
-    public Tickets(int id_ticket, LocalDate fecha, LocalTime hora, Estatus estatusTicket) {
+    public Tickets(int id_ticket, Date fecha, Time hora, Estatus estatusTicket) {
         this.id_ticket = id_ticket;
         this.fecha = fecha;
         this.hora = hora;
@@ -60,10 +62,11 @@ public class Tickets implements
         pagos = new ArrayList<>();
     }
 
-    public Tickets(LocalDate fecha, LocalTime hora) {
+    public Tickets(Date fecha, Time hora) {
         this.fecha = fecha;
         this.hora = hora;
         this.estatusTicket = Estatus.PENDIENTE;
+
 
         pagoTotal = BigDecimal.ZERO;
         monto_total = BigDecimal.ZERO;
@@ -78,6 +81,18 @@ public class Tickets implements
         } else {
             estatusTicket = Estatus.PENDIENTE;
         }
+    }
+
+    public void setId_ticket(int id_ticket) {
+        this.id_ticket = id_ticket;
+        detalleArticulos.forEach(d -> d.setId_ticket(id_ticket));
+    }
+
+    public void calcularMontoTotal() {
+        monto(detalleArticulos.stream()
+                .map(d -> (d.getArticuloVenta().monto().multiply(BigDecimal.valueOf(d.cantidad()))))
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
+        System.out.println("monto new: " + monto());
     }
 
     @Override
@@ -132,7 +147,11 @@ public class Tickets implements
     public boolean agregarArticulo(DetalleTicket detalleTicket) {
         if (detalleTicket == null) return false;
 
+        if (detalleArticulos.contains(detalleTicket))
+            return modificarCantidad(detalleTicket) != null;
+
         monto(monto().add(detalleTicket.monto()));
+        detalleTicket.setId_ticket(id_ticket);
         return detalleArticulos.add(detalleTicket);
     }
 
@@ -162,11 +181,13 @@ public class Tickets implements
     @Override
     public Integer modificarCantidad(DetalleTicket detalleTicket) {
         if (detalleTicket == null) return null;
+        if (!detalleArticulos.contains(detalleTicket)) return null;
 
-        detalleArticulos.forEach(d -> {
-            if (d.equals(detalleTicket))
-                d.cantidad(detalleTicket.cantidad());
-        });
+        DetalleTicket detalleToDelete = detalleArticulos.stream().filter(detalleTicket::equals).reduce(null, (a, d) -> d);
+
+        System.out.println("detalle a borrar: " + detalleToDelete);
+        eliminarArticulo(detalleToDelete);
+        agregarArticulo(detalleTicket);
 
         return detalleTicket.cantidad();
     }
@@ -186,5 +207,10 @@ public class Tickets implements
     public void consultarArticulos() {
         detalleArticulos.stream()
                 .map(this::consultarArticulo).toList().forEach(System.out::println);
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(id_ticket);
     }
 }
